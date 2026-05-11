@@ -1,0 +1,7 @@
+{
+  "name": "Lightweight",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
