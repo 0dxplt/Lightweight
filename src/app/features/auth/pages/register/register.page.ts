@@ -10,7 +10,7 @@ import { RouterModule } from '@angular/router';
   templateUrl: './register.page.html',
   styleUrls: ['./register.page.scss'],
   standalone: true,
-  imports: [IonText, IonRouterLink, IonButton, IonInput, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, ReactiveFormsModule, FormsModule, IonInputPasswordToggle, RouterModule]
+  imports: [IonText, IonRouterLink, IonButton, IonInput, IonContent, CommonModule, ReactiveFormsModule, FormsModule, IonInputPasswordToggle, RouterModule]
 })
 export class RegisterPage implements OnInit {
 
