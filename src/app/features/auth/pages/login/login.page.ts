@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 
-import { IonContent, IonItem, IonButton, IonInput, IonIcon, IonRippleEffect } from '@ionic/angular/standalone';
+import { IonContent, IonItem, IonButton, IonInput, IonIcon } from '@ionic/angular/standalone';
 
 import { AuthService } from '../../services/auth-service';
 
@@ -15,7 +15,7 @@ import { eyeOutline, eyeOffOutline } from 'ionicons/icons';
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
   standalone: true,
-  imports: [IonRippleEffect, IonIcon,
+  imports: [IonIcon,
     CommonModule,
     ReactiveFormsModule,
     IonContent,
