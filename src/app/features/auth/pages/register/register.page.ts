@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormControl, FormGroup, Validators, FormsModule } from '@angular/forms';
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonInput, IonInputPasswordToggle, IonButton, IonRippleEffect, IonRouterLink, IonText } from '@ionic/angular/standalone';
 import { AuthService } from '../../services/auth-service';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -34,7 +34,7 @@ export class RegisterPage implements OnInit {
     ]),
   });
 
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService, private router: Router) { }
 
   ngOnInit() {
   }
@@ -51,6 +51,9 @@ export class RegisterPage implements OnInit {
     console.log(username, email, password, weight, height);
 
     this.authService.register(username, email, password, weight, height);
+
+    if (this.authService.isLogged())
+      this.router.navigate(["/tabs/workouts/"]);
   }
 
 }
