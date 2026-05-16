@@ -86,3 +86,21 @@ ion-button {
         font-weight: bolder;
     }
 }
+
+.password-toggle-icon {
+    color: var(--ion-color-tertiary);
+    cursor: pointer;
+    transition: all 200ms linear;
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    width: 30px;
+    height: 30px;
+}
+
+.password-toggle-icon:hover {
+    background-color: #636363;
+}

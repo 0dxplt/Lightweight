@@ -3,23 +3,26 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 
-import { IonContent, IonItem, IonButton, IonInput, IonIcon, IonInputPasswordToggle } from '@ionic/angular/standalone';
+import { IonContent, IonItem, IonButton, IonInput, IonIcon, IonRippleEffect } from '@ionic/angular/standalone';
 
 import { AuthService } from '../../services/auth-service';
+
+import { addIcons } from 'ionicons';
+import { eyeOutline, eyeOffOutline } from 'ionicons/icons';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
   standalone: true,
-  imports: [IonIcon,
+  imports: [IonRippleEffect, IonIcon,
     CommonModule,
     ReactiveFormsModule,
     IonContent,
     IonItem,
     IonButton,
     IonInput,
-    RouterModule, IonInputPasswordToggle]
+    RouterModule]
 })
 export class LoginPage implements OnInit {
 
@@ -32,7 +35,11 @@ export class LoginPage implements OnInit {
     ])
   });
 
-  constructor(private authService: AuthService, private router: Router) {}
+  showPassword: boolean = false;
+
+  constructor(private authService: AuthService, private router: Router) {
+    addIcons({ eyeOutline, eyeOffOutline });
+  }
 
   ngOnInit() {}
 
@@ -49,5 +56,9 @@ export class LoginPage implements OnInit {
 
     if (this.authService.isLogged())
       this.router.navigate(["/tabs/workouts"]);
+  }
+
+  togglePassword() {
+    this.showPassword = !this.showPassword;
   }
 }

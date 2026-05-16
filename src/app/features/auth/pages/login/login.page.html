@@ -18,12 +18,16 @@
       <ion-item>
         <ion-input
           id="login-password-input"
-          type="password"
+          [type]="showPassword ? 'text' : 'password'"
           formControlName="password"
           label="Password"
           labelPlacement="floating">
-          <!--<ion-input-password-toggle slot="end"></ion-input-password-toggle>-->
         </ion-input>
+        <ion-icon
+          [name]="showPassword ? 'eye-off-outline' : 'eye-outline'" 
+          class="password-toggle-icon"
+          (click)="togglePassword()">
+        </ion-icon>
       </ion-item>
 
       <ion-button type="submit" [disabled]="loginForm.invalid">
