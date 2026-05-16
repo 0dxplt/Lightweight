@@ -13,14 +13,17 @@ export type LoggedUser = {
   providedIn: 'root',
 })
 export class AuthService {
-  
+
   private _user: BehaviorSubject<LoggedUser | null>;
+  public user$: Observable<LoggedUser | null>;
   private _fakeIdCounter = 1;
 
-  public user$: Observable<LoggedUser | null>;
-  
   constructor() {
-    this._user = new BehaviorSubject<LoggedUser | null>(null);
+    const savedUser = localStorage.getItem('loggedUser');
+    this._user = new BehaviorSubject<LoggedUser | null>(
+      savedUser ? JSON.parse(savedUser) : null
+    );
+
     this.user$ = this._user.asObservable();
   }
 
@@ -28,11 +31,13 @@ export class AuthService {
     const fakeUser: LoggedUser = {
       id: this._fakeIdCounter,
       username: 'pippoesp69',
-      email: email,
+      email,
       weight: 190,
       height: 200
     };
+
     this._user.next(fakeUser);
+    localStorage.setItem('loggedUser', JSON.stringify(fakeUser));
   }
 
   register(username: string, email: string, password: string, weight: number, height: number) {
@@ -43,18 +48,21 @@ export class AuthService {
       weight,
       height
     };
-    this._user.next(newUser);
-  }
 
-  isLogged() : boolean {
-    return this._user.value !== null;
+    this._user.next(newUser);
+    localStorage.setItem('loggedUser', JSON.stringify(newUser));
   }
 
   logout() {
     this._user.next(null);
+    localStorage.removeItem('loggedUser');
   }
 
-  getUser() : LoggedUser | null {
+  isLogged(): boolean {
+    return this._user.value !== null;
+  }
+
+  getUser(): LoggedUser | null {
     return this._user.value;
   }
 }
