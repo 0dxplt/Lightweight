@@ -1,0 +1,26 @@
+<ion-content [fullscreen]="true">
+  <div class="register">
+    <h1>Register</h1>
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <ion-input formControlName="username" label="Username" class="custom" label-placement="floating" fill="outline"
+        placeholder="Enter username" [maxlength]="15"></ion-input>
+      <ion-input formControlName="email" type="email" label="Email" class="custom" label-placement="floating"
+        fill="outline" placeholder="Enter email"></ion-input>
+      <ion-input formControlName="password" type="password" label="Password" class="custom" label-placement="floating"
+        fill="outline" placeholder="Enter password" [maxlength]="32">
+        <ion-input-password-toggle slot="end"></ion-input-password-toggle>
+      </ion-input>
+      <div class="pa">
+        <ion-input formControlName="weight" type="number" formControlName="weight" label="Weight" class="custom"
+          label-placement="floating" fill="outline" inputmode="numeric" placeholder="Enter weight"></ion-input>
+        <ion-input formControlName="height" type="number" formControlName="height" label="Height" class="custom"
+          label-placement="floating" fill="outline" inputmode="numeric" placeholder="Enter height"></ion-input>
+      </div>
+      <div class="submit">
+        <ion-button type="submit" fill="outline">Register</ion-button>
+        <p>Have an account? <ion-router-link routerLink="/pts" style="text-decoration: none; cursor: pointer;"><ion-text
+              color="primary">Sign In</ion-text></ion-router-link></p>
+      </div>
+    </form>
+  </div>
+</ion-content>

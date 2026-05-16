@@ -29,4 +29,8 @@ export const routes: Routes = [
     path: 'feed',
     loadComponent: () => import('./features/feed/pages/feed/feed.page').then( m => m.FeedPage)
   },
+  {
+    path: 'register',
+    loadComponent: () => import('./features/auth/pages/register/register.page').then( m => m.RegisterPage)
+  },
 ];
