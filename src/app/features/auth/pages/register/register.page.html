@@ -1,6 +1,8 @@
 <ion-content [fullscreen]="true">
   <div class="register">
-    <h1>Register</h1>
+    <div class="register-header">
+      <h1>Register</h1>
+    </div>
     <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
       <ion-input formControlName="username" label="Username" class="custom" label-placement="floating" fill="outline"
         placeholder="Enter username" [maxlength]="15"></ion-input>
