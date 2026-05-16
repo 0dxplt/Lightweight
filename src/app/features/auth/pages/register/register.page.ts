@@ -29,7 +29,7 @@ export class RegisterPage implements OnInit {
     ]),
     height: new FormControl('', [
       Validators.required,
-      Validators.min(140),
+      Validators.min(40),
       Validators.max(240)
     ]),
   });
