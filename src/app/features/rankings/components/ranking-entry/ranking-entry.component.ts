@@ -1,7 +1,7 @@
 import { Component, effect, input, OnInit, signal } from '@angular/core';
 import { IonAvatar, IonItem, IonBadge, IonLabel } from "@ionic/angular/standalone";
-import { RankUser } from '../../services/ranking-service';
 import { Router } from '@angular/router';
+import { RankUser } from 'src/app/models/rank-user.model';
 
 @Component({
   selector: 'app-ranking-entry',

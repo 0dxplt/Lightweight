@@ -1,12 +1,5 @@
 import { Injectable } from '@angular/core';
-
-export type RankUser = {
-  rank: number;
-  avatar: string;
-  username: string;
-  pt: boolean;
-  level: number;
-}
+import { RankUser } from 'src/app/models/rank-user.model';
 
 @Injectable({
   providedIn: 'root',
@@ -39,3 +32,5 @@ export class RankingService {
     return users;
   }
 }
+
+export { RankUser };

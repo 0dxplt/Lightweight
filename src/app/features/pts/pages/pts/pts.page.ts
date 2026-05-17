@@ -53,7 +53,7 @@ export class PtsPage implements OnInit {
       palestra: 'ASD GYM4U',
       eta: 19,
       fotoUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRuCFcnFU-TPgls_fB_Jw1lCXlhgIcdFZPAd9Yd3c5ByMfs3x1CsT1F1YDvUQn5Uqc1eJkqtfulYApjOeOe5IM__iLozHusE6wKe9j2OGI&s=10",
-      citta: "Erice"
+      citta: "Trapani"
     },
     {
       username: 'pippoesp',
@@ -61,7 +61,7 @@ export class PtsPage implements OnInit {
       palestra: 'ASD GYM4U',
       eta: 19,
       fotoUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRuCFcnFU-TPgls_fB_Jw1lCXlhgIcdFZPAd9Yd3c5ByMfs3x1CsT1F1YDvUQn5Uqc1eJkqtfulYApjOeOe5IM__iLozHusE6wKe9j2OGI&s=10",
-      citta: "Erice"
+      citta: "Trapani"
     }
   ]
 
