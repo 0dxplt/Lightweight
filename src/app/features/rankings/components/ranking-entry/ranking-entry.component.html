@@ -1,0 +1,29 @@
+<ion-item button (click)="onClick($event)" detail="false">
+  
+  <!-- 1. RANGO (Allineato a sinistra, larghezza fissa) -->
+  <div slot="start" class="rank-container">
+    {{rankUser().rank}}
+  </div>
+
+  <!-- 2. AVATAR (Subito dopo il rango) -->
+  <ion-avatar slot="start" class="profile-pic">
+    <img [src]="displayAvatar()" (error)="handleImageError()">
+  </ion-avatar>
+
+  <!-- 3. INFO UTENTE (Username + Badge) -->
+  <ion-label>
+    <div class="user-content">
+      <span class="username">{{rankUser().username}}</span>
+      @if (rankUser().pt) {
+        <ion-badge color="primary" class="pt-badge">PT</ion-badge>
+      }
+    </div>
+  </ion-label>
+
+  <!-- 4. LIVELLO (Tutto allineato alla fine a destra) -->
+  <div slot="end" class="level-container">
+    <span class="level-number">{{rankUser().level}}</span>
+    <img src="assets/icon/favicon.png" class="level-icon">
+  </div>
+
+</ion-item>

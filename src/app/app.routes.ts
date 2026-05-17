@@ -10,7 +10,17 @@ export const routes: Routes = [
   {
     path: 'profile',
     canActivate: [authGuard(true)],
-    loadComponent: () => import('./features/profile/pages/profile/profile.page').then( m => m.ProfilePage)
+    children: [
+      {
+        path: '',
+          loadComponent: () => import('./features/profile/pages/profile/profile.page').then( m => m.ProfilePage)
+      },
+      {
+        // TODO: aggiungere una pagina 'PublicProfilePage'
+        path: ':username',
+        loadComponent: () => import('./features/profile/pages/profile/profile.page').then(m => m.ProfilePage)
+      }
+    ],
   },
   {
     path: 'workouts',
