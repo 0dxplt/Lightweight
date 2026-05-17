@@ -1,0 +1,12 @@
+<div class="personal-trainer">
+  <div class="profile-picture">
+    <ion-img
+      [src]="fotoUrl"></ion-img>
+  </div>
+  <ion-card [button]="true" [routerLink]="['/users', username]">
+    <h1>{{username}}</h1>
+    <p>{{nome}}</p>
+    <p>{{palestra}}</p>
+    <p>{{eta + ' yo'}}</p>
+  </ion-card>
+</div>
