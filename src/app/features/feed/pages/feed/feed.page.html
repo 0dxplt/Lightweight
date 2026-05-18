@@ -1,13 +1,44 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>feed</ion-title>
+    <div class="toolbar">
+      <ion-title>Feed</ion-title>
+      <ion-button fill="outline" id="open-modal">
+        <ion-icon slot="icon-only" name="search-outline"></ion-icon>
+      </ion-button>
+    </div>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">feed</ion-title>
-    </ion-toolbar>
   </ion-header>
+  <div class="sessions">
+    @for (user of user_sessions; track user) {
+    <app-user-card id="open-session-modal" [username]="user.username" [sessionName]="user.sessionName" [gainedXP]="user.gainedXP"
+      [tags]="user.tags" [avatarUrl]="user.avatarUrl" [verified]="user.verified" [pt]="user.pt"></app-user-card>
+    }
+    @empty {
+    <p>It’s pretty lonely here! Use the search button to start looking for someone to follow.</p>
+    }
+  </div>
+  <ion-modal #modal trigger="open-modal" [initialBreakpoint]="0.25" [breakpoints]="[0, 0.25, 0.5, 0.75]"
+    [expandToScroll]="false">
+    <ng-template>
+      <ion-content>
+        <ion-searchbar placeholder="Search" (click)="modal.setCurrentBreakpoint(0.75)"></ion-searchbar>
+        <ion-list>
+          @for (user of users; track user) {
+          <ion-item>
+            <ion-avatar slot="start">
+              <ion-img src={{user.avatarUrl}}></ion-img>
+            </ion-avatar>
+            <ion-label>
+              <h2>{{user.username}}</h2>
+            </ion-label>
+          </ion-item>
+          }
+        </ion-list>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
 </ion-content>

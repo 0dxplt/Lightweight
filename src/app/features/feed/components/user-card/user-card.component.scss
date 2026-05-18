@@ -1,0 +1,52 @@
+ion-card {
+    font-family: 'Montserrat', 'sans-serif';
+    padding: auto;
+}
+
+.container {
+    border: 1px solid transparent;
+    border-radius: 25px;
+    padding: 2%;
+}
+
+.user-info {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.user {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.username p {
+    margin: 0; 
+}
+
+.username {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    font-size: 1.5em;
+    gap: 8px;
+}
+
+.xp {
+    font-size: 1.3em;
+}
+
+.tags {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.tags ion-chip {
+    max-width:fit-content;
+    margin: 0px;
+    font-size: 1.2em;
+}

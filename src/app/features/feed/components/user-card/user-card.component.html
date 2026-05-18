@@ -1,0 +1,30 @@
+<ion-card class="container" [button]="true" (click)="openModal()">
+  <div class="user-info">
+    <div class="user">
+      <ion-avatar>
+        <img alt="Silhouette of a person's head" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
+      </ion-avatar>
+      <div class="username">
+        <p>{{username}}</p>
+        <ion-icon name="logo-ionic" color="primary"></ion-icon>
+        <ion-icon name="logo-ionic" color="primary"></ion-icon>
+      </div>
+    </div>
+    <ion-chip color="primary" class="xp">
+      {{gainedXP + ' XP'}}
+    </ion-chip>
+  </div>
+  <div class="session">
+    <h1>{{sessionName}}</h1>
+  </div>
+  <div class="tags">
+    @for (tag of tags; track tags) {
+    <ion-chip color="primary">
+      <ion-icon name="barbell-outline">
+      </ion-icon>
+      <ion-label>{{tag}}</ion-label>
+    </ion-chip>
+    }
+  </div>
+</ion-card>
+<app-session-modal [(isOpen)]="isOpen"></app-session-modal>
