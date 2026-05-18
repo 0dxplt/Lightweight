@@ -1,0 +1,18 @@
+.toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.sessions {
+    display: grid;
+    gap: 10px;
+    padding: 10px;
+    grid-template-columns: 1fr;
+}
+
+@media (min-width: 768px) {
+    .sessions {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
