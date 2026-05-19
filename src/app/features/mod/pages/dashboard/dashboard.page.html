@@ -1,0 +1,61 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      <span id="username">{{this.moderator()?.username}}</span>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">{{this.moderator()?.username}}</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-grid>
+    <ion-row>
+
+      <ion-col size="12" sizeMd="6" sizeLg="4">
+        <ion-card class="feature-card" color="secondary" (click)="reports()" button>
+
+          <ion-card-content>
+            <ion-icon name="alert-circle" class="feature-icon"></ion-icon>
+            <ion-card-title>Reports</ion-card-title>
+            <ion-card-subtitle>44 unsolved reports</ion-card-subtitle>
+          </ion-card-content>
+
+        </ion-card>
+      </ion-col>
+
+      <ion-col size="12" sizeMd="6" sizeLg="4">
+        <ion-card class="feature-card" color="secondary" (click)="requests()" button>
+
+          <ion-card-content>
+            <ion-icon name="folder" class="feature-icon"></ion-icon>
+            <ion-card-title>Validation Requests</ion-card-title>
+            <ion-card-subtitle>11 unsolved validation requests</ion-card-subtitle>
+          </ion-card-content>
+
+        </ion-card>
+      </ion-col>
+
+      <ion-col size="12" sizeMd="6" sizeLg="4">
+        <ion-card class="feature-card" (click)="solved()" color="secondary" button>
+          <ion-card-content>
+            <ion-icon name="checkmark-circle" class="feature-icon"></ion-icon>
+            <ion-card-title>Solved tickets</ion-card-title>
+            <ion-card-subtitle>{{this.numSolved}} solved tickets</ion-card-subtitle>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-fab vertical="bottom" horizontal="center" slot="fixed" (click)="showSettings()">
+    <ion-fab-button color="tertiary" id="settings-button">
+      <ion-icon name="chevron-up"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+  <ion-action-sheet trigger="settings-button" header="Settings" [buttons]="actionSheetButtons"></ion-action-sheet>
+</ion-content>

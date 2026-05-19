@@ -1,0 +1,48 @@
+<ion-content [fullscreen]="true">
+  <div class="login-container">
+    <div class="login-header">
+      <span>Moderation</span>
+      <ion-icon></ion-icon>
+    </div>
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <ion-item>
+        <ion-input
+          id="login-username-input"
+          type="text"
+          formControlName="username"
+          label="Username"
+          labelPlacement="floating">
+        </ion-input>
+      </ion-item>
+      
+      <ion-item>
+        <ion-input
+          id="login-email-input"
+          type="email"
+          formControlName="email"
+          label="Email"
+          labelPlacement="floating">
+        </ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-input
+          id="login-password-input"
+          [type]="showPassword ? 'text' : 'password'"
+          formControlName="password"
+          label="Password"
+          labelPlacement="floating">
+        </ion-input>
+        <ion-icon
+          [name]="showPassword ? 'eye-off-outline' : 'eye-outline'" 
+          class="password-toggle-icon"
+          (click)="togglePassword()">
+        </ion-icon>
+      </ion-item>
+
+      <ion-button type="submit" [disabled]="loginForm.invalid">
+        Login
+      </ion-button>
+    </form>
+  </div>
+</ion-content>

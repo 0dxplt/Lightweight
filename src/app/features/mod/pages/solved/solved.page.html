@@ -1,0 +1,40 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-item>
+      <ion-title>Solved {{this.segmentValue}}</ion-title>
+      <ion-button fill="clear" (click)="goBack()" id="goback">
+        <ion-icon slot="icon-only" name="arrow-back" color="tertiary"></ion-icon>
+      </ion-button>  
+    </ion-item>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" [scrollY]="false">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">rankings</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-segment-view style="height: 100%;">
+    <ion-segment-content id="solved-reports">
+      <app-solved-reports></app-solved-reports>
+    </ion-segment-content>
+    <ion-segment-content id="solved-requests">
+      <app-solved-requests></app-solved-requests>
+    </ion-segment-content>
+  </ion-segment-view>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-segment color="tertiary" [value]="this.segmentValue" (ionChange)="this.segmentValue = $event.detail.value">
+      <ion-segment-button value="reports" content-id="solved-reports">
+        <ion-label>Reports</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="requests" content-id="solved-requests">
+        <ion-label>Requests</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+</ion-footer>

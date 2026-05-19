@@ -1,0 +1,94 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      {{ solved ? 'Dettaglio Risoluzione' : 'Dettaglio Richiesta' }}
+    </ion-title>
+    <!-- <ion-buttons slot="end">
+      <ion-button (click)="dismiss()" color="medium">Chiudi</ion-button>
+    </ion-buttons> -->
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  
+  <!-- Sezione Stato (Badge) -->
+  <div class="ion-text-center ion-margin-bottom">
+    @if (solved) {
+      <ion-badge [color]="solvedRequest?.status === 'APPROVED' ? 'success' : 'danger'" class="status-badge">
+        {{ solvedRequest?.status }}
+      </ion-badge>
+    } @else {
+      <ion-badge color="warning" class="status-badge">PENDING</ion-badge>
+    }
+  </div>
+
+  <!-- Card Dati Richiesta -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-subtitle>Informazioni Richiesta</ion-card-subtitle>
+      <ion-card-title>ID #{{ solved ? solvedRequest?.request?.id : validationRequest?.id }}</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content class="ion-text-center">
+      <ion-list lines="none">
+        <!-- Utente che ha fatto la richiesta -->
+        <ion-item>
+          <ion-icon slot="start" name="person-outline" color="primary"></ion-icon>
+          <ion-label>
+            <p>Requester User</p>
+            @if (solved) {
+              <h2>{{ solvedRequest?.request?.user?.username }}</h2>
+            } @else {
+              <h2>
+                <a class="profile-link" (click)="goToProfileView(validationRequest?.user?.username)">
+                  {{ validationRequest?.user?.username }}
+                </a>
+              </h2>
+            }
+            <small>ID Utente: {{ solved ? solvedRequest?.request?.user?.id : validationRequest?.user?.id }}</small>
+          </ion-label>
+        </ion-item>
+
+        <!-- Timestamp Creazione -->
+        <ion-item>
+          <ion-icon slot="start" name="time-outline" color="primary"></ion-icon>
+          <ion-label>
+            <p>Creation Date</p>
+            <h2>{{ (solved ? solvedRequest?.request?.timestamp : validationRequest?.timestamp) | datefy }}</h2>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Sezione Modulo Risoluzione (Solo se solved è true) -->
+  @if (solved && solvedRequest) {
+    <ion-card class="moderator-card">
+      <ion-card-header>
+        <ion-card-subtitle>Solved by</ion-card-subtitle>
+        <ion-card-title>Moderator</ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+        <ion-list lines="none">
+          <ion-item>
+            <ion-icon slot="start" name="shield-checkmark-outline" color="tertiary"></ion-icon>
+            <ion-label>
+              <h2>{{ this.solvedRequest.moderator.username }}</h2>
+              <p>{{ this.solvedRequest.moderator.email }}</p>
+            </ion-label>
+          </ion-item>
+
+          <ion-item>
+            <ion-icon slot="start" name="calendar-outline" color="tertiary"></ion-icon>
+            <ion-label>
+              <p>Completion Date</p>
+              <h2>{{ solvedRequest.timestamp | datefy }}</h2>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+  }
+
+</ion-content>

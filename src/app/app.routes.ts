@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './features/auth/guards/auth.guard';
+import { modAuthGuard } from './features/mod/guards/mod-auth-guard';
 
 export const routes: Routes = [
   {
@@ -57,4 +58,35 @@ export const routes: Routes = [
     canActivate: [authGuard(false)],
     loadComponent: () => import('./features/auth/pages/register/register.page').then( m => m.RegisterPage)
   },
+  {
+    path: 'mod',
+    canActivate: [modAuthGuard(true)],
+    children: [
+      {
+        path: '',
+          loadComponent: () => import('./features/mod/pages/dashboard/dashboard.page').then( m => m.DashboardPage)
+      },
+      {
+        path: 'solved',
+        loadComponent: () => import('./features/mod/pages/solved/solved.page').then( m => m.SolvedPage)
+      },
+      {
+        path: 'reports',
+        loadComponent: () => import('./features/mod/pages/reports/reports.page').then( m => m.ReportsPage)
+      },
+      {
+        path: 'requests',
+        loadComponent: () => import('./features/mod/pages/requests/requests.page').then( m => m.RequestsPage)
+      }
+    ],
+  },
+  {
+    path: 'mod/login',
+    canActivate: [modAuthGuard(false)],
+    loadComponent: () => import('./features/mod/pages/mod-login/mod-login.page').then( m => m.ModLoginPage)
+  },  {
+    path: 'extended-report-modal',
+    loadComponent: () => import('./features/mod/pages/extended-report-modal/extended-report-modal.page').then( m => m.ExtendedReportModalPage)
+  },
+
 ];
