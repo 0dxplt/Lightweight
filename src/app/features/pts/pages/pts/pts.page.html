@@ -1,14 +1,14 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-button fill="outline" id="open-modal">{{ selectedCity ? selectedCity : 'Seleziona una città'}}</ion-button>
-    <ion-modal #modal trigger="open-modal" [initialBreakpoint]="0.25" [breakpoints]="[0, 0.25, 0.5, 0.75]" [expandToScroll]="false">
+    <ion-button fill="outline" id="open-city-modal">{{ selectedCity ? selectedCity : 'Seleziona una città'}}</ion-button>
+    <ion-modal #cityModal trigger="open-city-modal" [initialBreakpoint]="0.25" [breakpoints]="[0, 0.25, 0.5, 0.75]" [expandToScroll]="false">
       <ng-template>
         <ion-content>
           <ion-searchbar (ionInput)="handleInput($event)" placeholder="Search"
-            (click)="modal.setCurrentBreakpoint(0.75)"></ion-searchbar>
+            (click)="cityModal.setCurrentBreakpoint(0.75)"></ion-searchbar>
           <ion-list>
             @for (city of results; track city) {
-            <ion-item button (click)="selectCity(city, modal)" class="result-item">
+            <ion-item button (click)="selectCity(city, cityModal)" class="result-item">
               <ion-label>{{ city }}</ion-label>
             </ion-item>
             }
