@@ -2,7 +2,7 @@
   <ion-toolbar>
     <div class="toolbar">
       <ion-title>Feed</ion-title>
-      <ion-button fill="outline" id="open-modal">
+      <ion-button fill="outline" id="open-pt-search-modal">
         <ion-icon slot="icon-only" name="search-outline"></ion-icon>
       </ion-button>
     </div>
@@ -15,17 +15,17 @@
   <div class="sessions">
     @for (user of user_sessions; track user) {
     <app-user-card id="open-session-modal" [username]="user.username" [sessionName]="user.sessionName" [gainedXP]="user.gainedXP"
-      [tags]="user.tags" [avatarUrl]="user.avatarUrl" [verified]="user.verified" [pt]="user.pt"></app-user-card>
+      [tags]="user.tags" [avatarUrl]="user.avatarUrl" [verified]="user.verified" [pt]="user.pt" [sessionId]="user.sessionId"></app-user-card>
     }
     @empty {
     <p>It’s pretty lonely here! Use the search button to start looking for someone to follow.</p>
     }
   </div>
-  <ion-modal #modal trigger="open-modal" [initialBreakpoint]="0.25" [breakpoints]="[0, 0.25, 0.5, 0.75]"
+  <ion-modal #ptSearchModal trigger="open-pt-search-modal" [initialBreakpoint]="0.25" [breakpoints]="[0, 0.25, 0.5, 0.75]"
     [expandToScroll]="false">
     <ng-template>
       <ion-content>
-        <ion-searchbar placeholder="Search" (click)="modal.setCurrentBreakpoint(0.75)"></ion-searchbar>
+        <ion-searchbar placeholder="Search" (click)="ptSearchModal.setCurrentBreakpoint(0.75)"></ion-searchbar>
         <ion-list>
           @for (user of users; track user) {
           <ion-item>

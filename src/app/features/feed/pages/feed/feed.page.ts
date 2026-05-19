@@ -36,6 +36,7 @@ export class FeedPage implements OnInit {
     {
       username: "pippoesp",
       sessionName: "fazzu petto",
+      sessionId: 34424,
       gainedXP: 104,
       tags: ["Petto", "Tricipiti", "Spalle", "Quadricipiti"],
       avatarUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRuCFcnFU-TPgls_fB_Jw1lCXlhgIcdFZPAd9Yd3c5ByMfs3x1CsT1F1YDvUQn5Uqc1eJkqtfulYApjOeOe5IM__iLozHusE6wKe9j2OGI&s=10",
@@ -45,6 +46,7 @@ export class FeedPage implements OnInit {
     {
       username: "pippoesp",
       sessionName: "fazzu petto",
+      sessionId: 34424,
       gainedXP: 104,
       tags: ["Petto", "Tricipiti", "Spalle", "Quadricipiti"],
       avatarUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRuCFcnFU-TPgls_fB_Jw1lCXlhgIcdFZPAd9Yd3c5ByMfs3x1CsT1F1YDvUQn5Uqc1eJkqtfulYApjOeOe5IM__iLozHusE6wKe9j2OGI&s=10",
@@ -54,6 +56,7 @@ export class FeedPage implements OnInit {
     {
       username: "pippoesp",
       sessionName: "fazzu petto",
+      sessionId: 34424,
       gainedXP: 104,
       tags: ["Petto", "Tricipiti", "Spalle", "Quadricipiti"],
       avatarUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRuCFcnFU-TPgls_fB_Jw1lCXlhgIcdFZPAd9Yd3c5ByMfs3x1CsT1F1YDvUQn5Uqc1eJkqtfulYApjOeOe5IM__iLozHusE6wKe9j2OGI&s=10",
