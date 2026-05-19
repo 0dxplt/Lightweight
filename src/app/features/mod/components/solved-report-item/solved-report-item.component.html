@@ -1,0 +1,20 @@
+<ion-item button (click)="this.openModal(this.solvedReport())" detail="false">
+  
+  <!-- 1. ID (Allineato a sinistra, larghezza fissa) -->
+  <div slot="start" class="id-container">
+    {{this.solvedReport().id}}
+  </div>
+
+  <!-- 3. INFO MODERATORE (Username) -->
+  <ion-label>
+    <div class="moderator-content">
+      <span class="username">{{this.solvedReport().moderator.username}}</span>
+    </div>
+  </ion-label>
+
+  <!-- 4. DATA (Allineata alla fine a destra) -->
+  <div slot="end" class="level-container">
+    <span class="complete-date">{{this.solvedReport().timestamp | datefy}}</span>
+  </div>
+
+</ion-item>

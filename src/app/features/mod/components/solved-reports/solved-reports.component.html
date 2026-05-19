@@ -1,0 +1,15 @@
+<ion-content class="ion-content-scroll-host">
+  <ion-refresher slot="fixed" [pullFactor]="0.5" [pullMin]="100" [pullMax]="200" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content refreshingSpinner="circles">
+    </ion-refresher-content>
+  </ion-refresher>
+
+  <ion-list>
+    @for (item of this.solvedReports; track $index) {
+      <app-solved-report-item [solvedReport]="item"></app-solved-report-item>
+    }
+  </ion-list>
+  <ion-infinite-scroll (ionInfinite)="onIonInfinite($event)" threshold="50px" [disabled]="disabled">
+    <ion-infinite-scroll-content loadingText="Loading Users..." loadingSpinner="bubbles"></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ion-content>

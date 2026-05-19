@@ -1,0 +1,106 @@
+.login-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+    padding: 2rem;
+    justify-content: center;
+}
+
+.login-header {
+    width: 100%;
+    max-width: 420px;
+    margin: 0 auto 2rem auto;
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+
+    transform: translateY(-5em);
+
+    span {
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+        font-size: 48px;
+        font-weight: 600;
+    }
+
+    ion-icon {
+        margin-left: 10px;
+    }
+}
+
+form {
+    width: 100%;
+    max-width: 420px;
+    margin: 0 auto;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2em;
+}
+
+ion-item {
+    width: 100%;
+    --background: transparent;
+    border: 1px solid var(--ion-color-tertiary);
+    border-radius: 1%;
+    box-shadow: -1px -1px 5px var(--ion-color-tertiary), 1px 1px 5px var(--ion-color-tertiary);
+}
+
+ion-input {
+    --background: transparent;
+}
+
+ion-button {
+    width: 60%;
+    margin-top: 8em;
+    height: 60px;
+    --padding-top: 18px;
+    --padding-bottom: 18px;
+    font-size: 16px;
+    --background: transparent;
+    border: 2px solid var(--ion-color-tertiary);
+    border-radius: 1%;
+    box-shadow: 1px 1px 10px var(--ion-color-tertiary), -1px -1px 10px var(--ion-color-tertiary);
+}
+
+#span-footer {
+    position: fixed;
+    bottom: 5%;
+    left: 50%;
+    transform: translateX(-50%);
+
+    width: 100%;
+    max-width: 420px;
+
+    text-align: center;
+
+    span {
+        font-size: 14px;
+        color: #aaa;
+    }
+
+    a {
+        color: var(--ion-color-tertiary);
+        text-decoration: none;
+        font-weight: bolder;
+    }
+}
+
+.password-toggle-icon {
+    color: var(--ion-color-tertiary);
+    cursor: pointer;
+    transition: all 200ms linear;
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    width: 30px;
+    height: 30px;
+}
+
+.password-toggle-icon:hover {
+    background-color: #636363;
+}
