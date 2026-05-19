@@ -23,7 +23,7 @@
 
   <ion-list>
     @for (item of this.reports; track $index) {
-      <app-report-sliding-item [report]="item" (onConfirm)="refresh()" (onReview)="this.openModal(item)"></app-report-sliding-item>
+      <app-report-sliding-item [report]="item" (onConfirm)="requestOutcome(item)" (onReview)="this.openModal(item)"></app-report-sliding-item>
     }
   </ion-list>
   <ion-infinite-scroll (ionInfinite)="onIonInfinite($event)" threshold="50px" [disabled]="disabled">

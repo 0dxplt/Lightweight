@@ -25,8 +25,6 @@ export class ReportSlidingItemComponent  implements OnInit {
   }
 
   checkReport() {
-    // chiamata al db / service
-    this.reportService.confirmReport(this.report().id);
     this.onConfirm.emit();
   }
 

@@ -22,11 +22,29 @@ export class SolvedService {
           id: 0,
           reporter: {
             id: 10,
-            username: "Samuel#" + Math.round(Math.random() * 1000)
+            username: "Samuel#" + Math.round(Math.random() * 1000),
+            email: "reporter@prova",
+            weight: 100,
+            height: 180,
+            followers: 0,
+            following: 0,
+            gLevel: 0,
+            sLevel: 0,
+            xp: 0,
+            verified: (Math.random() < 0.5) ? true : false
           },
           reportee: {
             id: 21,
-            username: "L. Jackson#" + Math.round(Math.random() * 1000)
+            username: "L. Jackson#" + Math.round(Math.random() * 1000),
+            email: "reportee@prova",
+            weight: 100,
+            height: 180,
+            followers: 0,
+            following: 0,
+            gLevel: 0,
+            sLevel: 0,
+            xp: 0,
+            verified: (Math.random() < 0.5) ? true : false
           },
           timestamp: Math.round(Math.random() * 1000000000000),
           reason: "Nothing"
@@ -54,7 +72,16 @@ export class SolvedService {
           id: 0,
           user: {
             id: 0,
-            username: "Batman#" + Math.round(Math.random() * 1000)
+            username: "Batman#" + Math.round(Math.random() * 1000),
+            email: "user@prova",
+            weight: 100,
+            height: 180,
+            followers: 0,
+            following: 0,
+            gLevel: 0,
+            sLevel: 0,
+            xp: 0,
+            verified: (Math.random() < 0.5) ? true : false
           },
           timestamp: Math.round(Math.random() * 1000000000000)
         },

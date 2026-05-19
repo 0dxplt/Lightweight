@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonButton, IonIcon, IonItem, IonRefresherContent, IonInfiniteScroll, IonList, IonRefresher, IonInfiniteScrollContent, RefresherEventDetail } from '@ionic/angular/standalone';
+import { RefresherEventDetail } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { arrowBack } from 'ionicons/icons';
 import { Report } from 'src/app/models/report.model';
@@ -9,7 +9,8 @@ import { ReportService } from '../../services/report-service';
 import { IonInfiniteScrollCustomEvent, IonRefresherCustomEvent } from '@ionic/core';
 import { ReportSlidingItemComponent } from "../../components/report-sliding-item/report-sliding-item.component";
 import { ExtendedReportModalPage } from '../extended-report-modal/extended-report-modal.page';
-import { IonicModule, ModalController } from '@ionic/angular';
+import { AlertController, IonicModule, ModalController } from '@ionic/angular';
+import { ModAuthService } from '../../services/mod-auth-service';
 
 @Component({
   selector: 'app-reports',
@@ -27,9 +28,14 @@ export class ReportsPage implements OnInit {
 
   reports: Report[] = [];
   disabled: boolean = false;
+  isAlertOpen: boolean = false;
 
-  constructor(private reportService: ReportService, private location: Location, private modalController: ModalController) {
-      addIcons({arrowBack});}
+  constructor(
+    private modAuthService: ModAuthService,
+    private reportService: ReportService,
+    private location: Location,
+    private modalController: ModalController,
+    private alertController: AlertController) {}
 
   ngOnInit() {
     addIcons({'arrow-back':arrowBack});
@@ -92,4 +98,50 @@ export class ReportsPage implements OnInit {
 
     await modal.present();
   }
+
+  private _confirmReport(report: Report, outcome: string) {
+    this.reportService.confirmReport(report.id, this.modAuthService.getModerator()?.id, outcome);
+    this.refresh();
+  }
+
+  async requestOutcome(report: Report) {
+    const alertButtons = [{
+      text: 'Cancel',
+      role: 'cancel',
+      handler: () => {
+        console.log('Alert canceled');
+      },
+    },
+    {
+      text: 'Confirm',
+      role: 'confirm',
+      handler: (data: any) => {
+        const outcome: string = data.outcome;
+        if (outcome && outcome.trim() !== '') {
+          console.log('Alert confirmed with outcome:', outcome);
+          this._confirmReport(report, outcome);
+        }
+        return true;
+      },
+    }];
+    
+    const alertInputs = [{
+      name: 'outcome',
+      placeholder: 'Outcome',
+      attributes: {
+        autocomplete: 'off'
+      }
+    }];
+
+    const alert = await this.alertController.create({
+      header: 'Write an outcome',
+      subHeader: 'Report #' + report.id,
+      message: '',
+      buttons: alertButtons,
+      inputs: alertInputs
+    });
+
+    await alert.present();
+  }
+
 }

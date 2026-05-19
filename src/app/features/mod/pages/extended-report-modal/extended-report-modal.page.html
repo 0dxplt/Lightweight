@@ -33,13 +33,24 @@
           <ion-label>
             <p>Reporter</p>
             <h2>
-              <a class="profile-link" (click)="goToProfileView(solved ? solvedReport?.report?.reporter?.username : report?.reporter?.username)">
-                {{ solved ? solvedReport?.report?.reporter?.username : report?.reporter?.username }}
-              </a>
+              @if (solved) {
+                <h2>{{ solvedReport?.report?.reporter?.username }}</h2>
+              } @else {
+                <h2>
+                  <a class="profile-link" (click)="goToProfileView(report?.reporter?.username)">
+                    {{ report?.reporter?.username }}
+                  </a>
+                </h2>
+              }
             </h2>
-            <a class="sessions-link" (click)="goToSessionsView(solved ? solvedReport?.report?.reporter?.username : report?.reporter?.username)">
-              <ion-icon name="finger-print-outline"></ion-icon> View Sessions
-            </a>
+            <small>User ID: {{ solved ? solvedReport?.report?.reporter?.id : report?.reporter?.id }}</small>
+            @if (!solved) {
+              <h2>
+                <a class="sessions-link" (click)="goToSessionsView(report?.reporter?.username)">
+                  <ion-icon name="finger-print-outline"></ion-icon> View Sessions
+                </a>
+              </h2>
+            }
           </ion-label>
         </ion-item>
 
@@ -47,15 +58,26 @@
         <ion-item class="ion-margin-top">
           <ion-icon slot="start" name="person-circle-outline" color="danger"></ion-icon>
           <ion-label>
-            <p>Reportee (Person reported)</p>
+            <p>Reportee</p>
             <h2>
-              <a class="profile-link" (click)="goToProfileView(solved ? solvedReport?.report?.reportee?.username : report?.reportee?.username)">
-                {{ solved ? solvedReport?.report?.reportee?.username : report?.reportee?.username }}
-              </a>
+              @if (solved) {
+                <h2>{{ solvedReport?.report?.reportee?.username }}</h2>
+              } @else {
+                <h2>
+                  <a class="profile-link" (click)="goToProfileView(report?.reportee?.username)">
+                    {{ report?.reportee?.username }}
+                  </a>
+                </h2>
+              }
             </h2>
-            <a class="sessions-link" (click)="goToSessionsView(solved ? solvedReport?.report?.reportee?.username : report?.reportee?.username)">
-              <ion-icon name="finger-print-outline"></ion-icon> View Sessions
-            </a>
+            <small>User ID: {{ solved ? solvedReport?.report?.reportee?.id : report?.reportee?.id }}</small>
+            @if (!solved) {
+              <h2>
+                <a class="sessions-link" (click)="goToSessionsView(report?.reportee?.username)">
+                  <ion-icon name="finger-print-outline"></ion-icon> View Sessions
+                </a>
+              </h2>
+            }
           </ion-label>
         </ion-item>
 

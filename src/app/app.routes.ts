@@ -77,6 +77,14 @@ export const routes: Routes = [
       {
         path: 'requests',
         loadComponent: () => import('./features/mod/pages/requests/requests.page').then( m => m.RequestsPage)
+      },
+      {
+        path: 'profile-view/:username',
+        loadComponent: () => import('./features/mod/pages/profile-view/profile-view.page').then(m => m.ProfileViewPage)
+      },
+      {
+        path: 'sessions-view/:username',
+        loadComponent: () => import('./features/mod/pages/sessions-view/sessions-view.page').then(m => m.SessionViewPage)
       }
     ],
   },
@@ -84,9 +92,5 @@ export const routes: Routes = [
     path: 'mod/login',
     canActivate: [modAuthGuard(false)],
     loadComponent: () => import('./features/mod/pages/mod-login/mod-login.page').then( m => m.ModLoginPage)
-  },  {
-    path: 'extended-report-modal',
-    loadComponent: () => import('./features/mod/pages/extended-report-modal/extended-report-modal.page').then( m => m.ExtendedReportModalPage)
   },
-
 ];

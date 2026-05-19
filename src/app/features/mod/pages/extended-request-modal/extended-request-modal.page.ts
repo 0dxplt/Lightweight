@@ -36,6 +36,7 @@ export class ExtendedRequestModalPage implements OnInit {
 
   goToProfileView(username: string | null | undefined) {
     if (!username) return;
-    this.router.navigate(["mod/user-view/" + username]);
+    this.dismiss();
+    this.router.navigate(["mod/profile-view/" + username]);
   }
 }
