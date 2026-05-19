@@ -12,7 +12,16 @@ export class RequestService {
         id: i+1,
         user: {
           id: i+1,
-          username: "Requester#" + Math.round(Math.random() * 1000)
+          username: "Requester#" + Math.round(Math.random() * 1000),
+          email: "requester@prova",
+          weight: 100,
+          height: 180,
+          followers: 0,
+          following: 0,
+          gLevel: 0,
+          sLevel: 0,
+          xp: 0,
+          verified: (Math.random() < 0.5) ? true : false
         },
         timestamp: Math.round(Math.random() * 100000000000)
       };
