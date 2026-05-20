@@ -1,0 +1,103 @@
+.moderator-info {
+    p {
+        margin: 0;
+        font-size: 1rem;
+        color: var(--ion-color-tertiary);
+        text-align: center;
+        font-weight: 500;
+    }
+}
+
+ion-card {
+    margin: 16px;
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    border: none;
+    overflow: hidden;
+
+    ion-card-header {
+        padding: 16px;
+        border-bottom: 1px solid var(--ion-color-tertiary);
+
+        ion-card-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--ion-color-dark);
+            letter-spacing: -0.5px;
+        }
+    }
+}
+
+ion-list {
+    background: transparent;
+    padding: 0;
+}
+
+ion-item {
+    --padding-start: 16px;
+    --inner-padding-end: 16px;
+    --min-height: 56px;
+    border-left: 4px solid var(--ion-color-danger);
+    border-top-left-radius: 5%;
+    border-bottom-left-radius: 5%;
+    border-right: 4px solid var(--ion-color-success);
+    border-top-left-radius: 5%;
+    border-bottom-left-radius: 5%;
+
+    .set-row {
+        display: flex;
+        align-items: center;
+        width: 100%;
+
+        .set-number {
+            font-size: 0.7rem;
+            font-weight: 800;
+            color: var(--ion-color-tertiary);
+            text-transform: uppercase;
+            width: 45px;
+        }
+
+        .set-details {
+            flex: 1;
+            font-size: 0.95rem;
+            color: var(--ion-color-step-700);
+
+            strong {
+                color: var(--ion-color-dark);
+                font-weight: 600;
+            }
+
+            .unit {
+                font-size: 0.8rem;
+                color: var(--ion-color-step-400);
+                margin-left: 2px;
+            }
+        }
+    }
+}
+
+ion-badge {
+    --padding-top: 6px;
+    --padding-bottom: 6px;
+    --padding-start: 6px;
+    --padding-end: 6px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    ion-icon {
+        width: 25px;
+        height: 25px;   
+    }
+}
+
+ion-item-option {
+    --padding-start: 20px;
+    --padding-end: 20px;
+
+    ion-icon {
+        width: 1.5em;
+        height: 1.5em;
+    }
+}

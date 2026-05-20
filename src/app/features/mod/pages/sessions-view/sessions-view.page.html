@@ -1,6 +1,11 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>{{username}}'s sessions</ion-title>
+    <ion-item>
+      <ion-title>{{user.username}}'s sessions</ion-title>
+      <ion-button fill="clear" (click)="goBack()" slot="end" id="goback">
+        <ion-icon name="arrow-back" color="tertiary" style="width: 30px; height: 30px;"></ion-icon>
+      </ion-button>
+    </ion-item>
   </ion-toolbar>
 </ion-header>
 
@@ -10,4 +15,17 @@
       <ion-title size="large">sessions-view</ion-title>
     </ion-toolbar>
   </ion-header>
+  <ion-refresher slot="fixed" [pullFactor]="0.5" [pullMin]="100" [pullMax]="200" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content refreshingSpinner="circles">
+    </ion-refresher-content>
+  </ion-refresher>
+
+  <ion-list>
+    @for (item of this.sessions; track $index) {
+      <app-session-card [session]="item" (onClick)="openSessionModal($event)"></app-session-card>
+    }
+  </ion-list>
+  <ion-infinite-scroll (ionInfinite)="onIonInfinite($event)" [disabled]="disabled">
+    <ion-infinite-scroll-content></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
 </ion-content>

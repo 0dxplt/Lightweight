@@ -29,4 +29,14 @@ export class RequestService {
     }
     return requests;
   }
+
+  approve(request: ValidationRequest) {
+    // query al db
+    console.log("Approving request from user: \"" + request.user.username + "\"");
+  }
+
+  reject(request: ValidationRequest) {
+    // query al db
+    console.log("Rejecting request from user: \"" + request.user.username + "\"");
+  }
 }
