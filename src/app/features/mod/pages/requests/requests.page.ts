@@ -95,4 +95,14 @@ export class RequestsPage implements OnInit {
 
     await modal.present();
   }
+
+  approveRequest(request: ValidationRequest) {
+    this.requestService.approve(request);
+    this.refresh();
+  }
+
+  rejectRequest(request: ValidationRequest) {
+    this.requestService.reject(request);
+    this.refresh();
+  }
 }

@@ -24,8 +24,9 @@ export class ReportSlidingItemComponent  implements OnInit {
     addIcons({'checkmark-done':checkmarkDone});
   }
 
-  checkReport() {
+  checkReport(slidingItem: IonItemSliding) {
     this.onConfirm.emit();
+    slidingItem.close();
   }
 
   reportReview() {
