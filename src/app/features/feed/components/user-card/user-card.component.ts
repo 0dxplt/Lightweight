@@ -12,8 +12,6 @@ import { SessionModalComponent } from "src/app/shared/components/session-modal/s
 })
 export class UserCardComponent  implements OnInit {
 
-  public isOpen = false;
-
   @Input({ required: true }) username!: string;
   @Input({ required: true }) sessionName!: string;
   @Input({ required: true }) sessionId!: number;

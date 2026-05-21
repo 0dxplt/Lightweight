@@ -39,7 +39,7 @@ h1, p, h2 {
     display: flex;
     align-items: center;
     gap: 15px;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 }
 
 .avatar {
@@ -61,7 +61,6 @@ h1, p, h2 {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 6px;
 }
 
 .infos h1 {
@@ -75,6 +74,9 @@ h1, p, h2 {
     flex-direction: row;
     flex-wrap: wrap;
     gap: 5px;
+    margin-bottom: 20px;
+    align-items: center;
+    justify-content: center;
 }
 
 .tags ion-chip {
@@ -111,4 +113,9 @@ h1, p, h2 {
 .serie h2 {
     font-weight: 700;
     font-size: 1.4em;
+}
+
+ion-fab-button {
+    border: 2px solid white;
+    border-radius: 100%;
 }
