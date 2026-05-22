@@ -9,6 +9,7 @@ import { AuthService } from '../../services/auth-service';
 
 import { addIcons } from 'ionicons';
 import { eyeOutline, eyeOffOutline } from 'ionicons/icons';
+import { MAX_PASSWORD_LENGTH, MIN_PASSWORD_LENGTH } from 'src/app/shared/global';
 
 @Component({
   selector: 'app-login',
@@ -30,8 +31,8 @@ export class LoginPage implements OnInit {
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [
       Validators.required,
-      Validators.minLength(8),
-      Validators.maxLength(32)
+      Validators.minLength(MIN_PASSWORD_LENGTH),
+      Validators.maxLength(MAX_PASSWORD_LENGTH)
     ])
   });
 

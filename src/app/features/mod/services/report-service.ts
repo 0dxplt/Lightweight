@@ -24,7 +24,8 @@ export class ReportService {
           gLevel: 0,
           sLevel: 0,
           xp: 0,
-          verified: (Math.random() < 0.5) ? true : false
+          verified: (Math.random() < 0.5) ? true : false,
+          sessions: Math.round(Math.random() * 300)
         },
         reporter: {
           id: i+1,
@@ -37,7 +38,8 @@ export class ReportService {
           gLevel: 0,
           sLevel: 0,
           xp: 0,
-          verified: (Math.random() < 0.5) ? true : false
+          verified: (Math.random() < 0.5) ? true : false,
+          sessions: Math.round(Math.random() * 300)
         }
       }
       reports.push(report);

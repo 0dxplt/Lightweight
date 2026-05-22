@@ -15,6 +15,7 @@ export class SessionService {
         id: i+1,
         username: username,
         email: "user@prova",
+        sessions: Math.round(Math.random() * 300),
         weight: 100,
         height: 180,
         followers: 0,

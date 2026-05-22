@@ -1,0 +1,71 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button color="medium" (click)="cancel()">Cancel</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense" class="ion-no-border">
+    <ion-toolbar>
+      <ion-title size="large">Personal Trainer Request</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <div id="form-container">
+    <div class="pt-header">
+      <span>Personal Trainer Information</span>
+    </div>
+
+    <form [formGroup]="ptFormGroup" (ngSubmit)="confirm()">
+      
+      <!-- Email Professionale -->
+      <ion-item class="input-item" lines="full">
+        <ion-input
+          label="Professional Email"
+          labelPlacement="floating"
+          type="email"
+          formControlName="proemail">
+        </ion-input>
+      </ion-item>
+
+      <!-- Palestra -->
+       <ion-list>
+         <ion-item class="input-item" lines="full">
+           <ion-select label="Gym" 
+             labelPlacement="stacked" 
+             formControlName="gym" 
+             placeholder="Select Gym"
+             interface="modal"
+             (ionChange)="onGymChange($event)">
+             @for (item of this.gyms; track item.id) {
+               <ion-select-option [value]="item">{{ item.name }}, {{ item.address }}</ion-select-option>
+             }
+             <ion-select-option value="ADD_NEW" class="add-new-option">Add new gym</ion-select-option>
+           </ion-select>
+         </ion-item>
+       </ion-list>
+
+      <!-- Città -->
+       <ion-list>
+         <ion-item class="input-item" lines="full">
+           <ion-select label="City" labelPlacement="floating" formControlName="city" interface="modal">
+             @for (item of this.cities; track item.id) {
+               <ion-select-option [value]="item">{{ item.name }} ({{ item.nation.name }})</ion-select-option>
+             }
+           </ion-select>
+         </ion-item>
+       </ion-list>
+
+      <ion-button 
+        type="submit" 
+        class="submit-button"
+        expand="block" 
+        [disabled]="ptFormGroup.invalid">
+        Confirm
+      </ion-button>
+
+    </form>
+  </div>
+</ion-content>

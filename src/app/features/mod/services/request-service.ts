@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ValidationRequest } from 'src/app/models/request.model';
+import { User } from 'src/app/models/user.model';
 
 @Injectable({
   providedIn: 'root',
@@ -21,7 +22,8 @@ export class RequestService {
           gLevel: 0,
           sLevel: 0,
           xp: 0,
-          verified: (Math.random() < 0.5) ? true : false
+          verified: (Math.random() < 0.5) ? true : false,
+          sessions: Math.round(Math.random() * 300)
         },
         timestamp: Math.round(Math.random() * 100000000000)
       };
@@ -38,5 +40,17 @@ export class RequestService {
   reject(request: ValidationRequest) {
     // query al db
     console.log("Rejecting request from user: \"" + request.user.username + "\"");
+  }
+
+  new(from: User | null) {
+    if (!from) return;
+    // query al db
+    const request: ValidationRequest = {
+      id: 999,
+      user: from,
+      timestamp: Date.now()
+    }
+
+    console.log("Adding new request with id: " + request.id + " from \"" + from.name + " " + from.surname + "\"");
   }
 }

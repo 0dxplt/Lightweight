@@ -1,0 +1,98 @@
+.form-wrapper {
+    padding: 24px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.section-label {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--ion-color-step-400, #888);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: -10px;
+    padding-left: 4px;
+}
+
+.input-box {
+    border: none;
+    border-bottom: 2px solid var(--ion-color-tertiary);
+
+    ion-input {
+        --color: white;
+        font-weight: 500;
+        font-size: 1.1rem;
+    }
+}
+
+// ion-searchbar
+.search-box {
+    ion-searchbar {
+        --border-radius: 16px;
+        --background: #121212;
+        --color: white;
+        --icon-color: var(--ion-color-tertiary);
+        padding: 0;
+        height: 54px;
+        border: 1.5px solid #333;
+        border-radius: 16px;
+        transition: border-color 200ms linear;
+
+        &:focus-within {
+            border-color: #e67e22;
+        }
+    }
+}
+
+// Contenitore Mappa
+.map-wrapper {
+    height: 320px;
+    width: 100%;
+    border-radius: 24px;
+    border: 2px solid var(--ion-color-tertiary);
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    position: relative;
+
+    #map-id {
+        height: 100%;
+        width: 100%;
+        z-index: 1;
+    }
+}
+
+// Info Footer (Successo)
+.info-footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 12px;
+    background: rgba(46, 204, 113, 0.1);
+    border-radius: 12px;
+    color: #2ecc71;
+    animation: fadeIn 0.4s ease-out;
+
+    ion-icon {
+        font-size: 1.4rem;
+    }
+
+    span {
+        font-weight: 600;
+        font-size: 0.95rem;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

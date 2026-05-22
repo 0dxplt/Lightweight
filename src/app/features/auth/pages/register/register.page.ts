@@ -4,6 +4,7 @@ import { ReactiveFormsModule, FormControl, FormGroup, Validators, FormsModule } 
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonInput, IonInputPasswordToggle, IonButton, IonRippleEffect, IonRouterLink, IonText } from '@ionic/angular/standalone';
 import { AuthService } from '../../services/auth-service';
 import { Router, RouterModule } from '@angular/router';
+import { MAX_HEIGHT_VALUE, MAX_PASSWORD_LENGTH, MAX_USERNAME_LENGTH, MAX_WEIGHT_VALUE, MIN_HEIGHT_VALUE, MIN_PASSWORD_LENGTH, MIN_USERNAME_LENGTH, MIN_WEIGHT_VALUE } from 'src/app/shared/global';
 
 @Component({
   selector: 'app-register',
@@ -15,22 +16,22 @@ import { Router, RouterModule } from '@angular/router';
 export class RegisterPage implements OnInit {
 
   registerForm: FormGroup = new FormGroup({
-    username: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(15)]),
+    username: new FormControl('', [Validators.required, Validators.minLength(MIN_USERNAME_LENGTH), Validators.maxLength(MAX_USERNAME_LENGTH)]),
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [
       Validators.required,
-      Validators.minLength(8),
-      Validators.maxLength(32)
+      Validators.minLength(MIN_PASSWORD_LENGTH),
+      Validators.maxLength(MAX_PASSWORD_LENGTH)
     ]),
     weight: new FormControl('', [
       Validators.required,
-      Validators.min(30),
-      Validators.max(400)
+      Validators.min(MIN_WEIGHT_VALUE),
+      Validators.max(MAX_WEIGHT_VALUE)
     ]),
     height: new FormControl('', [
       Validators.required,
-      Validators.min(40),
-      Validators.max(240)
+      Validators.min(MIN_HEIGHT_VALUE),
+      Validators.max(MAX_HEIGHT_VALUE)
     ]),
   });
 

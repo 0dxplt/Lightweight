@@ -1,4 +1,5 @@
 import { Nation } from "./nation.model";
+import { PersonalTrainer } from "./personal-trainer.model";
 
 export type User = {
     id: number;
@@ -16,5 +17,7 @@ export type User = {
     xp: number;
     followers: number;
     following: number;
+    sessions: number;
     verified: boolean;
+    pt?: PersonalTrainer;
 }

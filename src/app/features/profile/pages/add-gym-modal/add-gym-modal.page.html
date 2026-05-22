@@ -1,0 +1,49 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar style="--background: #1a1a1a;">
+    <ion-buttons slot="start">
+      <ion-button (click)="cancel()" style="--color: #e67e22; font-weight: 600;">Cancel</ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button (click)="confirm()" [disabled]="!gymName || !lat" style="--color: #2ecc71; font-weight: 600;">Confirm</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content style="--background: #1a1a1a; --color: white;">
+  <div class="form-wrapper">
+    
+    <!-- Nome Palestra -->
+    <div class="input-box">
+      <ion-input 
+        [(ngModel)]="gymName" 
+        label="Gym's name"
+        labelPlacement="floating">
+      </ion-input>
+    </div>
+
+    <!-- Ricerca Mappa -->
+    <label class="section-label">Search</label>
+    <div class="search-box">
+      <ion-searchbar 
+        [(ngModel)]="addressQuery" 
+        (keyup.enter)="searchLocation()"
+        placeholder="Search in map..."
+        style="--background: #121212; --color: white;">
+      </ion-searchbar>
+    </div>
+
+    <!-- Container Mappa -->
+    <div class="map-wrapper">
+      <div id="map-id"></div>
+    </div>
+
+    <!-- Info coordinate -->
+    @if (lat) {
+      <div class="info-footer">
+        <ion-icon name="location-outline"></ion-icon>
+        <span>{{this.addressFound}}</span>
+      </div>
+    }
+
+  </div>
+</ion-content>
