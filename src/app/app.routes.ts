@@ -59,6 +59,18 @@ export const routes: Routes = [
     loadComponent: () => import('./features/auth/pages/register/register.page').then( m => m.RegisterPage)
   },
   {
+    path: 'session',
+    canActivate: [authGuard(true)],
+    loadComponent: () => import('./features/session/pages/current-session/current-session.page').then( m => m.CurrentSessionPage)
+  },
+  {
+    path: 'workout',
+    loadComponent: () => import('./features/workout/workout.page').then( m => m.WorkoutPage)
+  },
+  {
+    path: 'workout/:id',
+    loadComponent: () => import('./features/workout/workout.page').then( m => m.WorkoutPage)
+  }
     path: 'mod',
     canActivate: [modAuthGuard(true)],
     children: [

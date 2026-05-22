@@ -4,11 +4,16 @@ export type Serie = {
     recuperoMs: number;
 }
 
+export type Tag = {
+    nome: string;
+    perc: number;
+}
+
 export type Exercise = {
     exercisePhotoUrl: string;
     nome: string;
     serie: Serie[];
-    tags: String[];
+    tags: Tag[];
 }
 
 export type SessionModalComponentInfo = {

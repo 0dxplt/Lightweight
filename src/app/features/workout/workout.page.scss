@@ -1,0 +1,109 @@
+* {
+    font-family: 'Montserrat', sans-serif;
+}
+
+h1, p, h2 {
+    margin: 0;
+}
+
+.exercises {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding: 15px;
+}
+
+@media (min-width: 992px) {
+    .exercises {
+        grid-template-columns: repeat(2, 1fr); 
+    }
+}
+
+.exercise {
+    background-color: var(--ion-color-secondary, #254b54);
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.exercise-top {
+    display: flex;
+    padding: 15px;
+    gap: 15px;
+    align-items: center;
+}
+
+.avatar {
+    width: 70px;
+    height: 70px;
+    border-radius: 15px;
+    background-color: white;
+    flex-shrink: 0;
+    overflow: hidden;
+    
+    ion-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+}
+
+.infos {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.infos h1 {
+    font-size: 1.1em;
+    font-weight: 600;
+    color: white;
+    margin-bottom: 8px;
+}
+
+.tags {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.custom-chip {
+    margin: 0;
+    height: 22px;
+    font-size: 0.75em;
+    color: white;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    padding: 0 10px;
+}
+
+.exercise-bottom {
+    background-color: white;
+    display: flex;
+    justify-content: space-around;
+    padding: 12px 10px;
+    text-align: center;
+}
+
+.stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.stat p {
+    font-size: 0.85em;
+    font-weight: 500;
+    color: #111;
+    margin-bottom: 5px;
+}
+
+.stat h2 {
+    font-weight: 700;
+    font-size: 1.3em;
+    color: var(--ion-color-secondary, #254b54);
+}

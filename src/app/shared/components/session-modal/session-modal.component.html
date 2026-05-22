@@ -22,15 +22,15 @@
           <div class="name">
             <h1>{{exercise.nome}}</h1>
           </div>
-          <div class="tags">
-            @for (tag of exercise.tags; track tag) {
-            <ion-chip>
-              {{tag}}
-            </ion-chip>
-            }
-          </div>
         </div>
       </div>
+      <div class="tags">
+          @for (tag of exercise.tags; track tag) {
+          <ion-chip>
+            {{tag.nome}} {{tag.perc + '%'}}
+          </ion-chip>
+          }
+        </div>
       <div class="series">
         @for (serie of exercise.serie; track serie) {
         <div class="serie">
@@ -44,7 +44,7 @@
           </div>
           <div class="recupero">
             <p>Recupero</p>
-            <h2>{{serie.recuperoMs}}</h2>
+            <h2>{{serie.recuperoMs | betterMsViewer}}</h2>
           </div>
         </div>
         }
@@ -52,4 +52,9 @@
     </div>
     }
   </div>
+  <ion-fab (click)="openChartModal()" slot="fixed" horizontal="center" vertical="bottom">
+    <ion-fab-button color="secondary">
+      <ion-icon name="stats-chart"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 </ion-content>

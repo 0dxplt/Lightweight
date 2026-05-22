@@ -10,4 +10,28 @@
       <ion-title size="large">workouts</ion-title>
     </ion-toolbar>
   </ion-header>
+  <ion-card class="active-session" [button]="true" routerLink="/session">
+    Sessione Corrente
+  </ion-card>
+  <div class="exercises">
+    @for (workout of workouts; track workout) {
+    <ion-card class="workout-card" [button]="true" [routerLink]="['/workout', workout.id]">
+      <div class="title">
+        <h1>{{workout.nome}}</h1>
+      </div>
+      <div class="tags">
+        @for (tag of workout.tags; track tag) {
+        <ion-chip>
+          {{tag}}
+        </ion-chip>
+        }
+      </div>
+    </ion-card>
+    }
+  </div>
+  <ion-fab slot="fixed" horizontal="center" vertical="bottom" [routerLink]="['/workout']">
+    <ion-fab-button color="secondary">
+      <ion-icon name="add-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 </ion-content>
