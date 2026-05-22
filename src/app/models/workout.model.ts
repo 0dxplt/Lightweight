@@ -1,14 +1,12 @@
-import { Tag } from "./session-modal-component-info"
+import { Exercise } from "./exercise.model";
 import { User } from "./user.model";
 import { WorkoutExercise } from "./workout-exercise.model";
 
 export type ExerciseWorkout = {
-    exercisePhotoUrl: string;
-    nome: string;
     serie: number;
     reps: number,
     recuperoMs: number;
-    tags: Tag[];
+    exercise: Exercise;
 }
 
 export type WorkoutMiniCard = {
