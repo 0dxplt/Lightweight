@@ -1,0 +1,63 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button color="medium" (click)="cancel()">Esci</ion-button>
+    </ion-buttons>
+    <ion-title>{{ session.workout.name }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button color="primary" (click)="confirm()" [strong]="true">Salva</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding-bottom">
+  <div class="moderator-info ion-padding">
+    <p>Session info</p>
+  </div>
+
+  @for (group of groupedExercises(); track group.name) {
+    <ion-card class="exercise-card">
+      <ion-card-header>
+        <ion-card-title>{{ group.name }}</ion-card-title>
+        <ion-card-subtitle>{{ group.sets.length }} total series</ion-card-subtitle>
+      </ion-card-header>
+
+      <ion-list lines="inset">
+        @for (set of group.sets; track set.id; let i = $index) {
+          <ion-item-sliding #slidingItem>
+
+            <ion-item-options side="start">
+              <ion-item-option color="danger" (click)="setValidation(set, false, slidingItem)">
+                <ion-icon slot="icon-only" name="close-outline"></ion-icon>
+              </ion-item-option>
+            </ion-item-options>
+
+            <ion-item lines="full">
+              <div class="set-row">
+                <span class="set-number">SET {{ i + 1 }}</span>
+
+                <div class="set-details">
+                  <span><strong>{{ set.reps }}</strong> <small class="unit">reps</small></span>
+                  <span style="margin: 0 8px; color: #ccc;">•</span>
+                  <span><strong>{{ set.weight }}</strong> <small class="unit">kg</small></span>
+                </div>
+              </div>
+
+              <ion-badge slot="end" [color]="set.valid ? 'success' : 'danger'">
+                <ion-icon [name]="set.valid ? 'checkmark-outline' : 'close-outline'"></ion-icon>
+              </ion-badge>
+            </ion-item>
+
+            <ion-item-options side="end">
+              <ion-item-option color="success" (click)="setValidation(set, true, slidingItem)">
+                <ion-icon slot="icon-only" name="checkmark-outline"></ion-icon>
+              </ion-item-option>
+            </ion-item-options>
+
+          </ion-item-sliding>
+        }
+
+      </ion-list>
+    </ion-card>
+  }
+</ion-content>

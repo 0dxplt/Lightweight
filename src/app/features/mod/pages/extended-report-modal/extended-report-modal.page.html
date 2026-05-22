@@ -1,0 +1,139 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      {{ solved ? 'Resolution Details' : 'Report Details' }}
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  
+  <!-- Status Badge -->
+  <div class="ion-text-center ion-margin-bottom">
+    @if (solved) {
+      <ion-badge color="success" class="status-badge">RESOLVED</ion-badge>
+    } @else {
+      <ion-badge color="warning" class="status-badge">PENDING REVIEW</ion-badge>
+    }
+  </div>
+
+  <!-- Main Report Card -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-subtitle>Report Information</ion-card-subtitle>
+      <ion-card-title>ID #{{ solved ? solvedReport?.report?.id : report?.id }}</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-list lines="none">
+        
+        <!-- Reporter -->
+        <ion-item>
+          <ion-icon slot="start" name="megaphone-outline" color="primary"></ion-icon>
+          <ion-label>
+            <p>Reporter</p>
+            <h2>
+              @if (solved) {
+                <h2>{{ solvedReport?.report?.reporter?.username }}</h2>
+              } @else {
+                <h2>
+                  <a class="profile-link" (click)="goToProfileView(report?.reporter?.username)">
+                    {{ report?.reporter?.username }}
+                  </a>
+                </h2>
+              }
+            </h2>
+            <small>User ID: {{ solved ? solvedReport?.report?.reporter?.id : report?.reporter?.id }}</small>
+            @if (!solved) {
+              <h2>
+                <a class="sessions-link" (click)="goToSessionsView(report?.reporter?.username)">
+                  <ion-icon name="finger-print-outline"></ion-icon> View Sessions
+                </a>
+              </h2>
+            }
+          </ion-label>
+        </ion-item>
+
+        <!-- Reportee -->
+        <ion-item class="ion-margin-top">
+          <ion-icon slot="start" name="person-circle-outline" color="danger"></ion-icon>
+          <ion-label>
+            <p>Reportee</p>
+            <h2>
+              @if (solved) {
+                <h2>{{ solvedReport?.report?.reportee?.username }}</h2>
+              } @else {
+                <h2>
+                  <a class="profile-link" (click)="goToProfileView(report?.reportee?.username)">
+                    {{ report?.reportee?.username }}
+                  </a>
+                </h2>
+              }
+            </h2>
+            <small>User ID: {{ solved ? solvedReport?.report?.reportee?.id : report?.reportee?.id }}</small>
+            @if (!solved) {
+              <h2>
+                <a class="sessions-link" (click)="goToSessionsView(report?.reportee?.username)">
+                  <ion-icon name="finger-print-outline"></ion-icon> View Sessions
+                </a>
+              </h2>
+            }
+          </ion-label>
+        </ion-item>
+
+        <!-- Submission Date -->
+        <ion-item class="ion-margin-top">
+          <ion-icon slot="start" name="time-outline" color="primary"></ion-icon>
+          <ion-label>
+            <p>Submission Date</p>
+            <h2>{{ (solved ? solvedReport?.report?.timestamp : report?.timestamp) | datefy }}</h2>
+          </ion-label>
+        </ion-item>
+
+        <!-- Report Reason -->
+        <div class="reason-box ion-margin-top">
+          <small>Reason for report</small>
+          <p>{{ solved ? solvedReport?.report?.reason : report?.reason }}</p>
+        </div>
+
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Resolution Details (Only if solved) -->
+  @if (solved && solvedReport) {
+    <ion-card class="moderator-card">
+      <ion-card-header>
+        <ion-card-subtitle>Outcome Information</ion-card-subtitle>
+        <ion-card-title>Resolution</ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+        <div class="outcome-box">
+          <small>Moderator Outcome</small>
+          <p>{{ solvedReport.outcome }}</p>
+        </div>
+
+        <ion-list lines="none" class="ion-margin-top">
+          <ion-item>
+            <ion-icon slot="start" name="shield-checkmark-outline" color="tertiary"></ion-icon>
+            <ion-label>
+              <p>Solved by</p>
+              <h2>{{ solvedReport.moderator.username }}</h2>
+              <p>{{ solvedReport.moderator.email }}</p>
+            </ion-label>
+          </ion-item>
+
+          <ion-item>
+            <ion-icon slot="start" name="calendar-outline" color="tertiary"></ion-icon>
+            <ion-label>
+              <p>Completion Date</p>
+              <h2>{{ solvedReport.timestamp | datefy }}</h2>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+  }
+
+</ion-content>

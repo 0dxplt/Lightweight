@@ -1,0 +1,28 @@
+<ion-item button (click)="this.openModal(this.solvedRequest())" detail="false">
+  
+  <!-- 1. RANGO (Allineato a sinistra, larghezza fissa) -->
+  <div slot="start" class="id-container">
+    {{this.solvedRequest().id}}
+  </div>
+
+  <!-- 3. INFO MODERATORE (Username) -->
+  <ion-label>
+    <div class="moderator-content">
+      <span class="username">{{this.solvedRequest().moderator.username}}</span>
+    </div>
+  </ion-label>
+
+  <div slot="end" class="id-container">
+    <ion-badge
+      [color]="this.statusColor"
+      class="status-badge">
+      <ion-icon
+        [name]="this.statusIcon">
+      </ion-icon>
+      {{ solvedRequest().status }}
+    </ion-badge>
+    <span class="complete-date">
+      {{ solvedRequest().timestamp | datefy }}
+    </span>
+  </div>
+</ion-item>

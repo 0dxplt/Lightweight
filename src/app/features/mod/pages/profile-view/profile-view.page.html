@@ -1,0 +1,72 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-item lines="none">
+      <ion-title>Profile: {{ user.username }}</ion-title>
+      <ion-button fill="clear" (click)="goBack()" slot="end" id="goback">
+        <ion-icon name="arrow-back" color="tertiary"></ion-icon>
+      </ion-button>
+    </ion-item>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  
+  <!-- Header: Avatar e nomi -->
+  <div class="ion-text-center ion-margin-bottom">
+    <ion-avatar style="width: 100px; height: 100px; margin: 0 auto;">
+      <img [src]="user.propic || 'assets/icon/favicon.png'" alt="profile picture" />
+    </ion-avatar>
+    <h1>{{ user.username }}</h1>
+    <p>{{ user.name }} {{ user.surname }}</p>
+  </div>
+
+  <!-- Moderator Action: Toggle Verificato -->
+  <ion-list-header>
+    <ion-label color="tertiary">Actions</ion-label>
+  </ion-list-header>
+  <ion-item>
+    <ion-icon slot="start" name="checkmark-circle" color="primary"></ion-icon>
+    <ion-label>Verified Account</ion-label>
+    <ion-toggle [checked]="user.verified" (ionChange)="onToggleVerified($event)"></ion-toggle>
+  </ion-item>
+
+  <!-- Info Personali -->
+  <ion-list-header>
+    <ion-label color="tertiary">Info</ion-label>
+  </ion-list-header>
+  <ion-item>
+    <ion-label>Email: <strong>{{ user.email }}</strong></ion-label>
+  </ion-item>
+  <ion-item>
+    <ion-label>Nationality: <strong>{{ user.nationality?.name }}</strong></ion-label>
+    <ion-text slot="end">{{ user.nationality?.flag }}</ion-text>
+  </ion-item>
+  <ion-item>
+    <ion-label>Stats: <strong>{{ user.weight }}kg / {{ user.height }}cm</strong></ion-label>
+  </ion-item>
+
+  <!-- Statistiche App -->
+  <ion-list-header>
+    <ion-label color="tertiary">App Stats</ion-label>
+  </ion-list-header>
+  <ion-item>
+    <ion-label>Levels: S-{{ user.sLevel }} / G-{{ user.gLevel }}</ion-label>
+  </ion-item>
+  <ion-item>
+    <ion-label>XP Points: <strong>{{ user.xp }}</strong></ion-label>
+  </ion-item>
+  <ion-item>
+    <ion-label>Followers: <strong>{{ user.followers }}</strong></ion-label>
+  </ion-item>
+  <ion-item>
+    <ion-label>Following: <strong>{{ user.following }}</strong></ion-label>
+  </ion-item>
+
+  <!-- Pulsante di Salvataggio -->
+  <div class="ion-margin-top">
+    <ion-button expand="block" color="primary" (click)="saveChanges()">
+      Done
+    </ion-button>
+  </div>
+
+</ion-content>

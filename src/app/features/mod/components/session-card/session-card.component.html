@@ -1,0 +1,36 @@
+<ion-card (click)="click()" button>
+  <ion-card-content>
+    <!-- Titolo e Stato -->
+    <div class="card-header">
+      <div class="title-group">
+        <span class="session-id">#{{ session().id }}</span>
+        <h2>{{ session().workout.name }}</h2>
+      </div>
+      <ion-icon 
+        [name]="session().shared ? 'share-social-outline' : 'lock-closed-outline'" 
+        [color]="session().shared ? 'success' : 'medium'">
+      </ion-icon>
+    </div>
+
+    <!-- Data ed XP -->
+    <div class="metadata">
+      <div class="meta-item">
+        <ion-icon name="calendar-outline"></ion-icon>
+        <ion-label>{{ (session().timestamp | datefy).split(' - ')[0] }}</ion-label>
+      </div>
+      @if (session().xp) {
+        <div class="meta-item">
+          <ion-icon name="flash-outline" color="warning"></ion-icon>
+          <ion-label>{{ session().xp }} XP</ion-label>
+        </div>
+      }
+    </div>
+
+    <!-- Tags Gruppi Muscolari -->
+    <div class="tags-row">
+      @for (tag of uniqueTags(); track tag) {
+        <span class="custom-tag">{{ tag }}</span>
+      }
+    </div>
+  </ion-card-content>
+</ion-card>

@@ -1,0 +1,40 @@
+<ion-item-sliding #slidingItem>
+  <ion-item (click)="reportReview()" button>
+    <!-- 1. ID (Allineato a sinistra, larghezza fissa) -->
+    <div slot="start" class="id-container">
+      {{this.report().id}}
+    </div>
+
+    <!-- 3. INFO REPORTER (Username) -->
+    <ion-label>
+      <div class="reporter-content">
+        <span class="reporter-username" style="color: var(--ion-color-tertiary);">
+          {{this.report().reporter.username}}
+        </span>
+      </div>
+    </ion-label>
+
+    <!-- 4. INFO REPORTEE (Username) -->
+    <ion-label>
+      <div class="reportee-content">
+        <span class="reportee-username" style="color: var(--ion-color-danger);">
+          {{this.report().reportee.username}}
+        </span>
+      </div>
+    </ion-label>
+
+    <!-- 4. DATA (Allineata alla fine a destra) -->
+    <div slot="end" class="level-container">
+      <span class="complete-date">
+        {{(this.report().timestamp | datefy).split(' - ')[0]}}
+      </span>
+    </div>
+
+  </ion-item>
+
+  <ion-item-options side="end" (click)="checkReport(slidingItem)">
+    <ion-item-option color="secondary">
+      <ion-icon name="checkmark-done" style="width: 30px; height: 30px;"></ion-icon>
+    </ion-item-option>
+  </ion-item-options>
+</ion-item-sliding>

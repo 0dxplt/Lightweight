@@ -38,7 +38,8 @@ export class RankingListComponent  implements OnInit {
   }
 
   private _addUsers() {
-    for (let i = 0; i < this._limit; i++, this._start++) {
+    const length = this._users.length;
+    for (let i = 0; i < this._limit && this.users.length < length; i++, this._start++) {
       this.users.push(this._users[this._start]);
     }
   }
