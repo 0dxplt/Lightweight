@@ -25,7 +25,7 @@ h1, p, h2 {
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: relative;
 }
 
 .exercise-top {
@@ -106,4 +106,39 @@ h1, p, h2 {
     font-weight: 700;
     font-size: 1.3em;
     color: var(--ion-color-secondary, #254b54);
+}
+
+.delete-button {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    margin: 0;
+    width: 36px;
+    height: 36px;
+}
+
+.delete-button::part(native) {
+    border-radius: 50%;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.delete-button ion-icon {
+    font-size: 22px;
+    color: white;
+}
+
+.edit-value {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.edit-value-button {
+  font-size: 24px;
+  color: var(--ion-color-secondary);
+  cursor: pointer;
 }

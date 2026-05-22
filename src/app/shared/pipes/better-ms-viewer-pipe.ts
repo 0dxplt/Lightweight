@@ -7,7 +7,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class BetterMsViewerPipe implements PipeTransform {
 
   transform(value: number): string {
-    if (!value) {
+    if (value === null || value === undefined) {
       return "";
     }
 
