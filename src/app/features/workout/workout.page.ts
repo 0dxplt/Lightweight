@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonChip, IonImg, IonFab, IonIcon, IonFabButton, IonLabel, IonAvatar, IonItem, IonList, IonSearchbar, IonModal, IonFabList } from '@ionic/angular/standalone';
 import { Exercise } from 'src/app/models/session-modal-component-info';
-import { WorkoutExercise } from 'src/app/models/workout.model';
+import { ExerciseWorkout } from 'src/app/models/workout.model';
 import { BetterMsViewerPipe } from "../../shared/pipes/better-ms-viewer-pipe";
 import { addIcons } from 'ionicons';
 import { addOutline, pieChartOutline, settingsOutline } from 'ionicons/icons';
@@ -19,7 +19,7 @@ export class WorkoutPage implements OnInit {
 
   @Input() id!: string;
 
-  public exercises:WorkoutExercise[] = [
+  public exercises:ExerciseWorkout[] = [
     {
       exercisePhotoUrl: "",
       nome: "Panca Piana Manubri",
