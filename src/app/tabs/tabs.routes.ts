@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { TabsPage } from './tabs.page';
+import { authGuard } from '../features/auth/guards/auth.guard';
 
 export const routes: Routes = [
   {
@@ -28,8 +29,22 @@ export const routes: Routes = [
       },
       {
         path: 'profile',
-        loadComponent: () =>
-          import('../features/profile/pages/profile/profile.page').then((m) => m.ProfilePage),
+        canActivate: [authGuard(true)],
+        children: [
+          {
+            path: '',
+            loadComponent: () => import('../features/profile/pages/profile/profile.page').then(m => m.ProfilePage)
+          },
+          {
+            path: 'edit',
+            loadComponent: () => import('../features/profile/pages/edit-profile/edit-profile.page').then( m => m.EditProfilePage)
+          },
+          {
+            // TODO: aggiungere una pagina 'PublicProfilePage'
+            path: ':username',
+            loadComponent: () => import('../features/profile/pages/profile/profile.page').then(m => m.ProfilePage)
+          },
+        ],
       },
       {
         path: '',

@@ -1,0 +1,72 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button color="medium" (click)="cancel()">Cancel</ion-button>
+    </ion-buttons>
+    <ion-title>Verification</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div id="form-container">
+    <div class="verify-header">
+      <span>Complete your Profile</span>
+      <p>In order to verify your account, you should insert some other details</p>
+    </div>
+
+    <form [formGroup]="verifyForm" (ngSubmit)="confirm()">
+      
+      <!-- Nome -->
+      @if (verifyForm.contains('name')) {
+        <ion-item class="input-item" lines="full">
+          <ion-input label="Name" labelPlacement="floating" formControlName="name"></ion-input>
+        </ion-item>
+        @if (verifyForm.get('name')?.errors?.['pattern']) {
+          <ion-note color="danger">Insert a valid name</ion-note>
+        }
+      }
+
+      <!-- Cognome -->
+      @if (verifyForm.contains('surname')) {
+        <ion-item class="input-item" lines="full">
+          <ion-input label="Surname" labelPlacement="floating" formControlName="surname"></ion-input>
+        </ion-item>
+        @if (verifyForm.get('surname')?.errors?.['pattern']) {
+          <ion-note color="danger">Insert a valid surname</ion-note>
+        }
+      }
+
+      <!-- Data di Nascita -->
+      @if (verifyForm.contains('birthdate')) {
+        <ion-item class="input-item" lines="full">
+          <ion-input 
+            label="Birthdate" 
+            labelPlacement="floating" 
+            type="date" 
+            formControlName="birthdate">
+          </ion-input>
+        </ion-item>
+      }
+
+      <!-- Nazionalità -->
+      @if (verifyForm.contains('nationality')) {
+        <ion-item class="input-item" lines="full">
+          <ion-select label="Nationality" labelPlacement="floating" formControlName="nationality">
+            @for (nation of nations; track nation.id) {
+              <ion-select-option [value]="nation">{{ nation.flag }} {{ nation.name }}</ion-select-option>
+            }
+          </ion-select>
+        </ion-item>
+      }
+
+      <ion-button 
+        type="submit" 
+        class="submit-button"
+        expand="block" 
+        [disabled]="verifyForm.invalid">
+        Invia Richiesta
+      </ion-button>
+
+    </form>
+  </div>
+</ion-content>

@@ -31,7 +31,8 @@ export class SolvedService {
             gLevel: 0,
             sLevel: 0,
             xp: 0,
-            verified: (Math.random() < 0.5) ? true : false
+            verified: (Math.random() < 0.5) ? true : false,
+            sessions: Math.round(Math.random() * 300)
           },
           reportee: {
             id: 21,
@@ -44,7 +45,8 @@ export class SolvedService {
             gLevel: 0,
             sLevel: 0,
             xp: 0,
-            verified: (Math.random() < 0.5) ? true : false
+            verified: (Math.random() < 0.5) ? true : false,
+            sessions: Math.round(Math.random() * 300)
           },
           timestamp: Math.round(Math.random() * 1000000000000),
           reason: "Nothing"
@@ -81,7 +83,8 @@ export class SolvedService {
             gLevel: 0,
             sLevel: 0,
             xp: 0,
-            verified: (Math.random() < 0.5) ? true : false
+            verified: (Math.random() < 0.5) ? true : false,
+            sessions: Math.round(Math.random() * 300)
           },
           timestamp: Math.round(Math.random() * 1000000000000)
         },

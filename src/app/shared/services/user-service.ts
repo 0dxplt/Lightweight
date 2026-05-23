@@ -24,7 +24,8 @@ export class UserService {
         name: 'Italia',
         shortform: 'it-IT',
         flag: ""
-      }
+      },
+      sessions: Math.round(Math.random() * 300)
     }
     return user;
   }

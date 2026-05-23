@@ -9,44 +9,29 @@ export const routes: Routes = [
     loadChildren: () => import('./tabs/tabs.routes').then((m) => m.routes),
   },
   {
-    path: 'profile',
-    canActivate: [authGuard(true)],
-    children: [
-      {
-        path: '',
-        loadComponent: () => import('./features/profile/pages/profile/profile.page').then(m => m.ProfilePage)
-      },
-      {
-        // TODO: aggiungere una pagina 'PublicProfilePage'
-        path: ':username',
-        loadComponent: () => import('./features/profile/pages/profile/profile.page').then(m => m.ProfilePage)
-      }
-    ],
-  },
-  {
     path: 'workouts',
-    canActivate: [authGuard(true)],
-    loadComponent: () => import('./features/workouts/pages/workouts/workouts.page').then(m => m.WorkoutsPage)
-  },
-  {
-    path: 'current-session',
-    canActivate: [authGuard(true)],
-    loadComponent: () => import('./features/session/pages/current-session/current-session.page').then(m => m.CurrentSessionPage)
+    redirectTo: 'tabs/workouts',
+    pathMatch: 'full'
   },
   {
     path: 'rankings',
-    canActivate: [authGuard(true)],
-    loadComponent: () => import('./features/rankings/pages/rankings/rankings.page').then(m => m.RankingsPage)
+    redirectTo: 'tabs/rankings',
+    pathMatch: 'full'
   },
   {
     path: 'pts',
-    canActivate: [authGuard(true)],
-    loadComponent: () => import('./features/pts/pages/pts/pts.page').then(m => m.PtsPage)
+    redirectTo: 'tabs/pts',
+    pathMatch: 'full'
   },
   {
     path: 'feed',
-    canActivate: [authGuard(true)],
-    loadComponent: () => import('./features/feed/pages/feed/feed.page').then(m => m.FeedPage)
+    redirectTo: 'tabs/feed',
+    pathMatch: 'full'
+  },
+  {
+    path: 'profile',
+    redirectTo: 'tabs/profile',
+    pathMatch: 'full'
   },
   {
     path: 'login',
@@ -70,7 +55,8 @@ export const routes: Routes = [
   {
     path: 'workout/:id',
     loadComponent: () => import('./features/workout/workout.page').then(m => m.WorkoutPage)
-  }, {
+  },
+  {
     path: 'mod',
     canActivate: [modAuthGuard(true)],
     children: [
