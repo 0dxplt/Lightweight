@@ -50,11 +50,11 @@ export const routes: Routes = [
   },
   {
     path: 'workout',
-    loadComponent: () => import('./features/workout/workout.page').then(m => m.WorkoutPage)
+    loadComponent: () => import('./features/workout/pages/workout.page').then(m => m.WorkoutPage)
   },
   {
     path: 'workout/:id',
-    loadComponent: () => import('./features/workout/workout.page').then(m => m.WorkoutPage)
+    loadComponent: () => import('./features/workout/pages/workout.page').then(m => m.WorkoutPage)
   },
   {
     path: 'mod',

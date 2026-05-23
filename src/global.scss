@@ -45,5 +45,9 @@
   --border-radius: 0; 
 }
 
+.add-exercise {
+  border-radius: 25px;
+}
+
 /* Leaflet */
 @import "leaflet/dist/leaflet.css";
