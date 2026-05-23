@@ -1,0 +1,21 @@
+<ion-header style="--background: transparent; box-shadow: none;">
+  <ion-toolbar style="text-align: center; margin-top: 10px; --background: transparent;">
+    <ion-title>{{this.username}}'s followings</ion-title>
+  </ion-toolbar>
+  <ion-toolbar style="margin-top: 10px; --background: transparent;">
+    <ion-searchbar (ionInput)="searchFollower($event)"></ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-list>
+    @for (item of this.following(); track item.id; ) {
+    <ion-item button (click)="visitProfile(item.username)">
+      <ion-avatar slot="start">
+        <img [src]="item.propic ? item.propic : '/assets/icon/favicon.png'" alt="avatar" />
+      </ion-avatar>
+      <ion-label>{{ item.username }}</ion-label>
+    </ion-item>
+    }
+    </ion-list>
+</ion-content>

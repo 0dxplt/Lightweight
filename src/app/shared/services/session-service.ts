@@ -74,27 +74,31 @@ export class SessionService {
           reps: 12,
           valid: true,
           weight: 20,
-          exercise: exercise
+          exercise: exercise,
+          recovery: 3000
         },
         {
           id: 0,
           reps: 20,
           valid: true,
           weight: 14,
-          exercise: exercise
+          exercise: exercise,
+          recovery: 3000
         },
         {
           id: 0,
           reps: 12,
           valid: true,
           weight: 18,
-          exercise: exercise
+          exercise: exercise,
+          recovery: 3000
         },
       {
           id: 0,
           reps: 12,
           valid: true,
           weight: 18,
+          recovery: 3000,
           exercise: {
             name: "Chest Press",
             id: i+1,
@@ -119,5 +123,11 @@ export class SessionService {
   updateSession(session: Session) {
     // query al DB
     console.log("Updating session: \"" + session.workout.name + "\"");
+  }
+
+  removeFrom(username: string | undefined, id: number | undefined) {
+    if (!username || !id) return;
+    // query al db
+    console.log("Deleting session #" + id + " from user \"" + username + "\"");
   }
 }

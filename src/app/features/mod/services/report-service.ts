@@ -52,4 +52,15 @@ export class ReportService {
     console.log("Confirming report #" + id_report);
     // Query per modificare i SolvedReport (DB)
   }
+
+  report(reporter: number, reportee: number, reason: string) {
+    // query al db
+    console.log(reporter + " has reported " + reportee + " for \"" + reason + "\"");
+  }
+
+  exists(reporter: number | undefined, reportee: number | undefined): boolean {
+    if (!reporter || !reportee) return false;
+    // query al db
+    return false;
+  }
 }

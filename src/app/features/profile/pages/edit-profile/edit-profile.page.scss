@@ -1,0 +1,115 @@
+ion-content {
+    --background: var(--ion-color-secondary);
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-content: center;
+    margin-top: 32px;
+}
+
+#user-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 512px;
+    
+    #user-header {
+        text-align: center;
+        z-index: 1;
+
+        img {
+            width: 128px;
+            height: 128px;
+            border: 2px solid var(--ion-color-tertiary);
+            border-radius: 50%;
+            overflow: hidden;
+            background-color: rgb(30, 30, 30);
+        }
+    }
+
+    #user-info-container {
+        box-sizing: content-box;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        flex: 1;
+
+        width: 100%;
+
+        margin-top: -64px;
+        padding: 32px;
+        padding-top: 72px;
+
+        border-radius: 5%;
+        box-shadow: 1px 1px 20px rgba(1, 1, 1, 0.8);
+        background-color: var(--ion-color-tertiary-contrast);
+
+        overflow: hidden;
+        z-index: 0;
+    }
+}
+
+#pt-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 512px;
+
+    #pt-info-container {
+        box-sizing: content-box;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        flex: 1;
+
+        width: 100%;
+
+        margin-top: 18px;
+        padding: 32px;
+
+        border-top: 2px solid var(--ion-color-tertiary);
+        box-shadow: 1px 1px 20px rgba(1, 1, 1, 0.8);
+        background-color: var(--ion-color-tertiary-contrast);
+        border-radius: 5%;
+    }
+}
+
+ion-item {
+    --background: transparent !important;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+ion-input, ion-select {
+    border-bottom: 2px solid var(--ion-color-tertiary);
+}
+
+ion-select {
+    --background: transparent !important;
+}
+
+ion-select-option {
+    --background: transparent !important;
+}
+
+ion-button[type="submit"] {
+    --color: var(--ion-color-tertiary);
+    --background: var(--ion-color-tertiary-contrast);
+    
+    margin-top: 24px;
+    margin-bottom: 10px;
+    width: 360px;
+    height: 80px;
+    
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 18px;
+
+    border: 2px solid var(--ion-color-tertiary);
+    border-radius: 2px;
+
+    transition: all 200ms linear;
+}

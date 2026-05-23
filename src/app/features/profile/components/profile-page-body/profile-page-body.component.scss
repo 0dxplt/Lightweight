@@ -1,0 +1,31 @@
+#main-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+  overflow-y: auto;
+}
+
+#header-cards {
+  flex-shrink: 0;
+}
+
+#sessions-card {
+  display: flex;
+  flex-direction: column;
+  flex: 1 0 600px;
+  min-height: 600px;
+  overflow: hidden;
+  margin: 10px;
+
+  ion-card-header {
+    flex-shrink: 0;
+  }
+
+  ion-card-content {
+    flex: 1;
+    overflow-y: scroll !important;
+    display: block;
+    padding: 0;
+  }
+}

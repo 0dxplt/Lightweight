@@ -16,17 +16,17 @@ export class CityService {
 
     const cities: City[] = [
       {
-        id: 1,
+        id: 0,
         name: "Trapani",
         nation: nation
       },
       {
-        id: 2,
+        id: 1,
         name: "Palermo",
         nation: nation
       },
       {
-        id: 3,
+        id: 2,
         name: "Napoli",
         nation: nation
       }

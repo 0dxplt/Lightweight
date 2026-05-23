@@ -1,0 +1,80 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar color="dark">
+    <ion-title>{{session.workout.name}}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="close()" color="medium">Close</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="main-content">
+    <div class="session-header">
+      <ion-icon name="calendar-outline"></ion-icon>
+      <span>{{session.timestamp | datefy}}</span>
+    </div>
+
+    <div class="exercises-container">
+      @for (group of groupedExercises(); track group.name) {
+      <div class="exercise-card">
+        
+        <div class="exercise-info">
+          <div class="avatar">
+            <img [src]="group.sets[0].exercise.imgpath ? group.sets[0].exercise.imgpath : 'assets/icon/favicon.png'" alt="exercise-img">
+          </div>
+          <div class="details">
+            <h2>{{group.name}}</h2>
+            <div class="tags">
+              @for (tag of getExerciseTags(group.sets); track tag.muscolarGroup.id) {
+                <span class="tag-badge">
+                  {{tag.muscolarGroup.name}} <small>{{tag.perc}}%</small>
+                </span>
+              }
+            </div>
+          </div>
+        </div>
+
+        <div class="series-table">
+          <div class="table-header">
+            <span>SET</span>
+            <span>WEIGHT</span>
+            <span>REPS</span>
+            <span>REST</span>
+          </div>
+          
+          @for (serie of group.sets; track $index) {
+          <div class="serie-row">
+            <span class="index">{{$index + 1}}</span>
+            <span class="weight">{{serie.weight}} <small>kg</small></span>
+            <span class="reps">{{serie.reps}}</span>
+            <span class="rest">{{serie.recovery| betterMsViewer}}</span>
+          </div>
+          }
+        </div>
+      </div>
+      }
+    </div>
+  </div>
+
+  <ion-fab slot="fixed" horizontal="center" vertical="bottom">
+    @if (this.isProfile) {
+      <ion-fab-button>
+        <ion-icon name="settings-outline"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-list side="end">
+        <ion-fab-button (click)="deleteSession()" color="danger">
+          <ion-icon name="trash-outline"></ion-icon>
+        </ion-fab-button>
+      </ion-fab-list>
+      <ion-fab-list side="start">
+        <ion-fab-button (click)="openChartModal()" color="success">
+          <ion-icon name="stats-chart"></ion-icon>
+        </ion-fab-button>
+      </ion-fab-list>
+    } @else {
+      <ion-fab-button (click)="openChartModal()" color="success">
+        <ion-icon name="stats-chart"></ion-icon>
+      </ion-fab-button>
+    }
+  </ion-fab>
+</ion-content>

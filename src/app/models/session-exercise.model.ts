@@ -5,5 +5,6 @@ export type SessionExercise = {
     exercise: Exercise;
     reps: number;
     weight: number;
+    recovery: number;
     valid: boolean;
 }
