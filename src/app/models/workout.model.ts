@@ -7,6 +7,7 @@ export type ExerciseWorkout = {
     reps: number,
     recuperoMs: number;
     exercise: Exercise;
+    isExpanded?: boolean;
 }
 
 export type WorkoutMiniCard = {

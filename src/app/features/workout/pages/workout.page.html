@@ -1,19 +1,25 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>workout</ion-title>
+    @if (editMode) {
+      <ion-input (ionBlur)="updateWokoutName($event)" value="{{workoutName}}"></ion-input>
+    } @else {
+      <ion-title>{{workoutName}}</ion-title>
+    }
+    <ion-buttons slot="end">
+      <ion-back-button defaultHref="/workouts"></ion-back-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">workout</ion-title>
+      <ion-title size="large">{{workoutName}}</ion-title>
     </ion-toolbar>
   </ion-header>
   <div class="exercises">
     @for (exerciseWorkout of exercisesWorkout; track exerciseWorkout) {
-    <div class="exercise">
-
+    <ion-card class="exercise" (click)="toggleExerciseDesc(exerciseWorkout)" [button]="true">
       <div class="exercise-top">
         <div class="avatar">
           <ion-img [src]="exerciseWorkout.exercise.imgpath"></ion-img>
@@ -34,7 +40,11 @@
         </ion-button>
         }
       </div>
-
+      @if (exerciseWorkout.isExpanded) {
+      <div class="exercise-middle">
+        <h3>{{exerciseWorkout.exercise.desc}}</h3>
+      </div>
+      }
       <div class="exercise-bottom">
         <div class="stat">
           <p>Serie</p>
@@ -80,7 +90,7 @@
         </div>
       </div>
 
-    </div>
+    </ion-card>
     }
     @empty {
     <h1>No exercises yet, click the button below to add one!</h1>
@@ -96,17 +106,24 @@
       </ion-fab-button>
     </ion-fab-list>
     <ion-fab-list side="start">
-      <ion-fab-button color="secondary">
+      <ion-fab-button color="secondary" (click)="visualizeRadarChart()">
         <ion-icon name="pie-chart-outline"></ion-icon>
       </ion-fab-button>
     </ion-fab-list>
     <ion-fab-list side="top">
+      @if (editMode) {
+      <ion-fab-button color="success" (click)="editModeToggle()">
+        <ion-icon name="checkmark-done-outline"></ion-icon>
+      </ion-fab-button>
+      } @else {
       <ion-fab-button color="secondary" (click)="editModeToggle()">
         <ion-icon name="pencil-outline"></ion-icon>
       </ion-fab-button>
+      }
     </ion-fab-list>
   </ion-fab>
-  <ion-modal #modal trigger="open-add-exercise" [initialBreakpoint]="0.25" [breakpoints]="[0, 0.25, 0.5, 0.75]">
+  <ion-modal #modal trigger="open-add-exercise" [initialBreakpoint]="0.5" [breakpoints]="[0, 0.25, 0.5, 0.75]"
+    (ionModalWillDismiss)="resetFilter()">
     <ng-template>
       <ion-content>
         <ion-searchbar placeholder="Search" (click)="modal.setCurrentBreakpoint(0.75)"></ion-searchbar>
@@ -122,11 +139,14 @@
             </ion-item>
           </ion-list>
         </div>
-        <ion-list>
+        <ion-list class="exercises-list">
           @for (exercise of filteredExercises; track exercise) {
-          <ion-card [button]="true" (click)="addExercise(exercise)">
+          <ion-card class="exercise-item" id="present-alert" [button]="true" (click)="inputModal(exercise)">
             {{exercise.name}}
           </ion-card>
+          }
+          @empty {
+            <h1>Nessun esercizio presente, prova a cambiare i filtri.</h1>
           }
         </ion-list>
       </ion-content>

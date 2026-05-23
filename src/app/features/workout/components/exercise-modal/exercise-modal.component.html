@@ -1,0 +1,81 @@
+<ion-content>
+  <div class="exercise">
+    <div class="header">
+      <div class="small-infos">
+        <div class="img"><ion-img src="{{exercise.imgpath}}"></ion-img></div>
+        <div class="difficulty">
+          @for (star of getStars(exercise.difficulty); track $index) {
+          <ion-icon color="white" name="star"></ion-icon>
+          }
+
+          @for (empty of getStars(5 - exercise.difficulty); track $index) {
+          <ion-icon color="white" name="star-outline"></ion-icon>
+          }
+        </div>
+      </div>
+      <div class="info">
+        <div class="title">
+          <h1>{{exercise.name}}</h1>
+        </div>
+        <div class="desc">
+          <p>{{exercise.desc}}</p>
+        </div>
+      </div>
+    </div>
+    <div class="exercise-bottom">
+
+      <div class="tags">
+        @for(tag of exercise.groups; track tag) {
+        <ion-chip color="secondary">
+          {{tag.muscolarGroup.name}} {{tag.perc}}%
+        </ion-chip>
+        }
+      </div>
+
+      <div class="stats-row">
+        <div class="stat">
+          <p>Serie</p>
+          <div class="edit-value">
+            <ion-icon name="remove-circle-outline" class="edit-value-button"
+              (click)="modificaValore('serie', -1)"></ion-icon>
+            <h2>{{serie}}</h2>
+            <ion-icon name="add-circle-outline" class="edit-value-button"
+              (click)="modificaValore('serie', 1)"></ion-icon>
+          </div>
+        </div>
+
+        <div class="stat">
+          <p>Ripetizioni</p>
+          <div class="edit-value">
+            <ion-icon name="remove-circle-outline" class="edit-value-button"
+              (click)="modificaValore('ripetizioni', -1)"></ion-icon>
+            <h2>{{ripetizioni}}</h2>
+            <ion-icon name="add-circle-outline" class="edit-value-button"
+              (click)="modificaValore('ripetizioni', 1)"></ion-icon>
+          </div>
+        </div>
+
+        <div class="stat">
+          <p>Recupero</p>
+          <div class="edit-value">
+            <ion-icon name="remove-circle-outline" class="edit-value-button"
+              (click)="modificaValore('recuperoMs', -15000)"></ion-icon>
+            <h2>{{recuperoMs | betterMsViewer}}</h2>
+            <ion-icon name="add-circle-outline" class="edit-value-button"
+              (click)="modificaValore('recuperoMs', 15000)"></ion-icon>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>
+<ion-footer>
+  <div class="buttons">
+    <ion-button (click)="cancel()" color="secondary" class="confirm-buttons">
+      Cancella
+    </ion-button>
+    <ion-button (click)="confirm()" color="secondary" class="confirm-buttons">
+      Aggiungi
+    </ion-button>
+  </div>
+</ion-footer>
