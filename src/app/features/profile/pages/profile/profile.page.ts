@@ -30,7 +30,10 @@ export class ProfilePage implements OnInit {
   actionSheetButtons = computed(() => {
     const u = this.user();
     const buttons = [
-      { text: 'Edit profile', handler: () => console.log("Edit") },
+      { text: 'Edit profile', handler: () => {
+        this.actionSheetController.dismiss();
+        this.router.navigate(["tabs/profile/edit"])
+      }},
       { text: 'Change Password', handler: () => {
         this.actionSheetController.dismiss();
         this.openChangePasswordModal()
