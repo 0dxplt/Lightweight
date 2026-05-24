@@ -27,7 +27,7 @@ export class SessionCardComponent  implements OnInit {
     return Array.from(tags);
   });
 
-  constructor(private modalController: ModalController) {
+  constructor() {
     addIcons({ 
       calendarOutline, 
       shareSocialOutline, 

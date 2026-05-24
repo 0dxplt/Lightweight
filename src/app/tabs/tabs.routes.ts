@@ -40,9 +40,8 @@ export const routes: Routes = [
             loadComponent: () => import('../features/profile/pages/edit-profile/edit-profile.page').then( m => m.EditProfilePage)
           },
           {
-            // TODO: aggiungere una pagina 'PublicProfilePage'
             path: ':username',
-            loadComponent: () => import('../features/profile/pages/profile/profile.page').then(m => m.ProfilePage)
+            loadComponent: () => import('../features/profile/pages/vist-profile-page/vist-profile-page.page').then( m => m.VistProfilePagePage)
           },
         ],
       },

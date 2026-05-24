@@ -31,3 +31,9 @@ export const SURNAME_REGEX: RegExp = /^[\p{L}]+(?:['\s\-][\p{L}]+)*$/u;
 export const VERIFY_MIN_SESSIONS: number = 30;
 export const VERIFY_MIN_FOLLOWERS: number = 500;
 export const VERIFY_MIN_AGE: number = 18;
+
+export const PROPIC_PATH: string = "assets/icon/favicon.png";
+
+export const SEASONAL_RANK_UP: number = 3000;
+export const GLOBAL_RANK_UP: number = 5000;
+export const XP_LIMIT: number = 3000;

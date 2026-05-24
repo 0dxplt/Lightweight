@@ -1,6 +1,6 @@
 import { computed, Injectable, signal } from '@angular/core';
 import { User } from 'src/app/models/user.model';
-import { SessionService } from 'src/app/shared/services/session-service';
+import { GLOBAL_RANK_UP } from 'src/app/shared/global';
 
 @Injectable({
   providedIn: 'root',
@@ -25,11 +25,11 @@ export class AuthService {
       email,
       weight: 190,
       height: 200,
-      followers: 0,
-      following: 0,
-      gLevel: 0,
-      sLevel: 0,
-      xp: 0,
+      followers: 1000,
+      following: 1000,
+      gLevel: 69,
+      sLevel: 33,
+      xp: Math.round(0.4 * GLOBAL_RANK_UP),
       verified: false,
       sessions: Math.round(Math.random() * 300)
     };
@@ -66,11 +66,11 @@ export class AuthService {
       email,
       weight,
       height,
-      followers: 0,
-      following: 0,
-      gLevel: 0,
-      sLevel: 0,
-      xp: 0,
+      followers: 500,
+      following: 500,
+      gLevel: 69,
+      sLevel: 33,
+      xp: Math.round(0.4 * GLOBAL_RANK_UP),
       verified: false,
       sessions: Math.round(Math.random() * 300)
     };
@@ -101,5 +101,51 @@ export class AuthService {
     // query al db
     this._user.set(user);
     localStorage.setItem('loggedUser', JSON.stringify(this._user()));
+  }
+
+  updateWithImage(user: User, propic: File | null) {
+    // const formData = new FormData();
+    // formData.append('user', JSON.stringify(user));
+    // if (propic) {
+    //   formData.append('propic', propic, propic.name);
+    // }
+    // query al db
+    this._user.set(user);
+    localStorage.setItem('loggedUser', JSON.stringify(this._user()));
+  }
+
+  follows(otherUsername: string): boolean {
+    if (otherUsername === this._user()?.username) false;
+    // fetch al DB
+    const follows: boolean = true;
+    return follows;
+  }
+
+  follow(otherUsername: string) {
+    if (otherUsername === this._user()?.username) return;
+    // query al db
+
+    if (!this._user()) return;
+
+    const other = structuredClone(this.user()) as User;
+    other.followers++;
+    this._user.set(other);
+    localStorage.setItem('loggedUser', JSON.stringify(this._user()));
+
+    console.log(this._user()?.username + ' has followed ' + otherUsername);
+  }
+  
+  unfollow(otherUsername: string) {
+    if (otherUsername === this._user()?.username) return;
+    // query al db
+
+    if (!this._user()) return;
+
+    const other = structuredClone(this.user()) as User;
+    other.followers--;
+    this._user.set(other);
+    localStorage.setItem('loggedUser', JSON.stringify(this._user()));
+
+    console.log(this._user()?.username + ' has unfollowed ' + otherUsername);
   }
 }

@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 import { User } from 'src/app/models/user.model';
 
+const names = ["Marco", "Giulia", "Luca", "Alessia", "Matteo", "Sofia", "Davide", "Chiara", "Simone", "Francesca"];
+const surnames = ["Rossi", "Bianchi", "Verdi", "Russo", "Ferrari", "Esposito", "Romano", "Gallo", "Conti", "Costa"];
+
 @Injectable({
   providedIn: 'root',
 })
@@ -33,5 +36,67 @@ export class UserService {
   updateVerified(user: User) {
     // Query al DB
     console.log("New Verified: " + user.verified); 
+  }
+
+  followersOf(username: string): User[] {
+    // fetch al db
+    const followers: User[] = [];
+
+    for (let i = 1; i <= 25; i++) {
+      const randomName = names[Math.floor(Math.random() * names.length)];
+      const randomSurname = surnames[Math.floor(Math.random() * surnames.length)];
+      const username = (randomName + randomSurname + Math.floor(Math.random() * 100)).toLowerCase();
+
+      const user: User = {
+        id: i + 100,
+        username: username,
+        name: randomName,
+        surname: randomSurname,
+        email: `${username}@example.com`,
+        birthdate: new Date(1970 + Math.floor(Math.random() * 35), Math.floor(Math.random() * 12), Math.floor(Math.random() * 28)),
+        weight: Math.round(50 + Math.random() * 50),
+        height: Math.round(150 + Math.random() * 50),
+        sLevel: Math.round(Math.random() * 50),
+        gLevel: Math.round(Math.random() * 100),
+        xp: Math.round(Math.random() * 10000),
+        followers: Math.round(Math.random() * 1000),
+        following: Math.round(Math.random() * 1000),
+        sessions: Math.round(Math.random() * 200),
+        verified: Math.random() > 0.8,
+      };
+      followers.push(user);
+    }
+    return followers;
+  }
+
+  followingOf(username: string) {
+    // fetch al db
+    const following: User[] = [];
+
+    for (let i = 1; i <= 25; i++) {
+      const randomName = names[Math.floor(Math.random() * names.length)];
+      const randomSurname = surnames[Math.floor(Math.random() * surnames.length)];
+      const username = (randomName + randomSurname + Math.floor(Math.random() * 100)).toLowerCase();
+
+      const user: User = {
+        id: i + 100,
+        username: username,
+        name: randomName,
+        surname: randomSurname,
+        email: `${username}@example.com`,
+        birthdate: new Date(1970 + Math.floor(Math.random() * 35), Math.floor(Math.random() * 12), Math.floor(Math.random() * 28)),
+        weight: Math.round(50 + Math.random() * 50),
+        height: Math.round(150 + Math.random() * 50),
+        sLevel: Math.round(Math.random() * 50),
+        gLevel: Math.round(Math.random() * 100),
+        xp: Math.round(Math.random() * 10000),
+        followers: Math.round(Math.random() * 1000),
+        following: Math.round(Math.random() * 1000),
+        sessions: Math.round(Math.random() * 200),
+        verified: Math.random() > 0.8,
+      };
+      following.push(user);
+    }
+    return following;
   }
 }
