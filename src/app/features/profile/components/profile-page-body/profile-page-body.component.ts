@@ -2,10 +2,10 @@ import { Component, computed, model, OnInit, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { IonicModule, LoadingController, ToastController } from '@ionic/angular';
 import { addIcons } from 'ionicons';
-import { barbellOutline, checkmarkCircleOutline } from 'ionicons/icons';
+import { barbellOutline, checkmarkCircle } from 'ionicons/icons';
 import { AuthService } from 'src/app/features/auth/services/auth-service';
 import { User } from 'src/app/models/user.model';
-import { PROPIC_PATH } from 'src/app/shared/global';
+import { GLOBAL_RANK_UP, PROPIC_PATH, SEASONAL_RANK_UP, XP_LIMIT } from 'src/app/shared/global';
 import { SessionCardComponent } from "src/app/features/mod/components/session-card/session-card.component";
 import { Session } from 'src/app/models/session.model';
 import { SessionService } from 'src/app/shared/services/session-service';
@@ -84,6 +84,18 @@ export class ProfilePageBodyComponent  implements OnInit {
     if (!user || !profile) return false;
     return user.username === profile.username;
   });
+  seasonalPerc = computed(() => {
+    const user = this.user();
+    if (!user) return 0;
+    if (user.xp >= SEASONAL_RANK_UP) return 1;
+    return user.xp / SEASONAL_RANK_UP;
+  });
+  globalPerc = computed(() => {
+    const user = this.user();
+    if (!user) return 0;
+    if (user.xp >= GLOBAL_RANK_UP) return 1;
+    return user.xp / GLOBAL_RANK_UP;
+  });
 
   sessions = signal<Session[]>([]);
 
@@ -95,7 +107,7 @@ export class ProfilePageBodyComponent  implements OnInit {
     private loadingController: LoadingController,
     private toastController: ToastController
   ) {
-    addIcons({barbellOutline, checkmarkCircleOutline});
+    addIcons({barbellOutline, checkmarkCircle});
   }
 
   ngOnInit() {
@@ -147,19 +159,27 @@ export class ProfilePageBodyComponent  implements OnInit {
 
     const { data, role } = await modal.onWillDismiss();
 
-    if (role === 'delete' && data) {   
+    if (role && data) {   
       const loading = await this.loadingController.create({
         message: "Deleting session..."
       });
       await loading.present();
 
-      setTimeout(() => {
+      if (role === 'delete') {
+        setTimeout(() => {
+          loading.dismiss();
+          console.log("Deleting: " + data.workout?.name);
+          this._showToast('Session removed correctly', 'success', 500);
+          this.sessionService.removeFrom(this.user()?.username, data.id);
+          this._removeFromUI(data)
+        }, Math.random() * 2500 + 500);
+      } else if (role === 'sharing') {
         loading.dismiss();
-        console.log("Deleting: " + data.workout?.name);
-        this._showToast('Session removed correctly', 'success', 500);
-        this.sessionService.removeFrom(this.user()?.username, data.id);
-        this._updateUI(data)
-      }, Math.random() * 2500 + 500);
+        console.log("Sharing setted to: " + data.shared);
+        this._showToast('Visibility updated correctly', 'success', 500);
+        this.sessionService.updateSession(data);
+        this._updateUI(data);
+      }
     }
   }
 
@@ -174,6 +194,16 @@ export class ProfilePageBodyComponent  implements OnInit {
   }
 
   private _updateUI(session: Session) {
+    const index = this.sessions().findIndex(s => s.id === session.id);
+    if (index > -1) {
+      this.sessions.update(s => {
+        s[index] = session;
+        return s;
+      })
+    }
+  }
+
+  private _removeFromUI(session: Session) {
     this.sessions.update(s => s.filter(se => se.id !== session.id));
   }
 

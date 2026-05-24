@@ -1,5 +1,6 @@
 import { computed, Injectable, signal } from '@angular/core';
 import { User } from 'src/app/models/user.model';
+import { GLOBAL_RANK_UP } from 'src/app/shared/global';
 
 @Injectable({
   providedIn: 'root',
@@ -26,9 +27,9 @@ export class AuthService {
       height: 200,
       followers: 1000,
       following: 1000,
-      gLevel: 0,
-      sLevel: 0,
-      xp: 0,
+      gLevel: 69,
+      sLevel: 33,
+      xp: Math.round(0.4 * GLOBAL_RANK_UP),
       verified: false,
       sessions: Math.round(Math.random() * 300)
     };
@@ -67,9 +68,9 @@ export class AuthService {
       height,
       followers: 500,
       following: 500,
-      gLevel: 0,
-      sLevel: 0,
-      xp: 0,
+      gLevel: 69,
+      sLevel: 33,
+      xp: Math.round(0.4 * GLOBAL_RANK_UP),
       verified: false,
       sessions: Math.round(Math.random() * 300)
     };

@@ -14,9 +14,10 @@ ion-content {
 
 .session-header {
   display: flex;
+  justify-self: center;
   align-items: center;
   gap: 8px;
-  color: #a0a0a0;
+  color: var(--ion-color-dark);
   margin-bottom: 20px;
   font-size: 0.9rem;
 }
@@ -25,14 +26,14 @@ ion-content {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  padding-bottom: 80px; // Spazio per il FAB
+  padding-bottom: 80px;
 }
 
 .exercise-card {
   background: var(--card-bg);
   border-radius: 16px;
   padding: 16px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 
   .exercise-info {
     display: flex;
@@ -42,10 +43,14 @@ ion-content {
     .avatar {
       width: 60px;
       height: 60px;
-      background: #2a2a2a;
+      background: var(--card-bg);
       border-radius: 12px;
       overflow: hidden;
-      img { width: 100%; height: 100%; object-fit: cover; }
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
     }
 
     .details {
@@ -70,7 +75,11 @@ ion-content {
           font-weight: 600;
           text-transform: uppercase;
           
-          small { opacity: 0.8; margin-left: 2px; }
+          small {
+            font-size: 0.6rem;
+            opacity: 0.8;
+            margin-left: 2px;
+          }
         }
       }
     }
@@ -78,7 +87,7 @@ ion-content {
 }
 
 .series-table {
-  background: rgba(0,0,0,0.2);
+  background: rgba(0, 0, 0, 0.2);
   border-radius: 12px;
   padding: 8px;
 
@@ -102,15 +111,28 @@ ion-content {
     text-align: center;
     color: white;
 
-    .index { color: var(--accent); font-weight: bold; }
-    .weight { font-weight: bold; }
-    .reps { font-size: 1.1rem; }
-    .rest { font-size: 0.85rem; color: #a0a0a0; }
+    .index {
+      color: var(--accent);
+      font-weight: bold;
+    }
+    .weight {
+      font-weight: bold;
+    }
+    .reps {
+      font-size: 1.1rem;
+    }
+    .rest {
+      font-size: 0.85rem;
+      color: #a0a0a0;
+    }
     
-    small { font-size: 0.7rem; color: #666; margin-left: 2px; }
+    small {
+      font-size: 0.7rem;
+      color: #666; margin-left: 2px;
+    }
   }
 }
 
-ion-fab-button {
-  --box-shadow: 0 4px 16px rgba(255, 115, 0, 0.4);
+ion-fab-list {
+  transition: all 300ms ease-in-out;
 }

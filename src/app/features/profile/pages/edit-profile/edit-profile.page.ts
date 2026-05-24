@@ -78,17 +78,17 @@ export class EditProfilePage implements OnInit {
 
   ngOnInit() {
       if (!this.isPT()) {
-      this.userForm.get('proemail')?.clearValidators();
-      this.userForm.get('city')?.clearValidators();
-      this.userForm.get('gym')?.clearValidators();
-      
-      this.userForm.get('proemail')?.updateValueAndValidity();
-      this.userForm.get('city')?.updateValueAndValidity();
-      this.userForm.get('gym')?.updateValueAndValidity();
+        this.userForm.get('proemail')?.clearValidators();
+        this.userForm.get('city')?.clearValidators();
+        this.userForm.get('gym')?.clearValidators();
+        
+        this.userForm.get('proemail')?.updateValueAndValidity();
+        this.userForm.get('city')?.updateValueAndValidity();
+        this.userForm.get('gym')?.updateValueAndValidity();
     }
   }
 
-  compareNationalies(obj1: Nation | undefined | null, obj2: Nation | undefined | null): boolean {
+  compareNationalities(obj1: Nation | undefined | null, obj2: Nation | undefined | null): boolean {
     return obj1 && obj2 ? (
       obj1.id === obj2.id &&
       obj1.name === obj2.name
@@ -111,7 +111,7 @@ export class EditProfilePage implements OnInit {
   }
 
   retrievePropic() {
-    // GET al backend
+    // url(backend) + user.propic
     return PROPIC_PATH;
   }
 
@@ -138,16 +138,18 @@ export class EditProfilePage implements OnInit {
     }
 
     const hasChanged = 
-      (current.username !== original?.username ||
-      current.email !== original?.email ||
-      current.weight !== original?.weight ||
-      current.height !== original?.height ||
-      current.name !== original?.name ||
-      current.surname !== original?.surname ||
-      current.birtdate !== original?.birthdate ||
-      !this.compareNationalies(current.nationality, original?.nationality) ||
-      this.selectedFile !== null) || (this.isPT() && (
-        current.proemail !== original?.pt?.proEmail ||
+      current.username !== (original?.username ?? '') ||
+      current.email !== (original?.email ?? '') ||
+      Number(current.weight) !== Number(original?.weight) ||
+      Number(current.height) !== Number(original?.height) ||
+      current.name !== (original?.name ?? '') ||
+      current.surname !== (original?.surname ?? '') ||
+      current.birthdate !== (original?.birthdate ?? '') ||
+      !this.compareNationalities(current.nationality, original?.nationality) || 
+      this.selectedFile !== null || 
+
+      (this.isPT() && (
+        current.proemail !== (original?.pt?.proEmail ?? '') ||
         !this.compareGyms(current.gym, original?.pt?.gym) ||
         !this.compareCities(current.city, original?.pt?.city)
       ));

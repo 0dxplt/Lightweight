@@ -1,5 +1,5 @@
 <ion-header class="ion-no-border">
-  <ion-toolbar color="dark">
+  <ion-toolbar color="light">
     <ion-title>{{session.workout.name}}</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="close()" color="medium">Close</ion-button>
@@ -27,7 +27,7 @@
             <div class="tags">
               @for (tag of getExerciseTags(group.sets); track tag.muscolarGroup.id) {
                 <span class="tag-badge">
-                  {{tag.muscolarGroup.name}} <small>{{tag.perc}}%</small>
+                  {{tag.muscolarGroup.name}} <small>{{tag.perc * 100}}%</small>
                 </span>
               }
             </div>
@@ -43,12 +43,12 @@
           </div>
           
           @for (serie of group.sets; track $index) {
-          <div class="serie-row">
-            <span class="index">{{$index + 1}}</span>
-            <span class="weight">{{serie.weight}} <small>kg</small></span>
-            <span class="reps">{{serie.reps}}</span>
-            <span class="rest">{{serie.recovery| betterMsViewer}}</span>
-          </div>
+            <div class="serie-row">
+              <span class="index">{{$index + 1}}</span>
+              <span class="weight">{{serie.weight}} <small>kg</small></span>
+              <span class="reps">{{serie.reps}}</span>
+              <span class="rest">{{serie.recovery| betterMsViewer}}</span>
+            </div>
           }
         </div>
       </div>
@@ -64,6 +64,11 @@
       <ion-fab-list side="end">
         <ion-fab-button (click)="deleteSession()" color="danger">
           <ion-icon name="trash-outline"></ion-icon>
+        </ion-fab-button>
+      </ion-fab-list>
+      <ion-fab-list side="top">
+        <ion-fab-button (click)="toggleSharing()" color="tertiary">
+          <ion-icon [name]="this.session.shared ? 'lock-closed-outline' : 'share-social-outline'"></ion-icon>
         </ion-fab-button>
       </ion-fab-list>
       <ion-fab-list side="start">

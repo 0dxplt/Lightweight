@@ -1,117 +1,108 @@
 <div id="main-container">
   <div id="header-cards">
-    <ion-card id="user-info-card">
-      <ion-card-header>
+    <ion-card class="profile-card">
+      <div class="avatar-section">
         <ion-avatar>
-          <img [src]="this.hasPropic() ? this.user()?.propic : 'assets/icon/favicon.png'" alt="propic">
+          <img [src]="hasPropic() ? user()?.propic : 'assets/icon/favicon.png'" alt="propic">
         </ion-avatar>
-      </ion-card-header>
+      </div>
+
       <ion-card-content>
-        <div id="user-info-content">
-          <div id="social">
-            <ion-item lines="none">
-              <ion-button id="following" slot="start" (click)="openFollowingModal()">
-                <ion-text>following</ion-text>
-                <ion-text>{{this.user()?.following}}</ion-text>
-              </ion-button>
-              <ion-button id="followers" slot="end" (click)="openFollowersModal()">
-                <ion-text>followers</ion-text>
-                <ion-text>{{this.user()?.followers}}</ion-text>
-              </ion-button>
-            </ion-item>
-            <ion-item lines="none">
-              <div id="infos">
-                <div id="strings">
-                  <div id="username">
-                    <ion-text>{{this.user()?.username}}</ion-text>
-                    @if (this.isPT()) {
-                      <ion-badge>
-                        <ion-icon name="barbell-outline"></ion-icon>
-                      </ion-badge>
-                    }
-                    @if (this.verified()) {
-                      <ion-badge>
-                        <ion-icon name="checkmark-circle-outline"></ion-icon>
-                      </ion-badge>
-                    }
-                  </div>
-                  <div id="name">
-                    @if (this.hasName()) {
-                      <ion-text>{{this.user()?.name}}</ion-text>
-                    }
-                    {{" "}}
-                    @if (this.hasSurname()) {
-                      <ion-text>{{this.user()?.surname}}</ion-text>
-                    }
-                  </div>
-                  <div id="nationality">
-                    @if (this.hasNationality()) {
-                      <ion-text>{{this.user()?.nationality?.name}}</ion-text>
-                    }
-                  </div>
-                </div>
-                <div id="numerics">
-                  <div id="age">
-                    @if (this.hasBirthdate()) {
-                      <ion-text>{{this.age()}} yo</ion-text>
-                    }
-                  </div>
-                  <div id="height">
-                    <ion-text>{{this.user()?.height}} cm</ion-text>
-                  </div>
-                  <div id="weight">
-                    <ion-text>{{this.user()?.weight}} kg</ion-text>
-                  </div>
-                </div>
-              </div>
-            </ion-item>
+        <div class="social-row">
+          <button type="button" class="stat-btn" (click)="openFollowingModal()">
+            <span class="label">following</span>
+            <span class="value">{{user()?.following}}</span>
+          </button>
+          <button type="button" class="stat-btn" (click)="openFollowersModal()">
+            <span class="label">followers</span>
+            <span class="value">{{user()?.followers}}</span>
+          </button>
+        </div>
+
+        <div class="user-details">
+          <h2 class="username">
+            {{user()?.username}}
+            @if (this.isPT()) {
+              <ion-badge color="tertiary"><ion-icon name="barbell"></ion-icon></ion-badge>
+            }
+            @if (this.verified()) {
+              <ion-badge color="success"><ion-icon name="checkmark-circle"></ion-icon></ion-badge>
+            }
+          </h2>
+          @if (this.hasName() || this.hasSurname()) {
+            <p class="full-name">
+              {{user()?.name}} {{user()?.surname}}
+            </p>
+          }
+          @if (this.hasNationality()) {
+            <p class="nationality">
+              {{user()?.nationality?.name}}
+            </p>
+          }
+        </div>
+
+        <div class="metrics-grid" [style]="this.hasBirthdate() ? 'grid-template-columns: repeat(3, 1fr);' : ''">
+          @if (this.hasBirthdate()) {
+            <div class="metric-item">
+              <span class="val">{{age()}} yo</span>
+              <span class="lab">Age</span>
+            </div>
+          }
+          <div class="metric-item">
+            <span class="val">{{user()?.height}} cm</span>
+            <span class="lab">Height</span>
+          </div>
+          <div class="metric-item">
+            <span class="val">{{user()?.weight}} kg</span>
+            <span class="lab">Weight</span>
           </div>
         </div>
       </ion-card-content>
     </ion-card>
-  
-    <ion-card id="progress-info">
+
+    <ion-card class="progress-card">
       <ion-card-content>
-        <div id="seasonal">
-          <ion-avatar>
-            <img src='../../../../assets/icon/favicon.png' alt="seasonal">
-          </ion-avatar>
-            <div id="seasonal-progress-bar"></div>
-            <ion-text>Level: {{this.user()?.sLevel}}</ion-text>
+        <div class="progress-row">
+          <ion-avatar><img src="assets/icon/favicon.png"></ion-avatar>
+          <div class="progress-info">
+            <ion-progress-bar [value]="this.globalPerc()" color="primary"></ion-progress-bar>
+            <p>Global level: {{user()?.sLevel}}</p>
+          </div>
         </div>
-        <div id="global">
-          <ion-avatar>
-            <img src='../../../../assets/icon/favicon.png' alt="global">
-          </ion-avatar>
-            <div id="global-progress-bar"></div>
-            <ion-text>Rank: {{this.user()?.gLevel}}</ion-text>
+        <div class="progress-row">
+          <ion-avatar><img src="assets/icon/favicon.png"></ion-avatar>
+          <div class="progress-info">
+            <ion-progress-bar [value]="this.seasonalPerc()" color="tertiary"></ion-progress-bar>
+            <p>Seasonal rank: {{user()?.gLevel}}</p>
+          </div>
         </div>
       </ion-card-content>
     </ion-card>
+
     @if (this.isPT()) {
-      <ion-card id="pt-info" button (click)="openPTInfoModal()">
+      <ion-card class="pt-card" button (click)="openPTInfoModal()">
         <ion-card-content>
-          <div id="proemail">
-            <p>Professional Email</p>
-            <ion-text>{{this.user()?.pt?.proEmail}}</ion-text>
+          <div class="pt-field">
+            <label>Professional Email</label>
+            <span>{{user()?.pt?.proEmail}}</span>
           </div>
-          <div id="gym">
-            <p>Gym</p>
-            <ion-text>{{this.user()?.pt?.gym?.name}}</ion-text>
+          <div class="pt-field">
+            <label>Gym</label>
+            <span>{{user()?.pt?.gym?.name}}</span>
           </div>
         </ion-card-content>
       </ion-card>
     }
   </div>
-  
+
   <ion-card id="sessions-card">
     <ion-card-header>
-      <p>
-        {{this.sameAsProfile() ? 'Your sessions' : this.user()?.username + '\'s sessions'}} ({{this.sessions().length}})
-      </p>
+      <ion-card-title>
+        {{sameAsProfile() ? 'Your sessions' : user()?.username + '\'s sessions'}} ({{sessions().length}})
+      </ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      <ion-list id="sessions-list">
+      <ion-list lines="none">
         @for (item of sessions(); track item.id) {
           <app-session-card [session]="item" (onClick)="openSessionModal(item)"></app-session-card>
         }

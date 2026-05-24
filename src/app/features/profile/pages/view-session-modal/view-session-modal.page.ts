@@ -7,7 +7,7 @@ import { DatefyPipe } from "../../../../shared/pipes/datefy-pipe";
 import { BetterMsViewerPipe } from "../../../../shared/pipes/better-ms-viewer-pipe";
 import { SessionExercise } from 'src/app/models/session-exercise.model';
 import { addIcons } from 'ionicons';
-import { settingsOutline, statsChart, trashOutline } from 'ionicons/icons';
+import { lockClosedOutline, settingsOutline, shareSocialOutline, statsChart, trashOutline } from 'ionicons/icons';
 import { Exercise, Serie, Tag } from 'src/app/models/session-modal-component-info';
 import { ChartModalComponent } from 'src/app/shared/components/chart-modal/chart-modal.component';
 import { AlertController } from '@ionic/angular/standalone';
@@ -24,7 +24,6 @@ export class ViewSessionModalPage implements OnInit {
   @Input({required: true}) session!: Session;
   @Input({required: true}) isProfile!: boolean;
 
-  // Raggruppiamo i set per esercizio
   groupedExercises = computed(() => {
     const session = this.session;
     if (!session || !session.exercises) return [];
@@ -47,7 +46,7 @@ export class ViewSessionModalPage implements OnInit {
     private modalController: ModalController,
     private alertController: AlertController
   ) {
-    addIcons({statsChart, settingsOutline, trashOutline});
+    addIcons({statsChart, settingsOutline, trashOutline, lockClosedOutline, shareSocialOutline});
   }
 
   ngOnInit() {}
@@ -109,6 +108,11 @@ export class ViewSessionModalPage implements OnInit {
     });
 
     await modal.present();
+  }
+
+  toggleSharing() {
+    this.session.shared = !this.session.shared;
+    this.modalController.dismiss(this.session, 'sharing');
   }
 
   getExerciseTags(sets: SessionExercise[]) {
