@@ -1,7 +1,7 @@
 import { Component, inject, Input, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonChip, IonImg, IonFab, IonIcon, IonFabButton, IonLabel, IonAvatar, IonItem, IonList, IonSearchbar, IonModal, IonFabList, IonSelect, IonSelectOption, IonCard, IonButton, ModalController, IonNav, IonButtons, IonBackButton, IonAlert, IonInput } from '@ionic/angular/standalone';
+import { IonContent, IonHeader, IonTitle, IonToolbar, IonChip, IonImg, IonFab, IonIcon, IonFabButton, IonLabel, IonAvatar, IonItem, IonList, IonSearchbar, IonModal, IonFabList, IonSelect, IonSelectOption, IonCard, IonButton, ModalController, IonNav, IonButtons, IonBackButton, IonAlert, IonInput, IonFooter } from '@ionic/angular/standalone';
 import { Exercise } from 'src/app/models/exercise.model';
 import { ExerciseWorkout } from 'src/app/models/workout.model';
 import { BetterMsViewerPipe } from "../../../shared/pipes/better-ms-viewer-pipe";
@@ -263,8 +263,8 @@ export class WorkoutPage implements OnInit {
 
   modificaValore(exercise: any, attr: string, value: number) {
     exercise[attr] += value;
-    if (exercise[attr] < 0) {
-      exercise[attr] = 0;
+    if (exercise[attr] < 1) {
+      exercise[attr] = 1;
     }
   }
 

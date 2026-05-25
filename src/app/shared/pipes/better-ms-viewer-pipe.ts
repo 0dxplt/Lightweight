@@ -14,11 +14,7 @@ export class BetterMsViewerPipe implements PipeTransform {
     const seconds = Math.floor(value / 1000);
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
-    if (minutes > 0) {
-      return (remainingSeconds > 0) ? `${minutes}\' ${remainingSeconds}\'\'` : `${minutes}\'`;
-    } else {
-      return `${remainingSeconds}\'\'`;
-    }
+    return `${minutes}\' ${remainingSeconds}\'\'`;
   }
 
 }

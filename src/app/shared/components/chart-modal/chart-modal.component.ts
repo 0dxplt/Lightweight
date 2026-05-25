@@ -1,7 +1,7 @@
 import { Component, ElementRef, inject, Input, OnInit, ViewChild } from '@angular/core';
 import { IonButton, IonImg, IonChip, IonFab, IonContent, IonHeader, IonToolbar, IonButtons, IonTitle, ModalController } from "@ionic/angular/standalone";
 import { ExercisesChart } from 'src/app/models/exercises-chart';
-import { Exercise } from 'src/app/models/session-modal-component-info';
+import { SessionExercise } from 'src/app/models/session-modal-component-info';
 import { Chart, RadialLinearScale, PointElement, LineElement, Filler, Tooltip, Legend, RadarController } from 'chart.js';
 Chart.register(RadialLinearScale, PointElement, LineElement, Filler, Tooltip, Legend, RadarController);
 
@@ -15,7 +15,7 @@ export class ChartModalComponent implements OnInit {
 
   private modalCtrl = inject(ModalController);
   public musclePercs: ExercisesChart[] = [];
-  @Input({ required: true }) exercises!: Exercise[];
+  @Input({ required: true }) exercises!: SessionExercise[];
 
   @ViewChild('chartCanvas') private chartCanvas!: ElementRef;
   radarChart: any;
@@ -28,7 +28,7 @@ export class ChartModalComponent implements OnInit {
     this.createRadarChart();
   }
 
-  calculateMusclePercs(exercises: Exercise[]) {
+  calculateMusclePercs(exercises: SessionExercise[]) {
     const dizionarioEsercizi: Record<string, number> = {};
 
     exercises.forEach(exercise => {
