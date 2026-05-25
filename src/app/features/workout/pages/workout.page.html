@@ -19,8 +19,8 @@
   </ion-header>
   <div class="exercises">
     @for (exerciseWorkout of exercisesWorkout; track exerciseWorkout) {
-    <ion-card class="exercise" (click)="toggleExerciseDesc(exerciseWorkout)" [button]="true">
-      <div class="exercise-top">
+    <ion-card class="exercise" (click)="toggleExerciseDesc(exerciseWorkout)">
+      <div class="exercise-top" style="cursor: pointer;">
         <div class="avatar">
           <ion-img [src]="exerciseWorkout.exercise.imgpath"></ion-img>
         </div>
@@ -42,7 +42,7 @@
       </div>
       @if (exerciseWorkout.isExpanded) {
       <div class="exercise-middle">
-        <h3>{{exerciseWorkout.exercise.desc}}</h3>
+        <p>{{exerciseWorkout.exercise.desc}}</p>
       </div>
       }
       <div class="exercise-bottom">
@@ -51,12 +51,12 @@
           <div class="edit-value">
             @if (editMode) {
             <ion-icon name="remove-circle-outline" class="edit-value-button"
-              (click)="modificaValore(exerciseWorkout, 'serie', -1)"></ion-icon>
+              (click)="$event.stopPropagation();modificaValore(exerciseWorkout, 'serie', -1)"></ion-icon>
             }
             <h2>{{exerciseWorkout.serie}}</h2>
             @if (editMode) {
             <ion-icon name="add-circle-outline" class="edit-value-button"
-              (click)="modificaValore(exerciseWorkout, 'serie', 1)"></ion-icon>
+              (click)="$event.stopPropagation();modificaValore(exerciseWorkout, 'serie', 1)"></ion-icon>
             }
           </div>
         </div>
@@ -65,12 +65,12 @@
           <div class="edit-value">
             @if (editMode) {
             <ion-icon name="remove-circle-outline" class="edit-value-button"
-              (click)="modificaValore(exerciseWorkout, 'reps', -1)"></ion-icon>
+              (click)="$event.stopPropagation();modificaValore(exerciseWorkout, 'reps', -1)"></ion-icon>
             }
             <h2>{{exerciseWorkout.reps}}</h2>
             @if (editMode) {
             <ion-icon name="add-circle-outline" class="edit-value-button"
-              (click)="modificaValore(exerciseWorkout, 'reps', 1)"></ion-icon>
+              (click)="$event.stopPropagation();modificaValore(exerciseWorkout, 'reps', 1)"></ion-icon>
             }
           </div>
         </div>
@@ -79,12 +79,12 @@
           <div class="edit-value">
             @if (editMode) {
             <ion-icon name="remove-circle-outline" class="edit-value-button"
-              (click)="modificaValore(exerciseWorkout, 'recuperoMs', -15000)"></ion-icon>
+              (click)="$event.stopPropagation();modificaValore(exerciseWorkout, 'recuperoMs', -15000)"></ion-icon>
             }
             <h2>{{exerciseWorkout.recuperoMs | betterMsViewer}}</h2>
             @if (editMode) {
             <ion-icon name="add-circle-outline" class="edit-value-button"
-              (click)="modificaValore(exerciseWorkout, 'recuperoMs', 15000)"></ion-icon>
+              (click)="$event.stopPropagation();modificaValore(exerciseWorkout, 'recuperoMs', 15000)"></ion-icon>
             }
           </div>
         </div>

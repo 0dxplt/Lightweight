@@ -1,0 +1,52 @@
+import { Component, inject, Input, OnInit } from '@angular/core';
+import { IonIcon, IonContent, IonImg, IonChip, IonFooter, IonButton, ModalController } from "@ionic/angular/standalone";
+import { addIcons } from 'ionicons';
+import { star, starOutline } from 'ionicons/icons';
+import { Exercise } from 'src/app/models/exercise.model';
+import { BetterMsViewerPipe } from "../../../../shared/pipes/better-ms-viewer-pipe";
+
+@Component({
+  selector: 'app-session-exercise-modal',
+  templateUrl: './session-exercise-modal.component.html',
+  styleUrls: ['./session-exercise-modal.component.scss'],
+  imports: [IonButton, IonFooter, IonChip, IonImg, IonContent, IonIcon, BetterMsViewerPipe],
+})
+export class SessionExerciseModalComponent implements OnInit {
+
+  private modalCtrl = inject(ModalController);
+  @Input() exercise!: Exercise;
+
+  public peso = 15;
+  public ripetizioni = 10;
+  public recuperoMs = 120000;
+
+  constructor() { addIcons({ starOutline, star }) }
+
+  ngOnInit() { }
+
+  cancel() {
+    return this.modalCtrl.dismiss(null, 'cancel');
+  }
+
+  confirm() {
+    return this.modalCtrl.dismiss({ peso: this.peso, ripetizioni: this.ripetizioni, recuperoMs: this.recuperoMs }, 'confirm');
+  }
+
+  modificaValore(attr: 'peso' | 'recuperoMs' | 'ripetizioni', value: number) {
+    this[attr] += value;
+    if (attr === 'recuperoMs') {
+      if (this[attr] < 0) {
+        this[attr] = 0;
+      }
+    } else {
+      if (this[attr] < 1) {
+        this[attr] = 1;
+      }
+    }
+  }
+
+  getStars(numero: number) {
+    return new Array(numero).fill(0);
+  }
+
+}

@@ -60,7 +60,7 @@ h1, p, h2 {
 }
 
 .infos h1 {
-    font-size: 1.1em;
+    font-size: 1.5em;
     font-weight: 600;
     color: white;
     margin-bottom: 8px;
@@ -76,7 +76,7 @@ h1, p, h2 {
 .custom-chip {
     margin: 0;
     height: 22px;
-    font-size: 0.75em;
+    font-size: 1em;
     color: white;
     background: transparent;
     border: 1px solid rgba(255, 255, 255, 0.6);
@@ -98,7 +98,7 @@ h1, p, h2 {
 }
 
 .stat p {
-    font-size: 0.85em;
+    font-size: 1em;
     font-weight: 500;
     color: #111;
     margin-bottom: 5px;
@@ -106,7 +106,7 @@ h1, p, h2 {
 
 .stat h2 {
     font-weight: 700;
-    font-size: 1.3em;
+    font-size: 1.5em;
     color: var(--ion-color-secondary, #254b54);
 }
 
@@ -154,8 +154,13 @@ h1, p, h2 {
 .exercise-middle {
     background-color: white;
     color: var(--ion-color-secondary);
-    font-size: 1.2em;
-    padding: 5px;
+    font-size: 1.4em;
+    padding: 15px;
+    font-weight: 500;
     border-bottom: 1px solid var(--ion-color-secondary);
     text-align: center;
+}
+
+ion-content {
+  --padding-bottom: 80px;
 }

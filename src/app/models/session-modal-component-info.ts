@@ -9,7 +9,7 @@ export type Tag = {
     perc: number;
 }
 
-export type Exercise = {
+export type SessionExercise = {
     exercisePhotoUrl: string;
     nome: string;
     serie: Serie[];
@@ -19,5 +19,5 @@ export type Exercise = {
 export type SessionModalComponentInfo = {
     nome: string;
     timestamp: number;
-    exercises: Exercise[];
+    exercises: SessionExercise[];
 }
