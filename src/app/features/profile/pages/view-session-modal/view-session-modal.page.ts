@@ -8,7 +8,7 @@ import { BetterMsViewerPipe } from "../../../../shared/pipes/better-ms-viewer-pi
 import { SessionExercise } from 'src/app/models/session-exercise.model';
 import { addIcons } from 'ionicons';
 import { lockClosedOutline, settingsOutline, shareSocialOutline, statsChart, trashOutline } from 'ionicons/icons';
-import { Exercise, Serie, Tag } from 'src/app/models/session-modal-component-info';
+import { SessionExercise as Exercise, Serie, Tag } from 'src/app/models/session-modal-component-info';
 import { ChartModalComponent } from 'src/app/shared/components/chart-modal/chart-modal.component';
 import { AlertController } from '@ionic/angular/standalone';
 
