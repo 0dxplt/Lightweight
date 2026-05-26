@@ -132,7 +132,7 @@
     (ionModalWillDismiss)="resetFilter()" (willPresent)="fetchExercises()">
     <ng-template>
       <ion-content>
-        <ion-searchbar placeholder="Search" (click)="modal.setCurrentBreakpoint(0.75)"></ion-searchbar>
+        <ion-searchbar #ricerca placeholder="Search" (ionInput)="handleInput($event)" (click)="modal.setCurrentBreakpoint(0.75)"></ion-searchbar>
         <div class="tag">
           <ion-list>
             <ion-item>
@@ -146,7 +146,7 @@
           </ion-list>
         </div>
         <ion-list class="exercises-list">
-          @for (exercise of filteredExercises; track exercise) {
+          @for (exercise of nameFilteredExercises; track exercise) {
           <ion-card class="exercise-item" id="present-alert" [button]="true" (click)="inputModal(exercise)">
             {{exercise.name}}
           </ion-card>

@@ -216,6 +216,7 @@ export class ProfilePageBodyComponent  implements OnInit {
       cssClass: 'following-modal',
       handle: true,
       backdropDismiss: true,
+      expandToScroll:false,
       initialBreakpoint: 0.4,
       breakpoints: [0, 0.4, 0.8, 1.0],
       componentProps: {
@@ -234,6 +235,7 @@ export class ProfilePageBodyComponent  implements OnInit {
       component: FollowersModalPage,
       cssClass: 'followers-modal',
       handle: true,
+      expandToScroll:false,
       backdropDismiss: true,
       initialBreakpoint: 0.4,
       breakpoints: [0, 0.4, 0.8, 1.0],

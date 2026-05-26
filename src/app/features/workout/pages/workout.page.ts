@@ -1,7 +1,7 @@
-import { Component, inject, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, Input, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonChip, IonImg, IonFab, IonIcon, IonFabButton, IonLabel, IonAvatar, IonItem, IonList, IonSearchbar, IonModal, IonFabList, IonSelect, IonSelectOption, IonCard, IonButton, ModalController, IonNav, IonButtons, IonBackButton, IonAlert, IonInput, IonFooter } from '@ionic/angular/standalone';
+import { IonContent, IonHeader, IonTitle, IonToolbar, IonChip, IonImg, IonFab, IonIcon, IonFabButton, IonLabel, IonAvatar, IonItem, IonList, IonSearchbar, IonModal, IonFabList, IonSelect, IonSelectOption, IonCard, IonButton, ModalController, IonNav, IonButtons, IonBackButton, IonAlert, IonInput, IonFooter, AlertController } from '@ionic/angular/standalone';
 import { Exercise } from 'src/app/models/exercise.model';
 import { ExerciseWorkout, Workout, WorkoutVisualization } from 'src/app/models/workout.model';
 import { BetterMsViewerPipe } from "../../../shared/pipes/better-ms-viewer-pipe";
@@ -24,6 +24,7 @@ export class WorkoutPage implements OnInit {
   @Input() id!: number;
 
   @ViewChild('modal') exercisesModal!: IonModal;
+  @ViewChild('ricerca', { read: ElementRef, static: false }) searchBar!: ElementRef;
 
   public workoutName: string = "";
 
@@ -35,6 +36,8 @@ export class WorkoutPage implements OnInit {
 
   private authService = inject(AuthService);
 
+  private alertController = inject(AlertController);
+
   public editMode = false;
 
   public exercises: Exercise[] = [];
@@ -42,6 +45,8 @@ export class WorkoutPage implements OnInit {
   public muscleGroups: string[] = [];
 
   public filteredExercises: Exercise[] = [];
+
+  public nameFilteredExercises: Exercise[] = [];
 
   public exercisesWorkout: ExerciseWorkout[] = [];
 
@@ -108,21 +113,13 @@ export class WorkoutPage implements OnInit {
             difficulty: 4,
             groups: [
               {
-                muscolarGroup: { id: 1, name: "Petto" },
+                muscolarGroup: { id: 1, name: "Quadricipiti" },
                 perc: 55
               },
               {
-                muscolarGroup: { id: 2, name: "Tricipiti" },
+                muscolarGroup: { id: 2, name: "Femorali" },
                 perc: 20
               },
-              {
-                muscolarGroup: { id: 3, name: "Spalle" },
-                perc: 10
-              },
-              {
-                muscolarGroup: { id: 4, name: "Bicipiti" },
-                perc: 15
-              }
             ]
           }
         },
@@ -189,6 +186,15 @@ export class WorkoutPage implements OnInit {
       }
       return ex.groups.some(tag => muscularGroups.includes(tag.muscolarGroup.name));
     })
+    this.nameFilteredExercises = [...this.filteredExercises];
+    if (!this.searchBar) return;
+    const nodoNativo = this.searchBar.nativeElement;
+    const customIonInput = new CustomEvent('ionInput', {
+      detail: { value: nodoNativo.value },
+      bubbles: true,
+      composed: true
+    });
+    nodoNativo.dispatchEvent(customIonInput);
   }
 
   editModeToggle() {
@@ -236,6 +242,7 @@ export class WorkoutPage implements OnInit {
 
   resetFilter() {
     this.filteredExercises = [...this.exercises];
+    this.nameFilteredExercises = [...this.filteredExercises];
   }
 
   toggleExerciseDesc(exercise: ExerciseWorkout) {
@@ -333,6 +340,7 @@ export class WorkoutPage implements OnInit {
     this.exercises = fetchedExercises.filter(ex => !exercisesWorkoutSet.has(ex.name));
 
     this.filteredExercises = [...this.exercises];
+    this.nameFilteredExercises = [...this.filteredExercises];
 
     this.muscleGroups = [
       "Petto",
@@ -344,7 +352,7 @@ export class WorkoutPage implements OnInit {
     ];
   }
 
-  startSessionWorkout() {
+  createCurrentSession() {
     const workout: WorkoutVisualization = {
       id: this.id,
       creatorUsername: this.creatorUsername,
@@ -354,5 +362,40 @@ export class WorkoutPage implements OnInit {
     };
     this.authService.createCurrentSession(workout);
     this.router.navigate(["/session"]);
+  }
+
+  async startSessionWorkout() {
+    if (!this.authService.currentSession()) {
+      this.createCurrentSession();
+    } else {
+      const alertButtons = [{
+        text: 'Cancel',
+        role: 'cancel',
+        handler: () => {
+          console.log('Alert canceled');
+        },
+      },
+      {
+        text: 'Confirm',
+        role: 'confirm',
+        handler: () => {
+          this.createCurrentSession();
+        },
+      }];
+
+      const alert = await this.alertController.create({
+        header: 'Hai già una sessione attiva!',
+        subHeader: "Vuoi sovrascrivere la sessione corrente?",
+        buttons: alertButtons,
+      });
+
+      await alert.present();
+    }
+  }
+
+  handleInput(event: any) {
+    const target = event.target as HTMLIonSearchbarElement;
+    const query = target.value?.toLowerCase() || '';
+    this.nameFilteredExercises = this.filteredExercises.filter((d) => d.name.toLowerCase().includes(query));
   }
 }

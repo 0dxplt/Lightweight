@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './features/auth/guards/auth.guard';
 import { modAuthGuard } from './features/mod/guards/mod-auth-guard';
+import { hasCurrentSessionGuard } from './features/session/guards/has-current-session-guard';
 
 export const routes: Routes = [
   {
@@ -45,7 +46,7 @@ export const routes: Routes = [
   },
   {
     path: 'session',
-    canActivate: [authGuard(true)],
+    canActivate: [authGuard(true), hasCurrentSessionGuard],
     loadComponent: () => import('./features/session/pages/current-session/current-session.page').then(m => m.CurrentSessionPage)
   },
   {
