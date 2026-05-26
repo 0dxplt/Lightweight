@@ -231,7 +231,6 @@ export class WorkoutPage implements OnInit {
   }
 
   addExercise(exercise: Exercise, serie: number, ripetizioni: number, recuperoMs: number) {
-    console.log(exercise, serie, ripetizioni, recuperoMs);
     this.exercisesWorkout.push(
       {
         serie: serie,
@@ -240,6 +239,8 @@ export class WorkoutPage implements OnInit {
         exercise: exercise
       }
     )
+    this.exercises = this.exercises.filter(ex => ex !== exercise);
+    this.filteredExercises = [...this.exercises];
   }
 
   filterExercises(event: any) {
@@ -305,5 +306,17 @@ export class WorkoutPage implements OnInit {
 
   updateWokoutName(event: any) {
     this.workoutName = event.target.value;
+  }
+
+  saveWorkout() {
+    // TODO: da fare il salvataggio
+    console.log({
+      nome: this.workoutName,
+      exercises: this.exercisesWorkout
+    });
+    return {
+      nome: this.workoutName,
+      exercises: this.exercisesWorkout
+    }
   }
 }
