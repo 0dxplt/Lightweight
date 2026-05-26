@@ -24,7 +24,7 @@ export class RankingEntryComponent  implements OnInit {
   ngOnInit() {}
 
   onClick(_: Event) {
-    this.router.navigate(["/profile/" + this.rankUser()?.username]);
+    this.router.navigate(["/tabs/profile/" + this.rankUser()?.username]);
   }
 
   handleImageError() {
