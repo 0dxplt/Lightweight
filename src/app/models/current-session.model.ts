@@ -4,6 +4,5 @@ import { Workout } from "./workout.model";
 export type CurrentSession = {
     nome: string;
     workout: Workout;
-    timestamp: number;
     exercises: SessionExercise[];
 }

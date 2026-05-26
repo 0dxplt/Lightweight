@@ -1,5 +1,8 @@
 import { computed, Injectable, signal } from '@angular/core';
+import { CurrentSession } from 'src/app/models/current-session.model';
+import { SessionExercise } from 'src/app/models/session-modal-component-info';
 import { User } from 'src/app/models/user.model';
+import { Workout } from 'src/app/models/workout.model';
 import { GLOBAL_RANK_UP } from 'src/app/shared/global';
 
 @Injectable({
@@ -9,13 +12,19 @@ export class AuthService {
 
   private _user = signal<User | null>(null);
   private _isLoggedIn = computed(() => this._user() !== null);
-  
+
   user = this._user.asReadonly();
   private _fakeIdCounter = 1;
-  
+
+  private _currentSession = signal<CurrentSession | null>(null);
+
+  currentSession = this._currentSession.asReadonly();
+
   constructor() {
     const savedUser = localStorage.getItem('loggedUser');
     this._user.set(savedUser ? JSON.parse(savedUser) : null);
+    const currentSession = localStorage.getItem('currentSession');
+    this._currentSession.set(currentSession ? JSON.parse(currentSession) : null);
   }
 
   login(email: string, password: string) {
@@ -87,6 +96,8 @@ export class AuthService {
   logout() {
     this._user.set(null);
     localStorage.removeItem('loggedUser');
+    this._currentSession.set(null);
+    localStorage.removeItem('currentSession');
   }
 
   isLogged(): boolean {
@@ -134,7 +145,7 @@ export class AuthService {
 
     console.log(this._user()?.username + ' has followed ' + otherUsername);
   }
-  
+
   unfollow(otherUsername: string) {
     if (otherUsername === this._user()?.username) return;
     // query al db
@@ -147,5 +158,16 @@ export class AuthService {
     localStorage.setItem('loggedUser', JSON.stringify(this._user()));
 
     console.log(this._user()?.username + ' has unfollowed ' + otherUsername);
+  }
+
+  updateCurrentSession(nome: string,
+    workout: Workout,
+    exercises: SessionExercise[]) {
+    this._currentSession.set({
+      nome: nome,
+      workout: workout,
+      exercises: exercises
+    });
+    localStorage.setItem('currentSession', JSON.stringify(this._currentSession()));
   }
 }
