@@ -2,7 +2,7 @@ import { computed, Injectable, signal } from '@angular/core';
 import { CurrentSession } from 'src/app/models/current-session.model';
 import { SessionExercise } from 'src/app/models/session-modal-component-info';
 import { User } from 'src/app/models/user.model';
-import { Workout } from 'src/app/models/workout.model';
+import { Workout, WorkoutVisualization } from 'src/app/models/workout.model';
 import { GLOBAL_RANK_UP } from 'src/app/shared/global';
 
 @Injectable({
@@ -160,8 +160,17 @@ export class AuthService {
     console.log(this._user()?.username + ' has unfollowed ' + otherUsername);
   }
 
+  createCurrentSession(workout: WorkoutVisualization) {
+    this._currentSession.set({
+      nome: workout.name,
+      workout: workout,
+      exercises: []
+    });
+    localStorage.setItem('currentSession', JSON.stringify(this._currentSession()));
+  }
+
   updateCurrentSession(nome: string,
-    workout: Workout,
+    workout: WorkoutVisualization,
     exercises: SessionExercise[]) {
     this._currentSession.set({
       nome: nome,
@@ -169,5 +178,10 @@ export class AuthService {
       exercises: exercises
     });
     localStorage.setItem('currentSession', JSON.stringify(this._currentSession()));
+  }
+
+  finishCurrentSession() {
+    this._currentSession.set(null);
+    localStorage.removeItem('currentSession');
   }
 }

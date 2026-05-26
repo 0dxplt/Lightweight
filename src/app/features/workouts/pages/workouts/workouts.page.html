@@ -10,9 +10,11 @@
       <ion-title size="large">workouts</ion-title>
     </ion-toolbar>
   </ion-header>
+  @if (authService.currentSession()) {
   <ion-card class="active-session" [button]="true" routerLink="/session">
-    Sessione Corrente
+    Sessione Corrente - {{authService.currentSession()?.nome}}
   </ion-card>
+  }
   <div class="exercises">
     @for (workout of workouts; track workout) {
     <ion-card class="workout-card" [button]="true" [routerLink]="['/workout', workout.id]">
