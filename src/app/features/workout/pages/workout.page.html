@@ -104,18 +104,13 @@
       <ion-fab-button color="secondary" id="open-add-exercise">
         <ion-icon name="add-outline"></ion-icon>
       </ion-fab-button>
-      <ion-fab-button color="success" (click)="saveWorkout()">
-        <ion-icon name="checkmark-done-outline"></ion-icon>
+      <ion-fab-button color="secondary" (click)="saveWorkout()">
+        <ion-icon name="save-outline"></ion-icon>
       </ion-fab-button>
     </ion-fab-list>
     <ion-fab-list side="start">
-      <ion-fab-button color="secondary" (click)="visualizeRadarChart()">
-        <ion-icon name="pie-chart-outline"></ion-icon>
-      </ion-fab-button>
-    </ion-fab-list>
-    <ion-fab-list side="top">
       @if (editMode) {
-      <ion-fab-button color="success" (click)="editModeToggle()">
+      <ion-fab-button color="secondary" (click)="editModeToggle()">
         <ion-icon name="checkmark-done-outline"></ion-icon>
       </ion-fab-button>
       } @else {
@@ -123,10 +118,18 @@
         <ion-icon name="pencil-outline"></ion-icon>
       </ion-fab-button>
       }
+      <ion-fab-button color="secondary" (click)="visualizeRadarChart()">
+        <ion-icon name="pie-chart-outline"></ion-icon>
+      </ion-fab-button>
+    </ion-fab-list>
+    <ion-fab-list side="top">
+      <ion-fab-button color="secondary" (click)="startSessionWorkout()">
+        <ion-icon name="play-outline"></ion-icon>
+      </ion-fab-button>
     </ion-fab-list>
   </ion-fab>
   <ion-modal #modal trigger="open-add-exercise" [initialBreakpoint]="0.5" [breakpoints]="[0, 0.25, 0.5, 0.75]"
-    (ionModalWillDismiss)="resetFilter()">
+    (ionModalWillDismiss)="resetFilter()" (willPresent)="fetchExercises()">
     <ng-template>
       <ion-content>
         <ion-searchbar placeholder="Search" (click)="modal.setCurrentBreakpoint(0.75)"></ion-searchbar>

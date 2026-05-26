@@ -20,5 +20,13 @@ export type Workout = {
     creator: User;
     name: string;
     creationTimestamp: number;
-    exercises: WorkoutExercise[]
+    exercises: WorkoutExercise[];
+}
+
+export type WorkoutVisualization = {
+    id: number;
+    creatorUsername: string;
+    name: string;
+    creationTimestamp: number;
+    exercises: ExerciseWorkout[];
 }

@@ -11,8 +11,9 @@ import { ExerciseModalComponent } from 'src/app/features/workout/components/exer
 import { SessionExerciseModalComponent } from '../../components/session-exercise-modal/session-exercise-modal.component';
 import { addIcons } from 'ionicons';
 import { addCircleOutline, addOutline, checkmarkDoneOutline, closeOutline, pencilOutline, pieChartOutline, removeCircleOutline, settingsOutline } from 'ionicons/icons';
-import { Workout } from 'src/app/models/workout.model';
+import { Workout, WorkoutVisualization } from 'src/app/models/workout.model';
 import { AuthService } from 'src/app/features/auth/services/auth-service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-current-session',
@@ -27,132 +28,44 @@ export class CurrentSessionPage implements OnInit {
 
   private authService = inject(AuthService);
 
-  public workout: any = {};
+  private router = inject(Router);
+
+  public workout!: WorkoutVisualization;
 
   public sessionExercises: SessionExercise[] = [];
 
   public sessionName = "Sessione";
 
-  public workoutExercises: Exercise[] = [
-    {
-      id: 35435345,
-      name: "Panca Piana Manubri Bilanciere Sdraiato",
-      desc: "Pigghia na panca, un bilanciere, ti stinnigghi na panca e aisi u bilanciere.",
-      imgpath: "https://static.strengthlevel.com/images/exercises/dumbbell-bench-press/dumbbell-bench-press-800.jpg",
-      difficulty: 4,
-      groups: [
-        {
-          muscolarGroup: { id: 1, name: "Petto" },
-          perc: 55
-        },
-        {
-          muscolarGroup: { id: 2, name: "Tricipiti" },
-          perc: 20
-        },
-        {
-          muscolarGroup: { id: 3, name: "Spalle" },
-          perc: 10
-        },
-        {
-          muscolarGroup: { id: 4, name: "Bicipiti" },
-          perc: 15
-        }
-      ]
-    },
-    {
-      id: 35435345,
-      name: "Panca Piana Bialnciere",
-      desc: "Pigghia na panca, un bilanciere, ti stinnigghi na panca e aisi u bilanciere.",
-      imgpath: "",
-      difficulty: 4,
-      groups: [
-        {
-          muscolarGroup: { id: 1, name: "Petto" },
-          perc: 55
-        },
-        {
-          muscolarGroup: { id: 2, name: "Tricipiti" },
-          perc: 20
-        },
-        {
-          muscolarGroup: { id: 3, name: "Spalle" },
-          perc: 10
-        },
-        {
-          muscolarGroup: { id: 4, name: "Bicipiti" },
-          perc: 15
-        }
-      ]
-    },
-    {
-      id: 35435345,
-      name: "Pressa 45",
-      desc: "Pigghia na panca, un bilanciere, ti stinnigghi na panca e aisi u bilanciere.",
-      imgpath: "",
-      difficulty: 4,
-      groups: [
-        {
-          muscolarGroup: { id: 5, name: "Femorali" },
-          perc: 65
-        },
-        {
-          muscolarGroup: { id: 6, name: "Quadricipiti" },
-          perc: 35
-        }
-      ]
-    },
-    {
-      id: 35435345,
-      name: "Panca Piana Manubri Bilanciere Sdraiato",
-      desc: "Pigghia na panca, un bilanciere, ti stinnigghi na panca e aisi u bilanciere.",
-      imgpath: "https://static.strengthlevel.com/images/exercises/dumbbell-bench-press/dumbbell-bench-press-800.jpg",
-      difficulty: 4,
-      groups: [
-        {
-          muscolarGroup: { id: 1, name: "Petto" },
-          perc: 55
-        },
-        {
-          muscolarGroup: { id: 2, name: "Tricipiti" },
-          perc: 20
-        },
-        {
-          muscolarGroup: { id: 3, name: "Spalle" },
-          perc: 10
-        },
-        {
-          muscolarGroup: { id: 4, name: "Bicipiti" },
-          perc: 15
-        }
-      ]
-    },
-  ];
+  public workoutExercises: Exercise[] = [];
 
   public filteredExercises = [...this.workoutExercises];
 
-  public muscleGroups = [
-    "Petto",
-    "Spalle",
-    "Tricipiti",
-    "Quadricipiti",
-    "Femorali",
-    "Bicipiti"
-  ]
+  public muscleGroups:string[] = [];
 
   @ViewChild('modal') exercisesModal!: IonModal;
 
   constructor() {
     addIcons({ settingsOutline, addOutline, pieChartOutline, pencilOutline, closeOutline, removeCircleOutline, addCircleOutline, checkmarkDoneOutline });
-    this.authService.currentSession
-    /* this.sessionName,
-      this.workout,
-      this.sessionExercises*/
   }
 
   ngOnInit() {
-    const currentSession = JSON.stringify(localStorage.getItem("currentSession"));
-    if (!currentSession) return;
-    this.
+    const currentSessionString = localStorage.getItem("currentSession");
+    if (currentSessionString) {
+      const currentSession = JSON.parse(currentSessionString);
+      this.sessionName = currentSession.nome;
+      this.workout = currentSession.workout;
+      this.sessionExercises = currentSession.exercises;
+      this.workoutExercises = this.workout.exercises.map(ex => ex.exercise);
+      this.filteredExercises = [...this.workoutExercises];
+      this.muscleGroups = [
+        "Petto",
+        "Spalle",
+        "Tricipiti",
+        "Quadricipiti",
+        "Femorali",
+        "Bicipiti"
+      ];
+    }
   }
 
   updateSessionName(event: any) {
@@ -185,6 +98,8 @@ export class CurrentSessionPage implements OnInit {
 
   saveSession() {
     console.log("Sessione Salvata");
+    this.authService.finishCurrentSession();
+    this.router.navigate(["/workouts"]);
   }
 
   resetFilter() {
