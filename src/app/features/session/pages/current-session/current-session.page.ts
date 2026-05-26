@@ -11,6 +11,8 @@ import { ExerciseModalComponent } from 'src/app/features/workout/components/exer
 import { SessionExerciseModalComponent } from '../../components/session-exercise-modal/session-exercise-modal.component';
 import { addIcons } from 'ionicons';
 import { addCircleOutline, addOutline, checkmarkDoneOutline, closeOutline, pencilOutline, pieChartOutline, removeCircleOutline, settingsOutline } from 'ionicons/icons';
+import { Workout } from 'src/app/models/workout.model';
+import { AuthService } from 'src/app/features/auth/services/auth-service';
 
 @Component({
   selector: 'app-current-session',
@@ -22,6 +24,10 @@ import { addCircleOutline, addOutline, checkmarkDoneOutline, closeOutline, penci
 export class CurrentSessionPage implements OnInit {
 
   public modalCtrl = inject(ModalController);
+
+  private authService = inject(AuthService);
+
+  public workout: any = {};
 
   public sessionExercises: SessionExercise[] = [];
 
@@ -135,19 +141,30 @@ export class CurrentSessionPage implements OnInit {
 
   @ViewChild('modal') exercisesModal!: IonModal;
 
-  constructor() { addIcons({ settingsOutline, addOutline, pieChartOutline, pencilOutline, closeOutline, removeCircleOutline, addCircleOutline, checkmarkDoneOutline }); }
+  constructor() {
+    addIcons({ settingsOutline, addOutline, pieChartOutline, pencilOutline, closeOutline, removeCircleOutline, addCircleOutline, checkmarkDoneOutline });
+    this.authService.currentSession
+    /* this.sessionName,
+      this.workout,
+      this.sessionExercises*/
+  }
 
   ngOnInit() {
+    const currentSession = JSON.stringify(localStorage.getItem("currentSession"));
+    if (!currentSession) return;
+    this.
   }
 
   updateSessionName(event: any) {
     this.sessionName = event.target.value;
+    this.onDidEdit();
   }
 
   removeExercise(exercise: SessionExercise) {
     this.sessionExercises = this.sessionExercises.filter(ex => ex !== exercise);
     this.workoutExercises.push(this.adaptExercise(exercise));
     this.filteredExercises = [...this.workoutExercises];
+    this.onDidEdit();
   }
 
   modificaValore(serie: any, attr: string, value: number) {
@@ -155,10 +172,19 @@ export class CurrentSessionPage implements OnInit {
     if (serie[attr] < 1) {
       serie[attr] = 1;
     }
+    this.onDidEdit();
+  }
+
+  onDidEdit() {
+    this.authService.updateCurrentSession(
+      this.sessionName,
+      this.workout,
+      this.sessionExercises
+    );
   }
 
   saveSession() {
-    console.log("Sessione salvata");
+    console.log("Sessione Salvata");
   }
 
   resetFilter() {
@@ -193,6 +219,7 @@ export class CurrentSessionPage implements OnInit {
     });
     this.workoutExercises = this.workoutExercises.filter(ex => ex !== exercise);
     this.filteredExercises = [...this.workoutExercises];
+    this.onDidEdit();
   }
 
   async inputModal(exercise: Exercise) {
@@ -213,7 +240,7 @@ export class CurrentSessionPage implements OnInit {
     }
   }
 
-  adaptExercise(exercise: SessionExercise):Exercise {
+  adaptExercise(exercise: SessionExercise): Exercise {
     // TODO: fetch al db tramite exercise.nome
     return {
       id: 0,
@@ -253,13 +280,15 @@ export class CurrentSessionPage implements OnInit {
         recuperoMs: data["recuperoMs"]
       })
     }
+    this.onDidEdit();
   }
 
   removeSerie(serie: Serie, sessionExercise: SessionExercise) {
     sessionExercise.serie = sessionExercise.serie.filter(s => s !== serie);
     if (sessionExercise.serie.length < 1) {
       this.removeExercise(sessionExercise);
+    } else {
+      this.onDidEdit();
     }
   }
-
 }
