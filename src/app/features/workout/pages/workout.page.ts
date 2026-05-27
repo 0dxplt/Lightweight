@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, computed, ElementRef, inject, Input, OnInit, signal, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonChip, IonImg, IonFab, IonIcon, IonFabButton, IonLabel, IonAvatar, IonItem, IonList, IonSearchbar, IonModal, IonFabList, IonSelect, IonSelectOption, IonCard, IonButton, ModalController, IonNav, IonButtons, IonBackButton, IonAlert, IonInput, IonFooter, AlertController } from '@ionic/angular/standalone';
@@ -48,11 +48,13 @@ export class WorkoutPage implements OnInit {
 
   public nameFilteredExercises: Exercise[] = [];
 
-  public exercisesWorkout: ExerciseWorkout[] = [];
+  public exercisesWorkout = signal<ExerciseWorkout[]>([]);
 
   public creatorUsername: string = "";
 
   public creationTimestamp = 0;
+
+  public hasExercise = computed(() => this.exercisesWorkout().length > 0);
 
   constructor() { addIcons({ closeOutline, removeCircleOutline, addCircleOutline, settingsOutline, addOutline, saveOutline, checkmarkDoneOutline, pencilOutline, pieChartOutline, playOutline }); }
 
@@ -63,14 +65,14 @@ export class WorkoutPage implements OnInit {
       console.log("Creo il workout");
       const date = new Date();
       this.workoutName = 'Workout ' + date.toLocaleDateString();
-      this.exercisesWorkout = [];
+      this.exercisesWorkout.set([]);
       this.creationTimestamp = date.getDate();
     } else {
       //TODO: fetch per ottenere tutti i dati del workout
       this.workoutName = "Workout";
       this.creatorUsername = "Pippo";
       this.creationTimestamp = 453534636;
-      this.exercisesWorkout = [
+      this.exercisesWorkout.set([
         {
           serie: 4,
           reps: 8,
@@ -145,7 +147,7 @@ export class WorkoutPage implements OnInit {
             ]
           }
         }
-      ]
+      ]);
     }
   }
 
@@ -168,14 +170,12 @@ export class WorkoutPage implements OnInit {
   }
 
   addExercise(exercise: Exercise, serie: number, ripetizioni: number, recuperoMs: number) {
-    this.exercisesWorkout.push(
-      {
-        serie: serie,
-        reps: ripetizioni,
-        recuperoMs: recuperoMs,
-        exercise: exercise
-      }
-    )
+    this.exercisesWorkout.update((values) => [...values, {
+      serie: serie,
+      reps: ripetizioni,
+      recuperoMs: recuperoMs,
+      exercise: exercise
+    }]);
   }
 
   filterExercises(event: any) {
@@ -203,7 +203,7 @@ export class WorkoutPage implements OnInit {
   }
 
   removeExercise(exercise: ExerciseWorkout) {
-    this.exercisesWorkout = this.exercisesWorkout.filter(ex => ex !== exercise);
+    this.exercisesWorkout.update((values) => values.filter(ex => ex !== exercise));
   }
 
   modificaValore(exercise: any, attr: string, value: number) {
@@ -232,7 +232,7 @@ export class WorkoutPage implements OnInit {
       breakpoints: [0, 0.53, 1.0],
       handle: true,
       componentProps: {
-        exercises: this.formatExercises(this.exercisesWorkout)
+        exercises: this.formatExercises(this.exercisesWorkout())
       },
       cssClass: ''
     });
@@ -335,7 +335,7 @@ export class WorkoutPage implements OnInit {
       }
     ];
 
-    const exercisesWorkoutSet = new Set(this.exercisesWorkout.map(ex => ex.exercise.name));
+    const exercisesWorkoutSet = new Set(this.exercisesWorkout().map(ex => ex.exercise.name));
 
     this.exercises = fetchedExercises.filter(ex => !exercisesWorkoutSet.has(ex.name));
 
@@ -358,7 +358,7 @@ export class WorkoutPage implements OnInit {
       creatorUsername: this.creatorUsername,
       name: this.workoutName,
       creationTimestamp: this.creationTimestamp,
-      exercises: this.exercisesWorkout
+      exercises: this.exercisesWorkout()
     };
     this.authService.createCurrentSession(workout);
     this.router.navigate(["/session"]);

@@ -33,44 +33,63 @@
             }
           </div>
         </div>
+        @if (editMode) {
         <ion-button class="delete-button" color="danger" (click)="removeExercise(sessionExercise)">
           <ion-icon name="close-outline"></ion-icon>
         </ion-button>
+        }
       </div>
       @for (serie of sessionExercise.serie; track serie) {
       <div class="exercise-bottom">
+        @if (editMode) {
         <div class="stat">
           <ion-icon color="danger" name="close-outline" class="edit-value-button"
             (click)="$event.stopPropagation();removeSerie(serie, sessionExercise)"></ion-icon>
         </div>
+        }
         <div class="stat">
           <p>Peso</p>
           <div class="edit-value">
+            @if (editMode) {
             <ion-icon name="remove-circle-outline" class="edit-value-button"
               (click)="$event.stopPropagation();modificaValore(serie, 'peso', -0.5)"></ion-icon>
             <h2>{{serie.peso}}</h2>
             <ion-icon name="add-circle-outline" class="edit-value-button"
               (click)="$event.stopPropagation();modificaValore(serie, 'peso', 0.5)"></ion-icon>
+            }
+            @else {
+            <h2>{{serie.peso}}</h2>
+            }
           </div>
         </div>
         <div class="stat">
           <p>Ripetizioni</p>
           <div class="edit-value">
+            @if (editMode) {
             <ion-icon name="remove-circle-outline" class="edit-value-button"
               (click)="$event.stopPropagation();modificaValore(serie, 'reps', -1)"></ion-icon>
             <h2>{{serie.reps}}</h2>
             <ion-icon name="add-circle-outline" class="edit-value-button"
               (click)="$event.stopPropagation();modificaValore(serie, 'reps', 1)"></ion-icon>
+            }
+            @else {
+            <h2>{{serie.reps}}</h2>
+            }
           </div>
         </div>
         <div class="stat">
           <p>Recupero</p>
           <div class="edit-value">
+            @if (editMode) {
             <ion-icon name="remove-circle-outline" class="edit-value-button"
               (click)="$event.stopPropagation();modificaValore(serie, 'recuperoMs', -15000)"></ion-icon>
             <h2>{{serie.recuperoMs | betterMsViewer}}</h2>
             <ion-icon name="add-circle-outline" class="edit-value-button"
               (click)="$event.stopPropagation();modificaValore(serie, 'recuperoMs', 15000)"></ion-icon>
+            }
+            @else {
+            <h2>{{serie.recuperoMs | betterMsViewer}}</h2>
+            }
           </div>
         </div>
       </div>
@@ -91,9 +110,14 @@
         <ion-icon name="add-outline"></ion-icon>
       </ion-fab-button>
     </ion-fab-list>
-    <ion-fab-list side="start">
-      <ion-fab-button color="success" (click)="saveSession()">
+    <ion-fab-list side="top">
+      <ion-fab-button color="secondary" (click)="saveSession()">
         <ion-icon name="checkmark-done-outline"></ion-icon>
+      </ion-fab-button>
+    </ion-fab-list>
+    <ion-fab-list side="start">
+      <ion-fab-button color="secondary" (click)="editModeToggle()">
+        <ion-icon name="pencil-outline"></ion-icon>
       </ion-fab-button>
     </ion-fab-list>
   </ion-fab>
@@ -101,7 +125,8 @@
     (ionModalWillDismiss)="resetFilter()">
     <ng-template>
       <ion-content>
-        <ion-searchbar placeholder="Search" (click)="modal.setCurrentBreakpoint(0.75)"></ion-searchbar>
+        <ion-searchbar #ricerca placeholder="Search" (click)="modal.setCurrentBreakpoint(0.75)"
+          (ionInput)="handleInput($event)"></ion-searchbar>
         <div class="tag">
           <ion-list>
             <ion-item>

@@ -13,6 +13,8 @@ Chart.register(RadialLinearScale, PointElement, LineElement, Filler, Tooltip, Le
 })
 export class ChartModalComponent implements OnInit {
 
+  public hasExercise = false;
+
   private modalCtrl = inject(ModalController);
   public musclePercs: ExercisesChart[] = [];
   @Input({ required: true }) exercises!: SessionExercise[];
@@ -22,7 +24,11 @@ export class ChartModalComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit() { }
+  ngOnInit() {
+    if (this.exercises.length >= 1) {
+      this.hasExercise = true;
+    }
+  }
 
   ngAfterViewInit() {
     this.createRadarChart();

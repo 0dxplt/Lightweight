@@ -1,5 +1,10 @@
 <ion-content class="ion-padding">
-<div class="chart">
-  <canvas #chartCanvas></canvas>
-</div>
+  @if (hasExercise) {
+  <div class="chart">
+    <canvas #chartCanvas></canvas>
+  </div>
+  }
+  @else {
+    <h1>Aggiungi un esercizio per visualizzare il grafico riassuntivo</h1>
+  }
 </ion-content>

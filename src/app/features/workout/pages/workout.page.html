@@ -1,9 +1,9 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     @if (editMode) {
-      <ion-input (ionBlur)="updateWokoutName($event)" value="{{workoutName}}"></ion-input>
+    <ion-input (ionBlur)="updateWokoutName($event)" value="{{workoutName}}"></ion-input>
     } @else {
-      <ion-title>{{workoutName}}</ion-title>
+    <ion-title>{{workoutName}}</ion-title>
     }
     <ion-buttons slot="end">
       <ion-back-button defaultHref="/workouts"></ion-back-button>
@@ -18,7 +18,7 @@
     </ion-toolbar>
   </ion-header>
   <div class="exercises">
-    @for (exerciseWorkout of exercisesWorkout; track exerciseWorkout) {
+    @for (exerciseWorkout of exercisesWorkout(); track exerciseWorkout) {
     <ion-card class="exercise" (click)="toggleExerciseDesc(exerciseWorkout)">
       <div class="exercise-top" style="cursor: pointer;">
         <div class="avatar">
@@ -123,16 +123,19 @@
       </ion-fab-button>
     </ion-fab-list>
     <ion-fab-list side="top">
+      @if (hasExercise()) {
       <ion-fab-button color="secondary" (click)="startSessionWorkout()">
         <ion-icon name="play-outline"></ion-icon>
       </ion-fab-button>
+      }
     </ion-fab-list>
   </ion-fab>
   <ion-modal #modal trigger="open-add-exercise" [initialBreakpoint]="0.5" [breakpoints]="[0, 0.25, 0.5, 0.75]"
     (ionModalWillDismiss)="resetFilter()" (willPresent)="fetchExercises()">
     <ng-template>
       <ion-content>
-        <ion-searchbar #ricerca placeholder="Search" (ionInput)="handleInput($event)" (click)="modal.setCurrentBreakpoint(0.75)"></ion-searchbar>
+        <ion-searchbar #ricerca placeholder="Search" (ionInput)="handleInput($event)"
+          (click)="modal.setCurrentBreakpoint(0.75)"></ion-searchbar>
         <div class="tag">
           <ion-list>
             <ion-item>
@@ -152,7 +155,7 @@
           </ion-card>
           }
           @empty {
-            <h1>Nessun esercizio presente, prova a cambiare i filtri.</h1>
+          <h1>Nessun esercizio presente, prova a cambiare i filtri.</h1>
           }
         </ion-list>
       </ion-content>
