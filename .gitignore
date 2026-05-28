@@ -77,6 +77,10 @@ server/node_modules/
 .env
 server/.env
 
+# DB
+server/data
+server/data/*.db
+
 # Log di errore
 npm-debug.log*
 yarn-debug.log*

@@ -1,16 +1,20 @@
 const express = require('express');
 const cors = require('cors');
 const app = express();
-const PORT = 10000;
+const db = require('./db/database');
+
+const config = require('./config/env');
+const PORT = config.port;
 
 // Middleware
-app.use(cors()); // CORS per Ionic
-app.use(express.json()); // Lettura JSON
+app.use(cors());
+app.use(express.json());
 
+// Rotte di test
 app.get("/", (req, res) => {
     res.json({testo: "Hello, World!"});
-})
+});
 
 app.listen(PORT, () => {
-    console.log('Server backend avviato sulla porta ' + PORT);
-})
+    console.log(`Server backend avviato sulla porta ${PORT}`);
+});
