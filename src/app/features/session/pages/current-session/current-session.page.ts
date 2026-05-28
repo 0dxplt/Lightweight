@@ -163,7 +163,9 @@ export class CurrentSessionPage implements OnInit {
     const modal = await this.modalCtrl.create({
       component: SessionExerciseModalComponent,
       componentProps: {
-        exercise: exercise
+        exercise: exercise,
+        reps: this.workout.exercises.filter(ex => ex.exercise.name === exercise.name)[0].reps,
+        recupero:  this.workout.exercises.filter(ex => ex.exercise.name === exercise.name)[0].recuperoMs
       },
     });
 

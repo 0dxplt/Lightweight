@@ -15,14 +15,20 @@ export class SessionExerciseModalComponent implements OnInit {
 
   private modalCtrl = inject(ModalController);
   @Input() exercise!: Exercise;
+  @Input() reps!: number;
+  @Input() recupero!: number;
 
-  public peso = 15;
-  public ripetizioni = 10;
-  public recuperoMs = 120000;
+  public peso = 0;
+  public ripetizioni = 1;
+  public recuperoMs = 1;
 
   constructor() { addIcons({ starOutline, star }) }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.peso = 15;
+    this.ripetizioni = this.reps;
+    this.recuperoMs = this.recupero;
+  }
 
   cancel() {
     return this.modalCtrl.dismiss(null, 'cancel');
