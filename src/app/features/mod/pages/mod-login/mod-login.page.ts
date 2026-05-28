@@ -6,6 +6,7 @@ import { addIcons } from 'ionicons';
 import { eyeOffOutline, eyeOutline } from 'ionicons/icons';
 import { ModAuthService } from '../../services/mod-auth-service';
 import { Router } from '@angular/router';
+import { MAX_MOD_PASSWORD_LENGTH, MAX_MOD_USERNAME_LENGTH, MIN_MOD_PASSWORD_LENGTH, MIN_MOD_USERNAME_LENGTH } from 'src/app/shared/global';
 
 @Component({
   selector: 'app-mod-login',
@@ -17,9 +18,9 @@ import { Router } from '@angular/router';
 export class ModLoginPage implements OnInit {
 
   loginForm: FormGroup = new FormGroup({
-    username: new FormControl('', [Validators.required, Validators.minLength(4), Validators.maxLength(16)]),
+    username: new FormControl('', [Validators.required, Validators.minLength(MIN_MOD_USERNAME_LENGTH), Validators.maxLength(MAX_MOD_USERNAME_LENGTH)]),
     email: new FormControl('', [Validators.required, Validators.email]),
-    password: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(16)])
+    password: new FormControl('', [Validators.required, Validators.minLength(MIN_MOD_PASSWORD_LENGTH), Validators.maxLength(MAX_MOD_PASSWORD_LENGTH)])
   })
   showPassword: boolean = false;
 

@@ -28,6 +28,12 @@ export const SURNAME_REGEX: RegExp = /^[\p{L}]+(?:['\s\-][\p{L}]+)*$/u;
     u : Flag Unicode, \p{L} deve leggere tutti i caratteri internazionali.
 */
 
+export const MIN_MOD_PASSWORD_LENGTH: number = 12;
+export const MAX_MOD_PASSWORD_LENGTH: number = 32;
+
+export const MIN_MOD_USERNAME_LENGTH: number = 8;
+export const MAX_MOD_USERNAME_LENGTH: number = 15;
+
 export const VERIFY_MIN_SESSIONS: number = 30;
 export const VERIFY_MIN_FOLLOWERS: number = 500;
 export const VERIFY_MIN_AGE: number = 18;
