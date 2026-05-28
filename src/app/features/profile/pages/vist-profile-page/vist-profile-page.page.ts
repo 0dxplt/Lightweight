@@ -54,7 +54,7 @@ export class VistProfilePagePage implements OnInit {
     const u = this.visitedUser();
     if (!u) return;
 
-    this.authService.follow(u.username);
+    this.authService.follow(u.username, this.visitedUser);
     // se non ci sono stati problemi
     this.followed.set(true);
   }
@@ -63,7 +63,7 @@ export class VistProfilePagePage implements OnInit {
     const u = this.visitedUser();
     if (!u) return;
     
-    this.authService.unfollow(u.username);
+    this.authService.unfollow(u.username, this.visitedUser);
     // se non ci sono stati problemi
     this.followed.set(false);
   }

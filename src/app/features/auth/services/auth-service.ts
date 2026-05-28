@@ -1,4 +1,4 @@
-import { computed, Injectable, signal } from '@angular/core';
+import { computed, Injectable, Signal, signal, WritableSignal } from '@angular/core';
 import { CurrentSession } from 'src/app/models/current-session.model';
 import { SessionExercise } from 'src/app/models/session-modal-component-info';
 import { User } from 'src/app/models/user.model';
@@ -132,32 +132,40 @@ export class AuthService {
     return follows;
   }
 
-  follow(otherUsername: string) {
+  follow(otherUsername: string, toBeFollowed: WritableSignal<User | null>) {
     if (otherUsername === this._user()?.username) return;
     // query al db
 
     if (!this._user()) return;
 
-    const other = structuredClone(this.user()) as User;
-    other.followers++;
-    this._user.set(other);
+    const cpy = structuredClone(this.user()) as User;
+    cpy.following++;
+    this._user.set(cpy);
     localStorage.setItem('loggedUser', JSON.stringify(this._user()));
-
     console.log(this._user()?.username + ' has followed ' + otherUsername);
+
+    const other = toBeFollowed();
+    if (!other) return;
+    other.followers++;
+    toBeFollowed.set(other);
   }
 
-  unfollow(otherUsername: string) {
+  unfollow(otherUsername: string, toBeUnfollowed: WritableSignal<User | null>) {
     if (otherUsername === this._user()?.username) return;
     // query al db
 
     if (!this._user()) return;
 
-    const other = structuredClone(this.user()) as User;
-    other.followers--;
-    this._user.set(other);
+    const cpy = structuredClone(this.user()) as User;
+    cpy.following--;
+    this._user.set(cpy);
     localStorage.setItem('loggedUser', JSON.stringify(this._user()));
-
     console.log(this._user()?.username + ' has unfollowed ' + otherUsername);
+
+    const other = toBeUnfollowed();
+    if (!other) return;
+    other.followers--;
+    toBeUnfollowed.set(other);
   }
 
   createCurrentSession(workout: WorkoutVisualization) {
