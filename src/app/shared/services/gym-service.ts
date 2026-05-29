@@ -1,46 +1,32 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { map, Observable } from 'rxjs';
 import { Gym } from 'src/app/models/gym.model';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class GymService {
-  all(): Gym[] {
-    const gyms: Gym[] = [
-      {
-        id: 0,
-        name: "GymFit",
-        address: "Via..."
-      },
-      {
-        id: 1,
-        name: "UP&DOWN",
-        address: "He bella hosa"
-      },
-      {
-        id: 2,
-        name: "Gymnasium",
-        address: "Via della Pace"
-      },
-      {
-        id: 3,
-        name: "PeppeEsp60 AS",
-        address: "Yeah buddy"
-      }
-    ];
-    return gyms;
+
+  constructor(private http: HttpClient) {}
+
+  all(): Observable<Gym[]> {
+    return this.http.get<any[]>(`${environment.apiUrl}/api/gyms`).pipe(
+      map(data => data.map(gym => ({
+        id: gym.id,
+        name: gym.nome,
+        address: gym.indirizzo,
+        lat: gym.lat,
+        lng: gym.lng
+      })))
+    );
   }
 
-  new(name: string, address: string, lat: number, lng: number) {
-    // query al db
-    const gym: Gym = {
-      id: Math.round(Math.random() * 2000),
-      name: name,
-      address: address,
-      lat: lat,
-      lng: lng
-    };
-
-    console.log("Adding new Gym: " + gym.name + "(" + gym.address + ")");
+  new(name: string, address: string, lat: number, lng: number): Observable<{message: string}> {
+    return this.http.post<{message: string}>(
+      `${environment.apiUrl}/api/gyms/new`,
+      {name:name, address:address, lat:lat, lng:lng}
+    );
   }
 }

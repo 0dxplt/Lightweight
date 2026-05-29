@@ -63,7 +63,7 @@ export class EditProfilePage implements OnInit {
 
   nations = signal<Nation[]>([]);
   cities = signal<City[]>([]);
-  gyms = this.gymService.all();
+  gyms = signal<Gym[]>([]);
 
   constructor(
     private authService: AuthService,
@@ -100,6 +100,15 @@ export class EditProfilePage implements OnInit {
       cities.forEach(c => {
         this.cities.update(value => {
           value.push(c);
+          return value;
+        });
+      });
+    });
+
+    this.gymService.all().subscribe(gyms => {
+      gyms.forEach(g => {
+        this.gyms.update(value => {
+          value.push(g);
           return value;
         });
       });
@@ -251,9 +260,25 @@ export class EditProfilePage implements OnInit {
     const { data } = await modal.onWillDismiss();
 
     if (data) {
-      this.gymService.new(data.name, data.address, data.lat, data.lng);
-      this.gyms.push(data); 
-      this.userForm.get('gym')?.setValue(data);
+      this.gymService.new(data.name, data.address, data.lat, data.lng).subscribe({
+        next: (res) => {
+          this._showToast(res.message, 'success', 2000);
+
+          this.gyms.update(value => {
+            value.push(data);
+            return value;
+          });
+
+          this.userForm.get('gym')?.setValue(data);
+        },
+        error: (err) => {
+          this._showToast(
+            err.error?.message ?? 'Errore server',
+            'danger',
+            2000
+          );
+        }
+      })
     }
   }
 

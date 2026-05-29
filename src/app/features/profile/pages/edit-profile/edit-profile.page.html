@@ -111,7 +111,7 @@
               formControlName="gym" 
               interface="modal"
               (ionChange)="gymChanged($event)">
-              @for (item of this.gyms; track item.id) {
+              @for (item of this.gyms(); track item.id) {
                 <ion-select-option [value]="item">{{ item.name }} ({{ item.address }})</ion-select-option>
               }
               <ion-select-option value="ADD_NEW" class="add-new-option">Add new gym</ion-select-option>
