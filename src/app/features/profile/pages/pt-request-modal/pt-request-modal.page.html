@@ -51,7 +51,7 @@
        <ion-list>
          <ion-item class="input-item" lines="full">
            <ion-select label="City" labelPlacement="floating" formControlName="city" interface="modal">
-             @for (item of this.cities; track item.id) {
+             @for (item of this.cities(); track item.id) {
                <ion-select-option [value]="item">{{ item.name }} ({{ item.nation.name }})</ion-select-option>
              }
            </ion-select>
