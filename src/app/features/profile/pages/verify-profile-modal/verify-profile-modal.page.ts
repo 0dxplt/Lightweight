@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, FormsModule, Validators, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule, ModalController } from '@ionic/angular';
 import { AuthService } from 'src/app/features/auth/services/auth-service';
 import { MAX_NAME_LENGTH, MAX_SURNAME_LENGTH, MIN_NAME_LENGTH, MIN_SURNAME_LENGTH, NAME_REGEX, SURNAME_REGEX } from 'src/app/shared/global';
 import { NationService } from 'src/app/shared/services/nation-service';
+import { Nation } from 'src/app/models/nation.model';
 
 @Component({
   selector: 'app-verify-profile-modal',
@@ -16,13 +17,26 @@ import { NationService } from 'src/app/shared/services/nation-service';
 export class VerifyProfileModalPage implements OnInit {
 
   user = this.authService.user;
-  nations = this.nationService.allNations();
+  nations =  signal<Nation[]>([]);
   verifyForm = new FormGroup({});
   missingFields: string[] = [];
 
-  constructor(private modalController: ModalController, private authService: AuthService, private nationService: NationService) { }
+  constructor(
+    private modalController: ModalController,
+    private authService: AuthService,
+    private nationService: NationService
+  ) {}
 
   ngOnInit() {
+    this.nationService.all().subscribe(nations => {
+      nations.forEach(n => {
+        this.nations.update(value => {
+          value.push(n);
+          return value
+        });
+      });
+    });
+
     const u = this.user();
     if (!u) {
       this.cancel();
@@ -45,7 +59,7 @@ export class VerifyProfileModalPage implements OnInit {
     }
 
     if (!u.nationality) {
-      this.verifyForm.addControl('nationality', new FormControl(null, [Validators.required]));
+      this.verifyForm.addControl('nationality', new FormControl('', [Validators.required]));
       this.missingFields.push('nationality');
     }
 

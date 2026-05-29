@@ -45,6 +45,16 @@
   --border-radius: 0; 
 }
 
+.flag-icon {
+  width: 20px;
+  height: 14px;
+  object-fit: cover;
+  border-radius: 3px;
+  margin-right: 8px;
+  vertical-align: middle;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.25);
+  border: 1px solid rgba(255,255,255,0.2);
+}
 .add-exercise {
   border-radius: 25px;
 }

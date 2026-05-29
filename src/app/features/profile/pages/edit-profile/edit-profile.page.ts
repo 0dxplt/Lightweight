@@ -61,7 +61,7 @@ export class EditProfilePage implements OnInit {
     return u.propic !== null && u.propic !== undefined && u.propic !== PROPIC_PATH;
   });
 
-  nations = this.nationService.allNations();
+  nations = signal<Nation[]>([]);
   cities = this.cityService.all();
   gyms = this.gymService.all();
 
@@ -86,6 +86,15 @@ export class EditProfilePage implements OnInit {
         this.userForm.get('city')?.updateValueAndValidity();
         this.userForm.get('gym')?.updateValueAndValidity();
     }
+
+    this.nationService.all().subscribe(nations => {
+      nations.forEach(n => {
+        this.nations.update(value => {
+          value.push(n);
+          return value;
+        })
+      });
+    });
   }
 
   compareNationalities(obj1: Nation | undefined | null, obj2: Nation | undefined | null): boolean {

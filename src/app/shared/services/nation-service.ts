@@ -1,31 +1,25 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { map, Observable } from 'rxjs';
 import { Nation } from 'src/app/models/nation.model';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class NationService {
-  allNations(): Nation[] {
-    const nations: Nation[] = [
-      {
-      id: 0,
-      name: "Italia",
-      shortform: "it-IT",
-      flag: ""
-    },
-    {
-      id: 1,
-      name: "England",
-      shortform: "en-EN",
-      flag: ""
-    },
-    {
-      id: 2,
-      name: "Russia",
-      shortform: "ru-RU",
-      flag: ""
-    }
-    ];
-    return nations;
-  } 
+
+  constructor(private http: HttpClient) {}
+
+  all(): Observable<Nation[]> {
+    return this.http.get<any[]>(environment.apiUrl + "/api/nations").pipe(
+      map(data => 
+        data.map(nation => ({
+          id: nation.id,
+          name: nation.nome,
+          shortform: nation.country_code,
+          flag: nation.bandiera
+        }))
+      ));
+  }
 }

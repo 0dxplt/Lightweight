@@ -74,12 +74,12 @@
           formControlName="nationality" 
           interface="modal"
           [compareWith]="compareNationalities">
-          @for (item of this.nations; track item.id) {
+          @for (item of this.nations(); track item.id) {
             <ion-select-option [value]="item">{{ item.name }}</ion-select-option>
           }
         </ion-select>
       </ion-item>
-      </div>
+    </div>
     </div>
     @if (this.isPT()) {
       <div id="pt-container">

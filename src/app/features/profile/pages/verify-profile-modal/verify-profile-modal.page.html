@@ -52,8 +52,8 @@
       @if (verifyForm.contains('nationality')) {
         <ion-item class="input-item" lines="full">
           <ion-select label="Nationality" labelPlacement="floating" formControlName="nationality">
-            @for (nation of nations; track nation.id) {
-              <ion-select-option [value]="nation">{{ nation.flag }} {{ nation.name }}</ion-select-option>
+            @for (nation of nations(); track nation.id) {
+              <ion-select-option [value]="nation">{{ nation.name }}</ion-select-option>
             }
           </ion-select>
         </ion-item>
