@@ -8,6 +8,7 @@ import { Gym } from 'src/app/models/gym.model';
 import { GymService } from 'src/app/shared/services/gym-service';
 import { IonSelectCustomEvent } from '@ionic/core';
 import { AddGymModalPage } from '../add-gym-modal/add-gym-modal.page';
+import { ToastController } from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-pt-request-modal',
@@ -19,7 +20,7 @@ import { AddGymModalPage } from '../add-gym-modal/add-gym-modal.page';
 export class PtRequestModalPage implements OnInit {
 
   cities = signal<City[]>([]);
-  gyms: Gym[] = this.gymService.all();
+  gyms = signal<Gym[]>([]);
 
   ptFormGroup: FormGroup = new FormGroup({
     proemail: new FormControl('', [Validators.required, Validators.email]),
@@ -31,6 +32,7 @@ export class PtRequestModalPage implements OnInit {
     private cityService: CityService,
     private gymService: GymService,
     private modalController: ModalController,
+    private toastController: ToastController
   ) { }
 
   ngOnInit() {
@@ -42,7 +44,14 @@ export class PtRequestModalPage implements OnInit {
         });
       });
     })
-    this.gyms = this.gymService.all();
+    this.gymService.all().subscribe(gyms => {
+      gyms.forEach(g => {
+        this.gyms.update(value => {
+          value.push(g);
+          return value;
+        })
+      });
+    });
   }
 
   onGymChange(event: IonSelectCustomEvent<SelectChangeEventDetail<any>>) {
@@ -62,10 +71,30 @@ export class PtRequestModalPage implements OnInit {
     const { data } = await modal.onWillDismiss();
 
     if (data) {
-      this.gymService.new(data.name, data.address, data.lat, data.lng);
-      this.gyms.push(data); 
-      this.ptFormGroup.get('gym')?.setValue(data);
+      this.gymService.new(data.name, data.address, data.lat, data.lng).subscribe({
+        next: (res) => {
+          this._showToast(res.message, 'success', 2000);
+          this.gyms.update(value => {
+            value.push(data);
+            return value;
+          }); 
+          this.ptFormGroup.get('gym')?.setValue(data);
+        },
+        error: (err) => {
+          this._showToast(err?.message ?? "Errore server", 'danger', 2000);          
+        }
+      })
     }
+  }
+
+  private async _showToast(message: string, color: string, duration: number) {
+    const toast = await this.toastController.create({
+      message: message,
+      color: color,
+      duration: duration
+    });
+    
+    await toast.present();
   }
 
   cancel() {
