@@ -118,3 +118,41 @@ CREATE TABLE IF NOT EXISTS Richieste (
     FOREIGN KEY(id_richiedente) REFERENCES Atleti(id) ON DELETE CASCADE,
     FOREIGN KEY(id_moderatore) REFERENCES Moderatori(id) ON DELETE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS Workout (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nome TEXT NOT NULL,
+    data_creazione INTEGER NOT NULL,
+    id_creatore INTEGER NOT NULL,
+    FOREIGN KEY(id_creatore) REFERENCES Atleti(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS Sessioni (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nome TEXT NOT NULL,
+    data_svolgimento INTEGER NOT NULL,
+    pubblica BOOLEAN DEFAULT 1 NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS WorkoutEsercizi (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    serie INTEGER NOT NULL,
+    ripetizioni INTEGER NOT NULL,
+    recupero INTEGER NOT NULL,
+    id_workout INTEGER NOT NULL,
+    id_esercizio INTEGER NOT NULL,
+    FOREIGN KEY (id_workout) REFERENCES Workout(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_esercizio) REFERENCES Esercizi(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS SessioniEsercizi (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    peso INTEGER NOT NULL,
+    ripetizioni INTEGER NOT NULL,
+    recupero INTEGER NOT NULL,
+    id_sessione INTEGER NOT NULL,
+    id_esercizio INTEGER NOT NULL,
+    valida BOOLEAN DEFAULT 1 NOT NULL,
+    FOREIGN KEY (id_sessione) REFERENCES Sessioni(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_esercizio) REFERENCES Esercizi(id) ON DELETE CASCADE
+);
