@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, FormsModule, Validators, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule, ModalController, SelectChangeEventDetail } from '@ionic/angular';
@@ -18,7 +18,7 @@ import { AddGymModalPage } from '../add-gym-modal/add-gym-modal.page';
 })
 export class PtRequestModalPage implements OnInit {
 
-  cities: City[] = this.cityService.all();
+  cities = signal<City[]>([]);
   gyms: Gym[] = this.gymService.all();
 
   ptFormGroup: FormGroup = new FormGroup({
@@ -34,7 +34,14 @@ export class PtRequestModalPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.cities = this.cityService.all();
+    this.cityService.all().subscribe(cities => {
+      cities.forEach(c => {
+        this.cities.update(value => {
+          value.push(c);
+          return value;
+        });
+      });
+    })
     this.gyms = this.gymService.all();
   }
 

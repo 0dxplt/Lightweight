@@ -62,7 +62,7 @@ export class EditProfilePage implements OnInit {
   });
 
   nations = signal<Nation[]>([]);
-  cities = this.cityService.all();
+  cities = signal<City[]>([]);
   gyms = this.gymService.all();
 
   constructor(
@@ -93,6 +93,15 @@ export class EditProfilePage implements OnInit {
           value.push(n);
           return value;
         })
+      });
+    });
+
+    this.cityService.all().subscribe(cities => {
+      cities.forEach(c => {
+        this.cities.update(value => {
+          value.push(c);
+          return value;
+        });
       });
     });
   }

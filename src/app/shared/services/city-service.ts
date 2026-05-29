@@ -1,37 +1,24 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { map, Observable } from 'rxjs';
 import { City } from 'src/app/models/city.model';
 import { Nation } from 'src/app/models/nation.model';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CityService {
-  all(): City[] {
-    const nation: Nation = {
-      id: 0,
-      name: "Italy",
-      shortform: "it-IT",
-      flag: ""
-    };
-
-    const cities: City[] = [
-      {
-        id: 0,
-        name: "Trapani",
-        nation: nation
-      },
-      {
-        id: 1,
-        name: "Palermo",
-        nation: nation
-      },
-      {
-        id: 2,
-        name: "Napoli",
-        nation: nation
-      }
-    ];
-
-    return cities;
+  
+  constructor(private http: HttpClient) {}
+  
+  all(): Observable<City[]> {
+    return this.http.get<any[]>(`${environment.apiUrl}/api/cities/full`).pipe(
+      map(data => data.map(city => ({
+        id: city.id,
+        name: city.nome,
+        nation: city.nation
+      })))
+    );
   }
 }

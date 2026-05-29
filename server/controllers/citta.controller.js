@@ -11,6 +11,30 @@ async function getAllCities(req, res) {
     }
 }
 
+async function getAllFullCities(req, res) {
+    try {
+        const allCities = await dbutils.all("SELECT * FROM Citta");
+        const fullCities = [];
+        for (let city of allCities) {
+            const country = await dbutils.get(`SELECT * FROM Nazioni WHERE Nazioni.id = ${city.id_nazione}`);
+            const __city = city;
+            __city.nation = {
+                id: country.id,
+                name: country.nome,
+                flag: country.bandiera,
+                shortform: country.country_code
+            };
+            fullCities.push(city);
+        }
+        res.json(fullCities);
+    } catch(error) {
+        res.status(500).json({
+            err: error.message
+        });
+    }
+}
+
 module.exports = {
-    getAllCities
+    getAllCities,
+    getAllFullCities
 }
