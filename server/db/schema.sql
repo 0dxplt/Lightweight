@@ -2,7 +2,7 @@ CREATE TABLE IF NOT EXISTS Esercizi (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     nome TEXT NOT NULL,
     descrizione TEXT NOT NULL,
-    img TEXT NOT NULL,
+    img TEXT,
     difficolta INTEGER NOT NULL
 );
 
