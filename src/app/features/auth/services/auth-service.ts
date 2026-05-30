@@ -95,9 +95,8 @@ export class AuthService {
 
   logout() {
     this._user.set(null);
-    localStorage.removeItem('loggedUser');
     this._currentSession.set(null);
-    localStorage.removeItem('currentSession');
+    localStorage.clear();
   }
 
   isLogged(): boolean {
