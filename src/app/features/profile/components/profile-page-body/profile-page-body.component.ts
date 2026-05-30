@@ -87,14 +87,14 @@ export class ProfilePageBodyComponent  implements OnInit {
   seasonalPerc = computed(() => {
     const user = this.user();
     if (!user) return 0;
-    if (user.xp >= SEASONAL_RANK_UP) return 1;
-    return user.xp / SEASONAL_RANK_UP;
+    if (user.sxp >= SEASONAL_RANK_UP) return 1;
+    return user.sxp / SEASONAL_RANK_UP;
   });
   globalPerc = computed(() => {
     const user = this.user();
     if (!user) return 0;
-    if (user.xp >= GLOBAL_RANK_UP) return 1;
-    return user.xp / GLOBAL_RANK_UP;
+    if (user.gxp >= GLOBAL_RANK_UP) return 1;
+    return user.gxp / GLOBAL_RANK_UP;
   });
 
   sessions = signal<Session[]>([]);

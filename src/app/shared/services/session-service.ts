@@ -22,7 +22,8 @@ export class SessionService {
         following: 0,
         gLevel: 0,
         sLevel: 0,
-        xp: Math.round(Math.random() * 1000),
+        gxp: Math.round(Math.random() * 1000),
+        sxp: Math.round(Math.random() * 10000),
         verified: (Math.random() < 0.5) ? true : false
       }
       const exercise: Exercise = {

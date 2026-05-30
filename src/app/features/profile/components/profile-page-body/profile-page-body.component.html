@@ -35,9 +35,10 @@
             </p>
           }
           @if (this.hasNationality()) {
-            <p class="nationality">
+            <span class="nationality">
               {{user()?.nationality?.name}}
-            </p>
+            </span>
+            <ion-icon [src]="user()?.nationality?.flag" class="flag-icon"></ion-icon>
           }
         </div>
 

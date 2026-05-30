@@ -15,21 +15,30 @@ app.get("/", (req, res) => {
     res.json({testo: "Hello, World!"});
 });
 
+// Middlewares
+const authMiddleware = require('./middlewares/auth.middleware.js');
+
 // Routes
 const routeEsercizi = require('./routes/esercizi.route.js');
 const routeNazioni = require('./routes/nazioni.route.js');
 const routePalestre = require('./routes/palestre.route.js');
 const routeCitta = require('./routes/citta.route.js');
 const routeGruppiMuscolari = require('./routes/gruppi-muscolari.route.js');
+const routeUsers = require('./routes/users.route.js');
+const routeAvatar = require('./routes/users-img.route.js');
 const routeModeratori = require('./routes/moderatori.route.js');
+const routeAuth = require('./routes/auth.route.js');
 
 // APIs
-app.use("/api/exercises", routeEsercizi);
-app.use("/api/nations", routeNazioni);
-app.use("/api/gyms", routePalestre);
-app.use("/api/cities", routeCitta);
-app.use("/api/muscolar-groups", routeGruppiMuscolari);
+app.use("/api/exercises", authMiddleware, routeEsercizi);
+app.use("/api/nations", authMiddleware, routeNazioni);
+app.use("/api/gyms", authMiddleware, routePalestre);
+app.use("/api/cities", authMiddleware, routeCitta);
+app.use("/api/muscolar-groups", authMiddleware, routeGruppiMuscolari);
+app.use("/api/users", authMiddleware, routeUsers);
+app.use("/api/imgs/users", authMiddleware, routeAvatar);
 app.use("/api/moderators", routeModeratori);
+app.use("/api/auth", routeAuth);
 
 app.listen(PORT, () => {
     console.log(`Server backend avviato sulla porta ${PORT}`);
