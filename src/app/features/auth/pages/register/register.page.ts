@@ -5,6 +5,7 @@ import { IonContent, IonHeader, IonTitle, IonToolbar, IonInput, IonInputPassword
 import { AuthService } from '../../services/auth-service';
 import { Router, RouterModule } from '@angular/router';
 import { MAX_HEIGHT_VALUE, MAX_PASSWORD_LENGTH, MAX_USERNAME_LENGTH, MAX_WEIGHT_VALUE, MIN_HEIGHT_VALUE, MIN_PASSWORD_LENGTH, MIN_USERNAME_LENGTH, MIN_WEIGHT_VALUE } from 'src/app/shared/global';
+import { ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-register',
@@ -35,7 +36,11 @@ export class RegisterPage implements OnInit {
     ]),
   });
 
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private toastController: ToastController
+  ) {}
 
   ngOnInit() {
   }
@@ -49,12 +54,23 @@ export class RegisterPage implements OnInit {
     const weight = this.registerForm.value.weight;
     const height = this.registerForm.value.height;
 
-    console.log(username, email, password, weight, height);
-
-    this.authService.register(username, email, password, weight, height);
-
-    if (this.authService.isLogged())
-      this.router.navigate(["/tabs/workouts/"]);
+    this.authService.register(username, email, password, weight, height).subscribe({
+      next: (res) => {
+        this._showToast(res.message, 'success', 1000);
+        this.router.navigate(["/login"]);
+      },
+      error: (err) => {
+        this._showToast("Errore: " + (err.error?.message ?? "Unkown"), 'danger', 2000);
+      }
+    });
   }
 
+  private async _showToast(message: string, color: string, duration: number) {
+    const toast = await this.toastController.create({
+      message: message,
+      color: color,
+      duration: duration
+    });
+    await toast.present();
+  }
 }

@@ -1,9 +1,12 @@
+import { HttpClient } from '@angular/common/http';
 import { computed, Injectable, Signal, signal, WritableSignal } from '@angular/core';
+import { Observable, tap } from 'rxjs';
 import { CurrentSession } from 'src/app/models/current-session.model';
 import { SessionExercise } from 'src/app/models/session-modal-component-info';
 import { User } from 'src/app/models/user.model';
 import { Workout, WorkoutVisualization } from 'src/app/models/workout.model';
 import { GLOBAL_RANK_UP } from 'src/app/shared/global';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -20,77 +23,60 @@ export class AuthService {
 
   currentSession = this._currentSession.asReadonly();
 
-  constructor() {
+  constructor(private http: HttpClient) {
     const savedUser = localStorage.getItem('loggedUser');
     this._user.set(savedUser ? JSON.parse(savedUser) : null);
     const currentSession = localStorage.getItem('currentSession');
     this._currentSession.set(currentSession ? JSON.parse(currentSession) : null);
   }
 
-  login(email: string, password: string) {
-    const fakeUser: User = {
-      id: this._fakeIdCounter,
-      username: 'pippoesp69',
-      email,
-      weight: 190,
-      height: 200,
-      followers: 1000,
-      following: 1000,
-      gLevel: 69,
-      sLevel: 33,
-      xp: Math.round(0.4 * GLOBAL_RANK_UP),
-      verified: false,
-      sessions: Math.round(Math.random() * 300)
-    };
-
-    if (Math.random() < 0.5) {
-      fakeUser.pt = {
-        proEmail: fakeUser.username + "@proemail.com",
-        gym: {
-          id: 0,
-          name: "PRO-GYM",
-          address: "Piazza XXI Aprile, Trapani",
-        },
-        city: {
-          id: 0,
-          name: "Trapani",
-          nation: {
-            id: 0,
-            name: "Italia",
-            shortform: "it-IT",
-            flag: ""
-          }
-        }
-      }
-    }
-
-    this._user.set(fakeUser);
-    localStorage.setItem('loggedUser', JSON.stringify(fakeUser));
+  login(email: string, password: string): Observable<any> {
+    return this.http.post<any>(
+      `${environment.apiUrl}/api/auth/login`,
+      {email:email, password:password}
+    ).pipe(
+      tap(response => {
+        const resUser = response.user;
+        const loggedUser: User = {
+          id: resUser.id,
+          username: resUser.username,
+          email: resUser.email,
+          weight: resUser.weight,
+          height: resUser.height,
+          sLevel: resUser.livello_stagionale,
+          gLevel: resUser.livello_globale,
+          sxp: resUser.xp_stagionali,
+          gxp: resUser.xp_globali,
+          followers: resUser.numero_followers,
+          following: resUser.numero_followed,
+          sessions: resUser.numero_sessioni,
+          verified: resUser.verificato,
+          name: !resUser.nome ? undefined : resUser.nome,
+          surname: !resUser.cognome ? undefined : resUser.cognome,
+          nationality: !resUser.nazione ? undefined : resUser.nazione,
+          birthdate: !resUser.data_nascita ? undefined : resUser.data_nascita,
+          propic: !resUser.img ? undefined : environment.apiUrl + "/api/imgs/users?token=" + response.token,
+          pt: !resUser.pt ? undefined : resUser.pt
+        };
+        this._user.set(loggedUser);
+        localStorage.setItem('loggedUser', JSON.stringify(loggedUser));
+        localStorage.setItem('jwt-token', response.token);
+      })
+    );
   }
 
-  register(username: string, email: string, password: string, weight: number, height: number) {
-    const newUser: User = {
-      id: ++this._fakeIdCounter,
-      username,
-      email,
-      weight,
-      height,
-      followers: 500,
-      following: 500,
-      gLevel: 69,
-      sLevel: 33,
-      xp: Math.round(0.4 * GLOBAL_RANK_UP),
-      verified: false,
-      sessions: Math.round(Math.random() * 300)
-    };
-
-    this._user.set(newUser);
-    localStorage.setItem('loggedUser', JSON.stringify(newUser));
+  register(username: string, email: string, password: string, weight: number, height: number): Observable<any> {
+    return this.http.post<any>(
+      `${environment.apiUrl}/api/auth/register`,
+      {username: username, email:email, password:password, weight: weight, height: height}
+    );
   }
 
-  changePassword(oldPass: string, newPass: string) {
-    // query al db
-    console.log("Changed '" + oldPass + "' with + '" + newPass + "'");
+  changePassword(oldPass: string, newPass: string): Observable<any> {
+    return this.http.post<any>(
+      `${environment.apiUrl}/api/users/change-password`,
+      {oldPass: oldPass, newPass: newPass}
+    );
   }
 
   logout() {
