@@ -50,7 +50,7 @@ export class AuthService {
           followers: resUser.numero_followers,
           following: resUser.numero_followed,
           sessions: resUser.numero_sessioni,
-          verified: resUser.verificato,
+          verified: resUser.verificato === 0 ? false : true,
           name: !resUser.nome ? undefined : resUser.nome,
           surname: !resUser.cognome ? undefined : resUser.cognome,
           nationality: !resUser.nazione ? undefined : resUser.nazione,
