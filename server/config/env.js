@@ -6,4 +6,5 @@ module.exports = {
     schemaPath: process.env.SCHEMA,
     seedPath: process.env.SEED,
     jwtSecret: process.env.JWT_SECRET,
+    avatarDir: process.env.USERS_AVATAR_DIR
 }

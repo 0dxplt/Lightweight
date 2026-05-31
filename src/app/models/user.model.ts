@@ -14,7 +14,8 @@ export type User = {
     nationality?: Nation;
     sLevel: number;
     gLevel: number;
-    xp: number;
+    sxp: number;
+    gxp: number,
     followers: number;
     following: number;
     sessions: number;

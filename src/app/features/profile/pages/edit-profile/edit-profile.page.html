@@ -2,7 +2,7 @@
   <form [formGroup]="this.userForm" (ngSubmit)="confirmChanges()">
     <div id="user-container">
       <div id="user-header" (click)="fileInput.click()" style="cursor: pointer;">
-      <img [src]="imagePreview() ? imagePreview() : (hasPropic() ? retrievePropic() : 'assets/icon/favicon.png')" alt="propic">
+      <img [src]="imagePreview() ? imagePreview() : (hasPropic() ? user()?.propic : 'assets/icon/favicon.png')" alt="propic">
       <input 
       #fileInput
       type="file" 

@@ -10,6 +10,7 @@ import { AuthService } from '../../services/auth-service';
 import { addIcons } from 'ionicons';
 import { eyeOutline, eyeOffOutline } from 'ionicons/icons';
 import { MAX_PASSWORD_LENGTH, MIN_PASSWORD_LENGTH } from 'src/app/shared/global';
+import { ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-login',
@@ -38,7 +39,11 @@ export class LoginPage implements OnInit {
 
   showPassword: boolean = false;
 
-  constructor(private authService: AuthService, private router: Router) {
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private toastController: ToastController
+  ) {
     addIcons({ eyeOutline, eyeOffOutline });
   }
 
@@ -50,16 +55,27 @@ export class LoginPage implements OnInit {
     const email = this.loginForm.value.email;
     const password = this.loginForm.value.password;
 
-    console.log("Email:", email);
-    console.log("Password:", password);
-
-    this.authService.login(email, password);
-
-    if (this.authService.isLogged())
-      this.router.navigate(["/tabs/workouts"]);
+    this.authService.login(email, password).subscribe({
+      next: (res) => {
+        this._showToast(res.message, 'success', 1000);
+        this.router.navigate(["/tabs/workouts"]);
+      },
+      error: (err) => {
+        this._showToast("Errore login: " + (err.error?.message ?? "Unkown"), 'danger', 1000);
+      }
+    })
   }
 
   togglePassword() {
     this.showPassword = !this.showPassword;
+  }
+
+  private async _showToast(message: string, color: string, duration: number) {
+    const toast = await this.toastController.create({
+      message: message,
+      color: color,
+      duration: duration
+    });
+    await toast.present();
   }
 }

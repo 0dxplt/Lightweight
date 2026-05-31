@@ -25,7 +25,8 @@ export class ProfileViewPage implements OnInit {
     private route: ActivatedRoute,
     private location: Location,
     private userService: UserService
-  ) {}
+  ) {
+      addIcons({arrowBack,checkmarkCircle});}
 
   ngOnInit() {
     addIcons({

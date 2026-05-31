@@ -81,7 +81,7 @@ export class PtRequestModalPage implements OnInit {
           this.ptFormGroup.get('gym')?.setValue(data);
         },
         error: (err) => {
-          this._showToast(err?.message ?? "Errore server", 'danger', 2000);          
+          this._showToast(err?.message ?? "Errore server", 'danger', 2000);
         }
       })
     }

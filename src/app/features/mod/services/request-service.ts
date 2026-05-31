@@ -21,7 +21,8 @@ export class RequestService {
           following: 0,
           gLevel: 0,
           sLevel: 0,
-          xp: 0,
+          sxp: Math.round(Math.random() * 10000),
+          gxp: Math.round(Math.random() * 10000),
           verified: (Math.random() < 0.5) ? true : false,
           sessions: Math.round(Math.random() * 300)
         },

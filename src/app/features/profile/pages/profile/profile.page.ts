@@ -133,20 +133,16 @@ export class ProfilePage implements OnInit {
     });
     await loading.present();
 
-    // Usare Observable o Promise quando avremo il backend
-    this.authService.changePassword(oldPass, newPass);
-    const error: boolean = false;
-    if (!error) {
-      setTimeout(() => {
+    this.authService.changePassword(oldPass, newPass).subscribe({
+      next: (res) => {
         loading.dismiss();
-        this._showToast('Password aggiornata con successo!', 'success');
-      }, Math.random() * 2500 + 500);
-    } else {
-      setTimeout(() => {
+        this._showToast(res.message, 'success');
+      },
+      error: (err) => {
         loading.dismiss();
-        this._showToast('Errore', 'danger');
-      }, Math.random() * 2500 + 500);
-    }
+        this._showToast((err.error?.message ?? 'Unkown'), 'danger');
+      }
+    });
   }
 
   private async _showToast(message: string, color: string) {

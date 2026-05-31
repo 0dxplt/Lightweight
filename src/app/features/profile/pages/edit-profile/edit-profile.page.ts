@@ -151,6 +151,11 @@ export class EditProfilePage implements OnInit {
       return false;
     }
 
+    if (this.userForm.pristine && !this.selectedFile) {
+      this._showToast('No changes detected.', 'warning', 2000);
+      return false;
+    }
+
     if (this.verified()) {
       if (!current.name || !current.surname || !current.birthdate || !current.nationality) {
         this._showToast('Verified users must provide Name, Surname, Birthdate and Nationality.', 'danger', 2000);
@@ -158,31 +163,26 @@ export class EditProfilePage implements OnInit {
       }
     }
 
-    // Verificare meglio quando avremo il backend
-    if (this.selectedFile && this.selectedFile.size > 5 * 1024 * 1024) {
-      this._showToast('The image is too large. Max 5MB allowed.', 'danger', 2000);
-      return false;
-    }
+    const normalize = (val: any) => (val === null || val === undefined ? '' : val);
 
     const hasChanged = 
-      current.username !== (original?.username ?? '') ||
-      current.email !== (original?.email ?? '') ||
+      normalize(current.username) !== normalize(original?.username) ||
+      normalize(current.email) !== normalize(original?.email) ||
+      normalize(current.name) !== normalize(original?.name) ||
+      normalize(current.surname) !== normalize(original?.surname) ||
+      normalize(current.birthdate) !== normalize(original?.birthdate) ||
       Number(current.weight) !== Number(original?.weight) ||
       Number(current.height) !== Number(original?.height) ||
-      current.name !== (original?.name ?? '') ||
-      current.surname !== (original?.surname ?? '') ||
-      current.birthdate !== (original?.birthdate ?? '') ||
       !this.compareNationalities(current.nationality, original?.nationality) || 
       this.selectedFile !== null || 
 
       (this.isPT() && (
-        current.proemail !== (original?.pt?.proEmail ?? '') ||
+        normalize(current.proemail) !== normalize(original?.pt?.proEmail) ||
         !this.compareGyms(current.gym, original?.pt?.gym) ||
         !this.compareCities(current.city, original?.pt?.city)
       ));
 
     if (!hasChanged) {
-      // vedere se l'UX va bene
       this._showToast('No changes detected.', 'warning', 2000);
       return false;
     }
@@ -205,6 +205,7 @@ export class EditProfilePage implements OnInit {
         const updatedUser: User = this._prepareUserObject(this.userForm.value);
         this.authService.updateWithImage(updatedUser, this.selectedFile);
         this.selectedFile = null;
+        this.userForm.markAsPristine();
         this.router.navigate(["profile"]);
       }, 250);
     }, Math.random() * 2500 + 500);
