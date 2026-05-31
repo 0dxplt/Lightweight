@@ -13,8 +13,6 @@ import { RefresherCustomEvent } from '@ionic/core';
 })
 export class RankingListComponent  implements OnInit {
 
-  readonly AVATAR_SERVER_PATH: string = "http://127.0.0.1:8000/uploads/avatars/";
-
   private _limit: number = 50;
   private _start: number = 0;
   private _users: RankUser[] = [];

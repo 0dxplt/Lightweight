@@ -48,7 +48,8 @@ async function login(req, res) {
         }
 
         const token = jwt.sign({
-            userId: user.id
+            userId: user.id,
+            role: 'user'
         }, config.jwtSecret);
 
         if (user.id_nazione) {

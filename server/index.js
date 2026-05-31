@@ -17,6 +17,7 @@ app.get("/", (req, res) => {
 
 // Middlewares
 const authMiddleware = require('./middlewares/auth.middleware.js');
+const modMiddleware = require('./middlewares/mod.middleware.js');
 
 // Routes
 const routeEsercizi = require('./routes/esercizi.route.js');
@@ -39,7 +40,7 @@ app.use("/api/cities", authMiddleware, routeCitta);
 app.use("/api/muscolar-groups", authMiddleware, routeGruppiMuscolari);
 app.use("/api/users", authMiddleware, routeUsers);
 app.use("/api/imgs/users", routeAvatar);
-app.use("/api/moderators", routeModeratori);
+app.use("/api/moderators", authMiddleware, modMiddleware, routeModeratori);
 app.use("/api/workout", routeWorkout);
 app.use("/api/workouts", routeWorkouts);
 app.use("/api/auth", routeAuth);
