@@ -1,36 +1,30 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { map, Observable } from 'rxjs';
 import { RankUser } from 'src/app/models/rank-user.model';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
-export class RankingService {
-  readonly SIZE_LIMIT: number = 200;
-  
-  getRankedUsers(global: boolean): RankUser[] {
-    let users: RankUser[] = [];
+export class RankingService {  
+  constructor(private http: HttpClient) {}
+
+  private _mapFromData(data: any): RankUser {
+    return {
+      level: data.level,
+      rank: data.rank,
+      username: data.username,
+      pt: data.pt,
+      avatar: !data.avatar ? undefined : data.avatar
+    };
+  }
+
+  getRankedUsers(global: boolean): Observable<RankUser[]> {
     let filter: string = (global) ? "global" : "seasonal";
-    if (global) {
-      // fetch con filter=global
-    } else {
-      // fetch con filter=seasonal
-    }
-    for (let i = 0; i < this.SIZE_LIMIT; i++) {
-      const user: RankUser = {
-          rank: 0,
-          avatar: "http://localhost:8000/uploads/avatars/" + 'pippoesp69.png',
-          username: 'pippoesp69#'+i,
-          pt: (Math.random() < 0.5) ? true : false,
-          level: Math.round((Math.random() * 1000))
-        }
-        users.push(user);
-    }
-    users = users.sort((a, b) => b.level - a.level);
-    for (let i = 0; i < users.length; i++) {
-      users[i].rank = i+1;
-    }
-    return users;
+    const url: string = `${environment.apiUrl}/api/rankings/${filter}`;
+    return this.http.get<any[]>(url).pipe(
+      map(data => data.map(value => this._mapFromData(value)))
+    );
   }
 }
-
-export { RankUser };

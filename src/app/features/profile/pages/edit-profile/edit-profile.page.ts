@@ -88,30 +88,15 @@ export class EditProfilePage implements OnInit {
     }
 
     this.nationService.all().subscribe(nations => {
-      nations.forEach(n => {
-        this.nations.update(value => {
-          value.push(n);
-          return value;
-        })
-      });
+      this.nations.set([...nations]);
     });
 
     this.cityService.all().subscribe(cities => {
-      cities.forEach(c => {
-        this.cities.update(value => {
-          value.push(c);
-          return value;
-        });
-      });
+      this.cities.set([...cities]);
     });
 
     this.gymService.all().subscribe(gyms => {
-      gyms.forEach(g => {
-        this.gyms.update(value => {
-          value.push(g);
-          return value;
-        });
-      });
+      this.gyms.set([...gyms]);
     });
   }
 
