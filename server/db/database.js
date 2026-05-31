@@ -8,7 +8,14 @@ const db = new sqlite3.Database(config.dbPath, (err) => {
     }
     else {
         console.log("DB operativo");
-        initDB();
+        db.run('PRAGMA foreign_keys = ON;', (pragmaErr) => {
+            if (pragmaErr) {
+                console.error("Errore attivazione chiavi esterne:", pragmaErr.message);
+            } else {
+                console.log("Chiavi esterne (CASCADE) attivate con successo!");
+                initDB();
+            }
+        });
     }
 });
 
@@ -21,6 +28,8 @@ function initDB() {
             console.log('Schema database caricato');
         }
     });
+
+    
 
     const seed = fs.readFileSync(config.seedPath, 'utf-8');
     db.exec(seed, (err) => {

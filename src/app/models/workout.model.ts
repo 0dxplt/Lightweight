@@ -26,6 +26,7 @@ export type Workout = {
 export type WorkoutVisualization = {
     id: number;
     creatorUsername: string;
+    creatorId: number;
     name: string;
     creationTimestamp: number;
     exercises: ExerciseWorkout[];

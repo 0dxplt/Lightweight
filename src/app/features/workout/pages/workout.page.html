@@ -96,6 +96,7 @@
     <h1>No exercises yet, click the button below to add one!</h1>
     }
   </div>
+  @if (hasExercise()) {
   <ion-fab slot="fixed" horizontal="center" vertical="bottom">
     <ion-fab-button color="secondary">
       <ion-icon name="settings-outline"></ion-icon>
@@ -123,13 +124,19 @@
       </ion-fab-button>
     </ion-fab-list>
     <ion-fab-list side="top">
-      @if (hasExercise()) {
       <ion-fab-button color="secondary" (click)="startSessionWorkout()">
         <ion-icon name="play-outline"></ion-icon>
       </ion-fab-button>
-      }
     </ion-fab-list>
   </ion-fab>
+  }
+  @else {
+  <ion-fab slot="fixed" horizontal="center" vertical="bottom">
+    <ion-fab-button color="secondary" id="open-add-exercise">
+      <ion-icon name="add-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+  }
   <ion-modal #modal trigger="open-add-exercise" [initialBreakpoint]="0.5" [breakpoints]="[0, 0.25, 0.5, 0.75]"
     (ionModalWillDismiss)="resetFilter()" (willPresent)="fetchExercises()">
     <ng-template>

@@ -31,7 +31,7 @@ export class WorkoutsPage implements OnInit {
     //fetch al database per ottenere i dati
     this.workouts = [
       {
-        id: 453672547,
+        id: 1,
         nome: "Petto",
         tags: [
           "Petto",
@@ -40,7 +40,7 @@ export class WorkoutsPage implements OnInit {
         ]
       },
       {
-        id: 453672547,
+        id: 2,
         nome: "Petto",
         tags: [
           "Petto",

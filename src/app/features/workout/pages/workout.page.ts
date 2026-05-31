@@ -11,6 +11,7 @@ import { ChartModalComponent } from 'src/app/shared/components/chart-modal/chart
 import { ExerciseModalComponent } from '../components/exercise-modal/exercise-modal.component';
 import { Router } from '@angular/router';
 import { AuthService } from '../../auth/services/auth-service';
+import { WorkoutService } from 'src/app/shared/services/workout-service';
 
 @Component({
   selector: 'app-workout',
@@ -38,6 +39,8 @@ export class WorkoutPage implements OnInit {
 
   private alertController = inject(AlertController);
 
+  private workoutService = inject(WorkoutService);
+
   public editMode = false;
 
   public exercises: Exercise[] = [];
@@ -50,6 +53,7 @@ export class WorkoutPage implements OnInit {
 
   public exercisesWorkout = signal<ExerciseWorkout[]>([]);
 
+  public creatorId: number = 0;
   public creatorUsername: string = "";
 
   public creationTimestamp = 0;
@@ -69,85 +73,13 @@ export class WorkoutPage implements OnInit {
       this.creationTimestamp = date.getDate();
     } else {
       //TODO: fetch per ottenere tutti i dati del workout
-      this.workoutName = "Workout";
-      this.creatorUsername = "Pippo";
-      this.creationTimestamp = 453534636;
-      this.exercisesWorkout.set([
-        {
-          serie: 4,
-          reps: 8,
-          recuperoMs: 180000,
-          exercise: {
-            id: 35435345,
-            name: "Panca Piana Manubri",
-            desc: "Pigghia na panca, un bilanciere, ti stinnigghi na panca e aisi u bilanciere.",
-            imgpath: "https://static.strengthlevel.com/images/exercises/dumbbell-bench-press/dumbbell-bench-press-800.jpg",
-            difficulty: 4,
-            groups: [
-              {
-                muscolarGroup: { id: 1, name: "Petto" },
-                perc: 55
-              },
-              {
-                muscolarGroup: { id: 2, name: "Tricipiti" },
-                perc: 20
-              },
-              {
-                muscolarGroup: { id: 3, name: "Spalle" },
-                perc: 10
-              },
-              {
-                muscolarGroup: { id: 4, name: "Bicipiti" },
-                perc: 15
-              }
-            ]
-          }
-        },
-        {
-          serie: 4,
-          reps: 8,
-          recuperoMs: 180000,
-          exercise: {
-            id: 35435345,
-            name: "Pressa 45",
-            desc: "Pigghia na panca, un bilanciere, ti stinnigghi na panca e aisi u bilanciere.",
-            imgpath: "",
-            difficulty: 4,
-            groups: [
-              {
-                muscolarGroup: { id: 1, name: "Quadricipiti" },
-                perc: 55
-              },
-              {
-                muscolarGroup: { id: 2, name: "Femorali" },
-                perc: 20
-              },
-            ]
-          }
-        },
-        {
-          serie: 4,
-          reps: 8,
-          recuperoMs: 180000,
-          exercise: {
-            id: 35435345,
-            name: "Panca Piana Bialnciere",
-            desc: "Pigghia na panca, un bilanciere, ti stinnigghi na panca e aisi u bilanciere.",
-            imgpath: "",
-            difficulty: 4,
-            groups: [
-              {
-                muscolarGroup: { id: 3, name: "Spalle" },
-                perc: 10
-              },
-              {
-                muscolarGroup: { id: 4, name: "Bicipiti" },
-                perc: 55
-              }
-            ]
-          }
-        }
-      ]);
+      this.workoutService.full(this.id).subscribe(wo => {
+        this.workoutName = wo.name;
+        this.creationTimestamp = wo.creationTimestamp;
+        this.creatorId = wo.creatorId;
+        this.creatorUsername = wo.creatorUsername;
+        this.exercisesWorkout.set(wo.exercises);
+      });
     }
   }
 
@@ -254,17 +186,26 @@ export class WorkoutPage implements OnInit {
   }
 
   saveWorkout() {
-    // TODO: da fare il salvataggio
-    console.log({
-      nome: this.workoutName,
-      exercises: this.exercisesWorkout,
-      timestamp: new Date().getDate()
+    this.workoutService.save(this.id, this.workoutName, new Date().getDate(), this.creatorId, this.exercisesWorkout().map(
+      ex => ({
+        serie: ex.serie,
+        ripetizioni: ex.reps,
+        recupero: ex.recuperoMs,
+        id: ex.exercise.id
+      })
+    )).subscribe({
+      next: (res) => {
+        console.log(res.message);
+      },
+      error: (err) => {
+        console.log(err.message);
+      }
     });
     this.router.navigate(["/workouts"]);
   }
 
   fetchExercises() {
-    // TODO: fetch al db per ottenere i dati
+    // TODO: fetch al db per ottenere tutti gli esercizi
     const fetchedExercises = [
       {
         id: 35435345,
@@ -342,6 +283,7 @@ export class WorkoutPage implements OnInit {
     this.filteredExercises = [...this.exercises];
     this.nameFilteredExercises = [...this.filteredExercises];
 
+    // TODO: fetch per ottenere tutti i gruppi muscolari
     this.muscleGroups = [
       "Petto",
       "Spalle",
@@ -356,6 +298,7 @@ export class WorkoutPage implements OnInit {
     const workout: WorkoutVisualization = {
       id: this.id,
       creatorUsername: this.creatorUsername,
+      creatorId: this.creatorId,
       name: this.workoutName,
       creationTimestamp: this.creationTimestamp,
       exercises: this.exercisesWorkout()
