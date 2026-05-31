@@ -15,11 +15,7 @@ import { AuthService } from 'src/app/features/auth/services/auth-service';
   standalone: true,
   imports: [IonCard, IonIcon, IonFabButton, IonChip, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonFab, RouterModule]
 })
-export class WorkoutsPage implements OnInit, ViewDidEnter {
-
-  ionViewDidEnter(): void {
-      console.log("Hello, World");
-  }
+export class WorkoutsPage implements OnInit {
 
   public workouts: WorkoutMiniCard[] = [];
 
