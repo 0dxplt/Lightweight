@@ -37,20 +37,10 @@ export class PtRequestModalPage implements OnInit {
 
   ngOnInit() {
     this.cityService.all().subscribe(cities => {
-      cities.forEach(c => {
-        this.cities.update(value => {
-          value.push(c);
-          return value;
-        });
-      });
+      this.cities.set([...cities]);
     })
     this.gymService.all().subscribe(gyms => {
-      gyms.forEach(g => {
-        this.gyms.update(value => {
-          value.push(g);
-          return value;
-        })
-      });
+      this.gyms.set([...gyms]);
     });
   }
 
