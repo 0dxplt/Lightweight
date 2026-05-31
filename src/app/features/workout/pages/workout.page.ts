@@ -104,7 +104,7 @@ export class WorkoutPage implements OnInit {
       this.workoutName = 'Workout ' + date.toLocaleDateString();
       this.creatorId = this.authService.getUser()?.id??0;
       this.exercisesWorkout.set([]);
-      this.creationTimestamp = date.getDate();
+      this.creationTimestamp = date.getTime();
     } else {
       this.workoutService.full(this.id).subscribe(wo => {
         this.workoutName = wo.name;
@@ -204,7 +204,7 @@ export class WorkoutPage implements OnInit {
   }
 
   saveWorkout() {
-    this.workoutService.save(this.id, this.workoutName, new Date().getDate(), this.creatorId, this.exercisesWorkout().map(
+    this.workoutService.save(this.id, this.workoutName, new Date().getTime(), this.creatorId, this.exercisesWorkout().map(
       ex => ({
         serie: ex.serie,
         ripetizioni: ex.reps,

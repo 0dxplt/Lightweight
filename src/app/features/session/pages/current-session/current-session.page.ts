@@ -128,7 +128,7 @@ export class CurrentSessionPage implements OnInit {
   saveSession() {
     const session: SaveSession = {
       nome: this.sessionName(),
-      data_svolgimento: new Date().getDate(),
+      dataSvolgimento: new Date().getTime(),
       xp: this.xp(),
       exercises: this.sessionExercises().flatMap(ex => {
         const exercise = this.workoutExercises().find(excs => excs.name === ex.nome);
