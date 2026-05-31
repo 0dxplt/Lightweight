@@ -57,7 +57,14 @@ export class VistProfilePagePage implements OnInit {
     this.userService.user(username).subscribe({
       next: (user) => {
         this.visitedUser.set(user);
-        this.followed.set(this.authService.follows(user.username));
+        this.authService.follows(user.id).subscribe({
+          next: (value) => {
+            this.followed.set(value);
+          },
+          error: (err) => {
+            console.log("Errore: " + (err.error?.message ?? 'Unknown'));
+          }
+        })
         this.reported.set(this.reportService.exists(this.authService.user()?.id, user.id));
       },
       error: (err) => {
@@ -70,18 +77,34 @@ export class VistProfilePagePage implements OnInit {
     const u = this.visitedUser();
     if (!u) return;
 
-    this.authService.follow(u.username, this.visitedUser);
-    // se non ci sono stati problemi
-    this.followed.set(true);
+    this.authService.follow(u.id, this.visitedUser).subscribe({
+      next: (value) => {
+        if (value.followed) {
+          this.followed.set(true);
+          this._showToast(`You have now followed ${this.visitedUser()?.username}`, 'success', 1000);
+        }
+      },
+      error: (err) => {
+        this._showToast("Errore: " + (err.error?.message ?? 'Unknown'), 'danger', 2000);
+      }
+    });
   }
 
   unfollow() {
     const u = this.visitedUser();
     if (!u) return;
     
-    this.authService.unfollow(u.username, this.visitedUser);
-    // se non ci sono stati problemi
-    this.followed.set(false);
+    this.authService.unfollow(u.id, this.visitedUser).subscribe({
+      next: (value) => {
+        if (value.unfollowed) {
+          this.followed.set(false);
+          this._showToast(`You have now unfollowed ${this.visitedUser()?.username}`, 'success', 1000);
+        }
+      },
+      error: (err) => {
+        this._showToast("Errore: " + (err.error?.message ?? 'Unknown'), 'danger', 2000);
+      }
+    });
   }
 
   report() {

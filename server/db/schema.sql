@@ -69,7 +69,7 @@ CREATE TABLE IF NOT EXISTS Atleti (
 CREATE TABLE IF NOT EXISTS PersonalTrainers (
     id INTEGER PRIMARY KEY,
     email_professionale TEXT NOT NULL,
-    id_citta INTEGER NOT NULL, -- Corretto nome colonna
+    id_citta INTEGER NOT NULL,
     id_palestra INTEGER NOT NULL,
     FOREIGN KEY (id) REFERENCES Atleti(id) ON DELETE CASCADE,
     FOREIGN KEY (id_citta) REFERENCES Citta(id) ON DELETE SET NULL,

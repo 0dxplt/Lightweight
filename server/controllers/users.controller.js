@@ -348,73 +348,114 @@ async function getFollowings(req, res) {
     }
 }
 
-async function changePassword(req, res) {
+async function follow(req, res) {
     try {
-        const userId = req.user.userId;
-        if (!userId) {
-            return res.status(403).json({
-                success: false,
-                message: "Token expired or not provided"
-            });
-        }
+        const follower = req.params.followerId;
+        const other = req.params.otherId;
 
-        const { oldPass, newPass } = req.body;
-
-        if (!oldPass || !newPass || oldPass.trim() === '' || newPass.trim() === '') {
+        if (isNaN(follower) || isNaN(other)) {
             return res.status(400).json({
                 success: false,
-                message: "Input invalid"
+                message: "Ids not provided"
             });
         }
 
-        if (oldPass.length < global.min_password_length || oldPass.length > global.max_password_length) {
-            return res.status(400).json({
-                success: false,
-                message: `Old password must be ${global.min_password_length}-${global.max_password_length} characters long`
-            });
-        }
-
-        if (newPass.length < global.min_password_length || newPass.length > global.max_password_length) {
-            return res.status(400).json({
-                success: false,
-                message: `New password must be ${global.min_password_length}-${global.max_password_length} characters long`
-            });
-        }
-
-        const dbPass = await dbutils.get(
-            "SELECT password FROM Atleti WHERE id = ?",
-            [userId]
+        const row = await dbutils.get(
+            "SELECT * FROM Follow WHERE id_follower = ? AND id_followed = ?",
+            [follower, other]
         );
 
-        if (!(await bcrypt.compareSync(oldPass, dbPass.password))) {
-            return res.status(400).json({
-                success: false,
-                message: "Old password is not correct"
-            });
+        if (row) {
+            return res.sendStatus(304);
         }
 
-        const pHash = await bcrypt.hash(newPass, global.rounds);
+        await dbutils.run("BEGIN TRANSACTION");
 
         await dbutils.run(
-            "UPDATE Atleti SET password = ? WHERE id = ?",
-            [pHash, userId]
+            "INSERT INTO Follow (id_follower, id_followed) VALUES (?, ?)",
+            [follower, other]
         );
 
-        res.status(200).json({
-            success: true,
-            message: "Password changed!"
-        });
+        await dbutils.run(
+            "UPDATE Atleti SET numero_followed = (numero_followed + 1) WHERE id = ?",
+            [follower]
+        );
+
+        await dbutils.run(
+            "UPDATE Atleti SET numero_followers = (numero_followers + 1) WHERE id = ?",
+            [other]
+        );
+
+        await dbutils.run("COMMIT");
+
+        res.status(200).json({followed: true});
+
     } catch(err) {
+        await dbutils.run("ROLLBACK");
+        console.log(err);
         res.status(500).json({
             success: false,
-            message: "Error: " + err.message
-        });
+            message: "Could not follow user"
+        })
+    }
+}
+
+async function unfollow(req, res) {
+    try {
+        const follower = req.params.followerId;
+        const other = req.params.otherId;
+
+        if (isNaN(follower) || isNaN(other)) {
+            return res.status(400).json({
+                success: false,
+                message: "Ids not provided"
+            });
+        }
+
+        const row = await dbutils.get(
+            "SELECT * FROM Follow WHERE id_follower = ? AND id_followed = ?",
+            [follower, other]
+        );
+
+        if (!row) {
+            return res.sendStatus(304);
+        }
+
+        await dbutils.run("BEGIN TRANSACTION");
+
+        await dbutils.run(
+            "DELETE FROM Follow WHERE id = ?",
+            [row.id]
+        );
+
+        await dbutils.run(
+            "UPDATE Atleti SET numero_followed = (numero_followed - 1) WHERE id = ?",
+            [follower]
+        );
+
+        await dbutils.run(
+            "UPDATE Atleti SET numero_followers = (numero_followers - 1) WHERE id = ?",
+            [other]
+        );
+
+        await dbutils.run("COMMIT");
+
+        res.status(200).json({unfollowed: true});
+
+    } catch(err) {
+        await dbutils.run("ROLLBACK");
+        console.log(err);
+        res.status(500).json({
+            success: false,
+            message: "Could not follow user"
+        })
     }
 }
 
 module.exports = {
-    changePassword,
     getUser,
     getFollowers,
-    getFollowings
+    getFollowings,
+    follow,
+    unfollow,
 }

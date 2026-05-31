@@ -183,17 +183,23 @@ export class EditProfilePage implements OnInit {
     });
     await loading.present();
 
-    setTimeout(() => {
-      loading.dismiss();
-      this._showToast('Profile updated!', 'success', 250);
-      setTimeout(() => {
-        const updatedUser: User = this._prepareUserObject(this.userForm.value);
-        this.authService.updateWithImage(updatedUser, this.selectedFile);
+    const updatedUser: User = this._prepareUserObject(this.userForm.value);
+    // this.authService.updateWithImage(updatedUser, this.selectedFile);
+    this.authService.update(updatedUser).subscribe({
+      next: (user) => {
+        loading.dismiss();
+        console.log(user);
         this.selectedFile = null;
         this.userForm.markAsPristine();
         this.router.navigate(["profile"]);
-      }, 250);
-    }, Math.random() * 2500 + 500);
+        this._showToast('Profile updated!', 'success', 1000);
+      },
+      error: (err) => {
+        loading.dismiss();
+        console.log(err);
+        this._showToast('Error: ' + (err.error?.message ?? 'Unknown'), 'danger', 2000);
+      }
+    });
   }
 
   private async _showToast(message: string, color: string, duration: number) {
