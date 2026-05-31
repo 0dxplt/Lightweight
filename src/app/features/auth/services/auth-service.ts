@@ -3,6 +3,7 @@ import { computed, Injectable, Signal, signal, WritableSignal } from '@angular/c
 import { Observable, tap } from 'rxjs';
 import { CurrentSession } from 'src/app/models/current-session.model';
 import { SessionExercise } from 'src/app/models/session-modal-component-info';
+import { SaveSession } from 'src/app/models/session.model';
 import { User } from 'src/app/models/user.model';
 import { Workout, WorkoutVisualization } from 'src/app/models/workout.model';
 import { GLOBAL_RANK_UP } from 'src/app/shared/global';
@@ -32,7 +33,7 @@ export class AuthService {
   login(email: string, password: string): Observable<any> {
     return this.http.post<any>(
       `${environment.apiUrl}/api/auth/login`,
-      {email:email, password:password}
+      { email: email, password: password }
     ).pipe(
       tap(response => {
         const resUser = response.user;
@@ -67,7 +68,7 @@ export class AuthService {
   register(username: string, email: string, password: string, weight: number, height: number): Observable<any> {
     return this.http.post<any>(
       `${environment.apiUrl}/api/auth/register`,
-      {username: username, email:email, password:password, weight: weight, height: height}
+      { username: username, email: email, password: password, weight: weight, height: height }
     );
   }
 
@@ -183,8 +184,16 @@ export class AuthService {
     localStorage.setItem('currentSession', JSON.stringify(this._currentSession()));
   }
 
-  finishCurrentSession() {
-    this._currentSession.set(null);
-    localStorage.removeItem('currentSession');
+  finishCurrentSession(session: SaveSession) {
+    return this.http.post<{ message: string }>(
+      `${environment.apiUrl}/api/workout/save/`, // TODO: da sistemare
+      session
+    ).pipe(
+      tap((res) => {
+        console.log(res.message)
+        this._currentSession.set(null);
+        localStorage.removeItem('currentSession');
+      })
+    )
   }
 }
