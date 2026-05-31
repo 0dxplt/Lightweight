@@ -2,7 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonChip, IonFab, IonFabButton, IonIcon, IonCard } from '@ionic/angular/standalone';
+import { IonContent, IonHeader, IonTitle, IonToolbar, IonChip, IonFab, IonFabButton, IonIcon, IonCard, ViewDidEnter } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { addOutline } from 'ionicons/icons';
 import { WorkoutMiniCard } from 'src/app/models/workout-mini-card.model';
@@ -15,7 +15,11 @@ import { AuthService } from 'src/app/features/auth/services/auth-service';
   standalone: true,
   imports: [IonCard, IonIcon, IonFabButton, IonChip, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonFab, RouterModule]
 })
-export class WorkoutsPage implements OnInit {
+export class WorkoutsPage implements OnInit, ViewDidEnter {
+
+  ionViewDidEnter(): void {
+      console.log("Hello, World");
+  }
 
   public workouts: WorkoutMiniCard[] = [];
 
