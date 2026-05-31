@@ -2,11 +2,15 @@ const dbutils = require('../db/database.utils');
 const bcrypt = require('bcrypt');
 const global = require('../config/global');
 const config = require('../config/env');
-const fs = require('fs');
+const fs = require('fs').promises;
 const path = require('path');
 
 async function update(req, res) {
-    const { user, profileId } = req.body;
+    const user = req.body.user ? JSON.parse(req.body.user) : null;
+    const profileId = req.body.profileId;
+    // Multer fornisce req.file
+    const file = req.file;
+
     let active_transaction = false;
 
     if (!user || !profileId) {
@@ -59,16 +63,15 @@ async function update(req, res) {
         }
 
         await dbutils.run("COMMIT");
-
         active_transaction = false;
 
         const row = await dbutils.get(
             `SELECT 
                 A.*, 
-                N1.nome AS nation_name, N1.shortform AS nation_short, N1.flag AS nation_flag,
+                N1.nome AS nation_name, N1.country_code AS nation_short, N1.bandiera AS nation_flag,
                 PT.email_professionale,
                 C.id AS city_id, C.nome AS city_name,
-                N2.id AS city_nation_id, N2.nome AS city_nation_name, N2.shortform AS city_nation_short, N2.flag AS city_nation_flag,
+                N2.id AS city_nation_id, N2.nome AS city_nation_name, N2.country_code AS city_nation_short, N2.bandiera AS city_nation_flag,
                 G.id AS gym_id, G.nome AS gym_name, G.indirizzo AS gym_address, G.lat AS gym_lat, G.lng AS gym_lng
             FROM Atleti A
             LEFT JOIN Nazioni N1 ON A.id_nazione = N1.id
@@ -79,6 +82,14 @@ async function update(req, res) {
             WHERE A.id = ?`,
             [profileId]
         );
+
+        if (file) {
+            const ext = '.png'
+            const fileName = `${profileId}${ext}`;
+            const filePath = path.join(config.avatarDir, fileName);
+
+            await fs.writeFile(filePath, file.buffer);
+        }
 
         if (!row) {
             throw new Error("User not found after update");
@@ -91,7 +102,7 @@ async function update(req, res) {
             surname: row.cognome,
             email: row.email,
             birthdate: row.data_nascita,
-            propic: row.img,
+            propic: "http://localhost:10000/api/imgs/users?id=" + row.id,
             weight: row.weight,
             height: row.height,
             sLevel: row.livello_stagionale,
@@ -139,31 +150,19 @@ async function update(req, res) {
         const errMsg = err.message || "";
         
         if (errMsg.includes("UNIQUE constraint failed: Atleti.username")) {
-            return res.status(409).json({
-                success: false,
-                message: "Username is already used"
-            });
+            return res.status(409).json({ success: false, message: "Username is already used" });
         }
         
         if (errMsg.includes("UNIQUE constraint failed: Atleti.email")) {
-            return res.status(409).json({
-                success: false,
-                message: "Email is already used"
-            });
+            return res.status(409).json({ success: false, message: "Email is already used" });
         }
 
         if (errMsg.includes("CHECK constraint failed")) {
-            return res.status(400).json({
-                success: false,
-                message: "Invalid data"
-            });
+            return res.status(400).json({ success: false, message: "Invalid data" });
         }
 
         console.error("Update Error:", err);
-        res.status(500).json({
-            success: false,
-            message: "Error during profile update"
-        });
+        res.status(500).json({ success: false, message: "Error during profile update" });
     }
 }
 

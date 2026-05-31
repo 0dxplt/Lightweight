@@ -92,13 +92,24 @@ export class AuthService {
     return this._user();
   }
 
-  update(user: User): Observable<User> {
+  update(user: User, propic: File | null): Observable<User> {
+    const formData = new FormData();
+    
+    formData.append('user', JSON.stringify(user));
+    formData.append('profileId', (this._user()?.id ?? -1).toString());
+    
+    if (propic) {
+      formData.append('propic', propic);
+    }
+
     return this.http.post<any>(
       `${environment.apiUrl}/api/profile/update`,
-      {user:user, profileId: this._user()?.id ?? -1}
+      formData
     ).pipe(
       tap(resUser => {
-        console.log(resUser);
+        if (resUser.propic) {
+          resUser.propic = `${resUser.propic}&t=${new Date().getTime()}`;
+        }
         this._user.set(resUser);
         localStorage.setItem('loggedUser', JSON.stringify(this._user()));
       })
