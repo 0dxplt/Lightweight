@@ -12,6 +12,7 @@ import { ExerciseModalComponent } from '../components/exercise-modal/exercise-mo
 import { Router } from '@angular/router';
 import { AuthService } from '../../auth/services/auth-service';
 import { WorkoutService } from 'src/app/shared/services/workout-service';
+import { ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-workout',
@@ -40,6 +41,8 @@ export class WorkoutPage implements OnInit {
   private alertController = inject(AlertController);
 
   private workoutService = inject(WorkoutService);
+
+  private toastController = inject(ToastController);
 
   public editMode = false;
 
@@ -195,13 +198,24 @@ export class WorkoutPage implements OnInit {
       })
     )).subscribe({
       next: (res) => {
+        this.showToast("Workout salvato con successo!", 'success', 2000);
         console.log(res.message);
+        this.router.navigate(["/workouts"]);
       },
       error: (err) => {
         console.log(err.message);
       }
     });
-    this.router.navigate(["/workouts"]);
+  }
+
+  async showToast(message: string, color: string, duration: number) {
+    const toast = await this.toastController.create({
+      message: message,
+      color: color,
+      duration: duration
+    });
+    
+    await toast.present();
   }
 
   fetchExercises() {
