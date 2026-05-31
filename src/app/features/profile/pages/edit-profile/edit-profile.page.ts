@@ -29,6 +29,7 @@ export class EditProfilePage implements OnInit {
   imagePreview = signal<string | null>(null);
 
   user = this.authService.user;
+  
   userForm: FormGroup = new FormGroup({
     username: new FormControl(this.user()?.username, [Validators.required, Validators.minLength(MIN_USERNAME_LENGTH), Validators.maxLength(MAX_USERNAME_LENGTH)]),
     name: new FormControl(this.user()?.name, [Validators.minLength(MIN_NAME_LENGTH), Validators.maxLength(MAX_NAME_LENGTH), Validators.pattern(NAME_REGEX)]),
@@ -122,11 +123,6 @@ export class EditProfilePage implements OnInit {
     ) : obj1 === obj2;
   }
 
-  retrievePropic() {
-    // url(backend) + user.propic
-    return PROPIC_PATH;
-  }
-
   private _canConfirmChanges(): boolean {
     const original = this.user();
     const current = this.userForm.value;
@@ -184,15 +180,17 @@ export class EditProfilePage implements OnInit {
     await loading.present();
 
     const updatedUser: User = this._prepareUserObject(this.userForm.value);
-    // this.authService.updateWithImage(updatedUser, this.selectedFile);
-    this.authService.update(updatedUser).subscribe({
-      next: (user) => {
+    this.authService.update(updatedUser, this.selectedFile).subscribe({
+      next: (_) => {
         loading.dismiss();
-        console.log(user);
+    
         this.selectedFile = null;
+        this.imagePreview.set(null); 
+        
         this.userForm.markAsPristine();
-        this.router.navigate(["profile"]);
         this._showToast('Profile updated!', 'success', 1000);
+        
+        this.router.navigate(["profile"]);
       },
       error: (err) => {
         loading.dismiss();
