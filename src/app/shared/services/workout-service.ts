@@ -70,7 +70,7 @@ export class WorkoutService {
 
   save(id: number, nome: string, data: number, creatore: number, exercises: {serie: number, ripetizioni: number, recupero: number, id: number}[]): Observable<{ message: string }> {
     return this.http.post<{ message: string }>(
-      `${environment.apiUrl}/api/workout/save`,
+      `${environment.apiUrl}/api/workout/save/`,
       { id:id, nome: nome, data: data, creatore: creatore, exercises: exercises }
     );
   }

@@ -16,7 +16,7 @@
   </ion-card>
   }
   <div class="exercises">
-    @for (workout of workouts; track workout) {
+    @for (workout of workouts(); track workout) {
     <ion-card class="workout-card" [button]="true" [routerLink]="['/workout', workout.id]">
       <div class="title">
         <h1>{{workout.nome}}</h1>
