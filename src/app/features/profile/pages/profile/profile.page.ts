@@ -194,7 +194,7 @@ export class ProfilePage implements OnInit {
     if (nationality) updatedUser.nationality = nationality;
     if (birthdate) updatedUser.birthdate = new Date(birthdate);
 
-    this.authService.update(updatedUser);
+    this.authService.update(updatedUser, null);
   }
 
   async openPTModal() {
@@ -236,6 +236,6 @@ export class ProfilePage implements OnInit {
       city: city
     }
 
-    this.authService.update(cpy);
+    this.authService.update(cpy, null);
   }
 }
