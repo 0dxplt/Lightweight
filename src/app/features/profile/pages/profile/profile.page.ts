@@ -40,7 +40,7 @@ export class ProfilePage implements OnInit {
       }},
     ];
 
-    if (u && !u.verified ) {
+    if (u && !u.verified && this._canBeVerified()) {
       buttons.push({ text: "Verify Account", handler: () => {
         this.actionSheetController.dismiss();
         this.openVerifyModal();
