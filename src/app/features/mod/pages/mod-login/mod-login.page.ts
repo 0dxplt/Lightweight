@@ -7,6 +7,8 @@ import { eyeOffOutline, eyeOutline } from 'ionicons/icons';
 import { ModAuthService } from '../../services/mod-auth-service';
 import { Router } from '@angular/router';
 import { MAX_MOD_PASSWORD_LENGTH, MAX_MOD_USERNAME_LENGTH, MIN_MOD_PASSWORD_LENGTH, MIN_MOD_USERNAME_LENGTH } from 'src/app/shared/global';
+import { ToastController } from '@ionic/angular';
+import { AuthService } from 'src/app/features/auth/services/auth-service';
 
 @Component({
   selector: 'app-mod-login',
@@ -24,7 +26,12 @@ export class ModLoginPage implements OnInit {
   })
   showPassword: boolean = false;
 
-  constructor(private authService: ModAuthService, private router: Router) {
+  constructor(
+    private authService: ModAuthService,
+    private userAuthService: AuthService,
+    private router: Router,
+    private toastController: ToastController
+  ) {
     addIcons({eyeOffOutline, eyeOutline});
   }
 
@@ -37,13 +44,28 @@ export class ModLoginPage implements OnInit {
     const email: string = this.loginForm.value.email;
     const password: string = this.loginForm.value.password;
 
-    this.authService.login(username, email, password);
-
-    if (this.authService.isModLogged())
-      this.router.navigate(["mod"]);
+    this.authService.login(username, email, password).subscribe({
+      next: (res) => {
+        this._showToast(res.message, 'success', 1000);
+        this.userAuthService.logout();
+        this.router.navigate(["mod"]);
+      },
+      error: (err) => {
+        this._showToast(("Errore: " + (err.error?.message ?? "Unkown")), 'danger', 2000);
+      }
+    });
   }
 
   togglePassword() {
     this.showPassword = !this.showPassword;
+  }
+
+  private async _showToast(message: string, color: string, duration: number) {
+    const toast = await this.toastController.create({
+      message: message,
+      color: color,
+      duration: duration
+    });
+    await toast.present();
   }
 }

@@ -685,6 +685,6 @@ INSERT OR IGNORE INTO Palestre (id, nome, indirizzo, lat, lng) VALUES
 (50, 'Bucuresti Power', 'Calea Victoriei, Bucarest', 44.4268, 26.1025);
 
 -- MODERATORI
--- Password: hash di "AdminSecure2024!"
-INSERT OR IGNORE INTO Moderatori (id, username, email, password) VALUES 
-(1, 'staff_admin', 'admin@gym-app.it', '$2b$10$e0Vp/m9YFf.YIuYfG5z6u.eDk0mB6W1iV9lO/kZqG8N7M6L5P4Q3S');
+-- Password: hash di "provamodprova"
+INSERT OR IGNORE INTO Moderatori (id, username, email, password) VALUES
+(1, 'staff_admin', 'admin@gym-app.it', '$2b$10$vmNtOGj8O9w91CwJZ48Kh.ztkCXDNMJHGcagy5.t34wW57dLLw2p.');

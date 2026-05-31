@@ -11,6 +11,7 @@ import { addIcons } from 'ionicons';
 import { eyeOutline, eyeOffOutline } from 'ionicons/icons';
 import { MAX_PASSWORD_LENGTH, MIN_PASSWORD_LENGTH } from 'src/app/shared/global';
 import { ToastController } from '@ionic/angular';
+import { ModAuthService } from 'src/app/features/mod/services/mod-auth-service';
 
 @Component({
   selector: 'app-login',
@@ -41,6 +42,7 @@ export class LoginPage implements OnInit {
 
   constructor(
     private authService: AuthService,
+    private modAuthService: ModAuthService,
     private router: Router,
     private toastController: ToastController
   ) {
@@ -58,6 +60,7 @@ export class LoginPage implements OnInit {
     this.authService.login(email, password).subscribe({
       next: (res) => {
         this._showToast(res.message, 'success', 1000);
+        this.modAuthService.logout();
         this.router.navigate(["/tabs/workouts"]);
       },
       error: (err) => {
