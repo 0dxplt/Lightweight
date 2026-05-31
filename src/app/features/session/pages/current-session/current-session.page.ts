@@ -13,6 +13,7 @@ import { WorkoutVisualization } from 'src/app/models/workout.model';
 import { AuthService } from 'src/app/features/auth/services/auth-service';
 import { Router } from '@angular/router';
 import { MuscolarGroupsService } from 'src/app/shared/services/muscolar-groups-service';
+import { SaveSession } from 'src/app/models/session.model';
 
 @Component({
   selector: 'app-current-session',
@@ -44,6 +45,8 @@ export class CurrentSessionPage implements OnInit {
   public selectedMuscleGroups = signal<string[]>([]);
 
   public muscleGroups = signal<string[]>([]);
+
+  public xp = signal<number>(0);
 
   public workoutExercises = computed(() => {
     const wo = this.workout();
@@ -94,13 +97,13 @@ export class CurrentSessionPage implements OnInit {
       this.workout.set(currentSession.workout);
       this.sessionExercises.set(currentSession.exercises);
       this.muscleGroupService.all().subscribe({
-      next: (data) => {
-        this.muscleGroups.set(data);
-      },
-      error: (err) => {
-        console.log(err.message);
-      }
-    });
+        next: (data) => {
+          this.muscleGroups.set(data);
+        },
+        error: (err) => {
+          console.log(err.message);
+        }
+      });
     }
   }
 
@@ -123,9 +126,29 @@ export class CurrentSessionPage implements OnInit {
   }
 
   saveSession() {
-    console.log("Sessione Salvata");
-    this.authService.finishCurrentSession();
-    this.router.navigate(["/workouts"]);
+    const session: SaveSession = {
+      nome: this.sessionName(),
+      data_svolgimento: new Date().getDate(),
+      xp: this.xp(),
+      exercises: this.sessionExercises().flatMap(ex => {
+        const exercise = this.workoutExercises().find(excs => excs.name === ex.nome);
+        return ex.serie.map(s => ({
+          exerciseId: exercise!.id,
+          reps: s.reps,
+          weight: s.peso,
+          recovery: s.recuperoMs,
+          valid: true
+        }));
+      })
+    };
+    this.authService.finishCurrentSession(session).subscribe({
+      next: () => {
+        this.router.navigate(["/workouts"]);
+      },
+      error: (err) => {
+        console.error("Errore nel salvataggio della sessione: ", err);
+      }
+    });
   }
 
   resetFilter() {
@@ -166,7 +189,7 @@ export class CurrentSessionPage implements OnInit {
     }
   }
 
- adaptExercise(exercise: SessionExercise): Exercise {
+  adaptExercise(exercise: SessionExercise): Exercise {
     const fullExercise = this.workoutExercises().find(ex => ex.name === exercise.nome);
     if (fullExercise) {
       return fullExercise;
@@ -210,7 +233,7 @@ export class CurrentSessionPage implements OnInit {
           return esercizi.filter(e => e !== sessionExercise);
         }
       }
-      return [...esercizi]; 
+      return [...esercizi];
     });
   }
 

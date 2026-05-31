@@ -8,3 +8,11 @@ export type SessionExercise = {
     recovery: number;
     valid: boolean;
 }
+
+export type SessionExerciseMinimal = {
+    exerciseId: number;
+    reps: number;
+    weight: number;
+    recovery: number;
+    valid: boolean;
+}
