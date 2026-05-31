@@ -151,11 +151,11 @@ async function update(req, res) {
             await dbutils.run("ROLLBACK");
 
         const errMsg = err.message || "";
-        
+
         if (errMsg.includes("UNIQUE constraint failed: Atleti.username")) {
             return res.status(409).json({ success: false, message: "Username is already used" });
         }
-        
+
         if (errMsg.includes("UNIQUE constraint failed: Atleti.email")) {
             return res.status(409).json({ success: false, message: "Email is already used" });
         }
@@ -225,7 +225,7 @@ async function changePassword(req, res) {
             success: true,
             message: "Password changed!"
         });
-    } catch(err) {
+    } catch (err) {
         res.status(500).json({
             success: false,
             message: "Error: " + err.message
@@ -236,7 +236,7 @@ async function changePassword(req, res) {
 async function follows(req, res) {
     try {
         const { profileId, otherId } = req.body;
-        
+
         const row = await dbutils.get(
             "SELECT * FROM Follow WHERE id_follower = ? AND id_followed = ?",
             [profileId, otherId]
@@ -244,7 +244,7 @@ async function follows(req, res) {
 
         res.json(row ? true : false);
 
-    } catch(err) {
+    } catch (err) {
         res.status(500).json({
             success: false,
             message: "Could not retrieve information"
@@ -252,8 +252,45 @@ async function follows(req, res) {
     }
 }
 
+async function saveSession(req, res) {
+    try {
+        const {session, profileId} = req.body;
+        await dbutils.run('BEGIN TRANSACTION');
+        await dbutils.run(
+            "INSERT INTO Sessioni (id_creatore, nome, data_svolgimento, xp) VALUES (?, ?, ?, ?)",
+            [profileId, session.nome, session.dataSvolgimento, session.xp]
+        );
+        console.log("Pippo");
+        
+        const result = await dbutils.all("SELECT last_insert_rowid() AS lastId");
+        sessionId = result[0].lastId;
+
+        console.log(sessionId);
+
+        for (serie of session.exercises) {
+            await dbutils.run(
+                "INSERT INTO SessioniEsercizi (peso, ripetizioni, recupero, id_sessione, id_esercizio) VALUES (?, ?, ?, ?, ?)",
+                [serie.weight, serie.reps, serie.recovery, sessionId, serie.exerciseId]
+            );
+        }
+        await dbutils.run('COMMIT');
+        res.json({
+            success: true,
+            message: "Saved Session!"
+        });
+    } catch (err) {
+        console.log(err);
+        await dbutils.run('ROLLBACK');
+        res.status(500).json({
+            success: false,
+            message: "Couldn't save session"
+        })
+    }
+}
+
 module.exports = {
     update,
     changePassword,
-    follows
+    follows,
+    saveSession
 }

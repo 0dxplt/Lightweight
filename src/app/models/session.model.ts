@@ -14,7 +14,7 @@ export type Session = {
 
 export type SaveSession = {
     nome: string,
-    data_svolgimento: number,
+    dataSvolgimento: number,
     xp: number,
     exercises: SessionExerciseMinimal[]
 }

@@ -46,7 +46,7 @@ export class CurrentSessionPage implements OnInit {
 
   public muscleGroups = signal<string[]>([]);
 
-  public xp = signal<number>(0);
+  public xp: number = 0;
 
   public workoutExercises = computed(() => {
     const wo = this.workout();
@@ -128,8 +128,8 @@ export class CurrentSessionPage implements OnInit {
   saveSession() {
     const session: SaveSession = {
       nome: this.sessionName(),
-      data_svolgimento: new Date().getDate(),
-      xp: this.xp(),
+      dataSvolgimento: new Date().getTime(),
+      xp: this.calcolaXP(),
       exercises: this.sessionExercises().flatMap(ex => {
         const exercise = this.workoutExercises().find(excs => excs.name === ex.nome);
         return ex.serie.map(s => ({
@@ -243,5 +243,19 @@ export class CurrentSessionPage implements OnInit {
 
   editModeToggle() {
     this.editMode.update(v => !v);
+  }
+
+  calcolaXP():number {
+    let sum = 0;
+    for (const exercise of this.sessionExercises()) {
+      const nSerie = exercise.serie.length;
+      for (const serie of exercise.serie) {
+        const pesoUser = this.authService.getUser()!.weight;
+        const altezzaUser = this.authService.getUser()!.height;
+        const difficolta = (3 - this.workoutExercises().filter(ex => ex.name === exercise.nome)[0].difficulty)/2;
+        sum += (serie.reps * serie.peso) * Math.sqrt(nSerie) * Math.log(1 + (pesoUser/serie.peso)) * (1 + (0.5 * (1 - difficolta))) * (1 / ((pesoUser**0.7) * (altezzaUser**0.31)));
+      }
+    }
+    return sum;
   }
 }
