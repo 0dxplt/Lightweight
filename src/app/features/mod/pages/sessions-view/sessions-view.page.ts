@@ -47,8 +47,8 @@ export class SessionViewPage implements OnInit {
 
     this.userService.user(tmp as string).subscribe(user => {
       this.user.set(user); 
+      this.refresh();
     })
-    this.refresh();
   }
 
   private _addSessions() {

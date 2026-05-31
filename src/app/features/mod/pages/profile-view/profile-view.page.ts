@@ -25,8 +25,7 @@ export class ProfileViewPage implements OnInit {
     private route: ActivatedRoute,
     private location: Location,
     private userService: UserService
-  ) {
-      addIcons({arrowBack,checkmarkCircle});}
+  ) {}
 
   ngOnInit() {
     addIcons({
@@ -36,13 +35,12 @@ export class ProfileViewPage implements OnInit {
     const tmp = this.route.snapshot.paramMap.get('username');
     if (!tmp) return this.location.back();
 
-    this.userService.user(tmp as string).subscribe(user => {
-      this.user.set(user);
+    this.userService.user(tmp as string).subscribe({
+      next: (user) => {
+        this.user.set(user);
+        this._originalValue = user.verified;
+      }
     });
-    const u = this.user();
-    if (!u) return this.location.back();
-
-    this._originalValue = u.verified;
   }
 
   onToggleVerified(_: IonToggleCustomEvent<ToggleChangeEventDetail<any>>) {
