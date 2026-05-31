@@ -1,7 +1,7 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-item>
-      <ion-title>{{user.username}}'s sessions</ion-title>
+      <ion-title>{{user()?.username}}'s sessions</ion-title>
       <ion-button fill="clear" (click)="goBack()" slot="end" id="goback">
         <ion-icon name="arrow-back" color="tertiary" style="width: 30px; height: 30px;"></ion-icon>
       </ion-button>

@@ -36,18 +36,34 @@ export class VistProfilePagePage implements OnInit {
   ) {}
 
   ngOnInit() {
-    var username = this.route.snapshot.paramMap.get('username');
-    if (!username) {
-      this.location.back();
-      return;
-    }
-    if (username === this.authService.user()?.username) {
-      this.router.navigate(['profile']);
-      return;
-    }
-    this.visitedUser.set(this.userService.user(username));
-    this.followed.set(this.authService.follows(username));
-    this.reported.set(this.reportService.exists(this.authService.user()?.id, this.visitedUser()?.id));
+    this.route.paramMap.subscribe(params => {
+      const username = params.get('username');
+      
+      if (!username) {
+        this.location.back();
+        return;
+      }
+
+      if (username === this.authService.user()?.username) {
+        this.router.navigate(['/tabs/profile']);
+        return;
+      }
+
+      this._loadUser(username);
+    });
+  }
+
+  private _loadUser(username: string) {
+    this.userService.user(username).subscribe({
+      next: (user) => {
+        this.visitedUser.set(user);
+        this.followed.set(this.authService.follows(user.username));
+        this.reported.set(this.reportService.exists(this.authService.user()?.id, user.id));
+      },
+      error: (err) => {
+        console.error('Errore caricamento utente', err);
+      }
+    });
   }
 
   follow() {

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonAvatar, IonListHeader, IonLabel, IonList, IonItem, IonIcon, IonToggle, IonText, IonGrid, IonRow, IonCol, ToggleChangeEventDetail, IonButton } from '@ionic/angular/standalone';
@@ -19,14 +19,13 @@ import { arrowBack, checkmarkCircle } from 'ionicons/icons';
 export class ProfileViewPage implements OnInit {
 
   private _originalValue: boolean = false;
-  user!: User;
+  user = signal<User | undefined>(undefined);
 
   constructor(
     private route: ActivatedRoute,
     private location: Location,
     private userService: UserService
-  ) {
-      addIcons({arrowBack,checkmarkCircle});}
+  ) {}
 
   ngOnInit() {
     addIcons({
@@ -34,14 +33,22 @@ export class ProfileViewPage implements OnInit {
       checkmarkCircle
     });
     const tmp = this.route.snapshot.paramMap.get('username');
-    if (!tmp) this.location.back();
+    if (!tmp) return this.location.back();
 
-    this.user = this.userService.user(tmp as string);
-    this._originalValue = this.user.verified;
+    this.userService.user(tmp as string).subscribe({
+      next: (user) => {
+        this.user.set(user);
+        this._originalValue = user.verified;
+      }
+    });
   }
 
   onToggleVerified(_: IonToggleCustomEvent<ToggleChangeEventDetail<any>>) {
-    this.user.verified = !this.user.verified;
+    this.user.update(user => {
+      if (!user) return;
+      user.verified = !user.verified;
+      return user;
+    });
   }
 
   goBack() {
@@ -49,8 +56,11 @@ export class ProfileViewPage implements OnInit {
   }
 
   saveChanges() {
-    if (this._originalValue != this.user.verified)
-      this.userService.updateVerified(this.user);
+    const u = this.user();
+    if (!u) return;
+
+    if (this._originalValue != u.verified)
+      this.userService.updateVerified(u);
     this.goBack();
   }
 }

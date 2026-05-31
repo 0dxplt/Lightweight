@@ -29,7 +29,9 @@ export class FollowingModalPage implements OnInit {
   ) {}
 
   ngOnInit() {
-    this._data = this.userService.followingOf(this.username);
+    this.userService.followingOf(this.username).subscribe(user => {
+      this._data.push(...user);
+    });
     this.following.set(this._data);
   }
 

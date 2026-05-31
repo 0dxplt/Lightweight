@@ -55,7 +55,7 @@ export class AuthService {
           surname: !resUser.cognome ? undefined : resUser.cognome,
           nationality: !resUser.nazione ? undefined : resUser.nazione,
           birthdate: !resUser.data_nascita ? undefined : resUser.data_nascita,
-          propic: !resUser.img ? undefined : environment.apiUrl + "/api/imgs/users?token=" + response.token,
+          propic: !resUser.img ? undefined : environment.apiUrl + "/api/imgs/users?id=" + resUser.id,
           pt: !resUser.pt ? undefined : resUser.pt
         };
         this._user.set(loggedUser);

@@ -6,6 +6,7 @@ const verifyToken = (req, res, next) => {
     const token = (authHeader && authHeader.split(' ')[1]) || req.query.token;
 
     if (!token) {
+        console.log("HELLO");
         return res.status(403).json({
             success: false,
             message: "Token not provided"

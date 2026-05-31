@@ -5,12 +5,9 @@ const config = require('../config/env');
 
 async function getAvatar(req, res) {
     try {
-        const userId = req.user.userId;
+        const userId = req.query.id;
         if (!userId) {
-            return res.status(401).json({
-                success: false,
-                message: "Token expired or not provided"
-            });
+            return res.status(404).json(null);
         }
     
         const dir = config.avatarDir;

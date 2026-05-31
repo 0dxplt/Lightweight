@@ -1,4 +1,4 @@
-import { Component, computed, model, OnInit, signal } from '@angular/core';
+import { Component, computed, input, model, OnInit, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { IonicModule, LoadingController, ToastController } from '@ionic/angular';
 import { addIcons } from 'ionicons';
@@ -23,7 +23,7 @@ import { FollowersModalPage } from '../../pages/followers-modal/followers-modal.
 })
 export class ProfilePageBodyComponent  implements OnInit {
 
-  user = model.required<User | null>();
+  user = input.required<User | null>();
   verified = computed(() => {
     const user = this.user();
     if (!user) return false;

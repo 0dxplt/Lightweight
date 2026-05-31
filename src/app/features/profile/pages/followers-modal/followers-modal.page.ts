@@ -30,7 +30,11 @@ export class FollowersModalPage implements OnInit {
   ) {}
 
   ngOnInit() {
-    this._data = this.userService.followersOf(this.username);
+    this.userService.followersOf(this.username).subscribe(users => {
+      users.forEach(u => {
+        this._data.push(u);
+      });
+    });
     this.followers.set(this._data);
   }
 
