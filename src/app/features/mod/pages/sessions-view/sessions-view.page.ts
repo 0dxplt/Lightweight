@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
@@ -28,7 +28,7 @@ export class SessionViewPage implements OnInit {
   private _limit = 10;
   private _isLoading = false;
 
-  user!: User;
+  user = signal<User | null>(null);
   sessions!: Session[];
   disabled = false;
 
@@ -44,7 +44,10 @@ export class SessionViewPage implements OnInit {
     addIcons({arrowBack});
     const tmp = this.route.snapshot.paramMap.get('username');
     if (!tmp) this.location.back();
-    this.user = this.userService.user(tmp as string);
+
+    this.userService.user(tmp as string).subscribe(user => {
+      this.user.set(user); 
+    })
     this.refresh();
   }
 
@@ -55,7 +58,10 @@ export class SessionViewPage implements OnInit {
   }
 
   refresh() {
-    this._sessions = this.sessionService.allOf(this.user.username);
+    const u = this.user();
+    if (!u) return this.location.back();
+    
+    this._sessions = this.sessionService.allOf(u.username);
     this._start = 0;
     this.sessions = [];
     this._addSessions();

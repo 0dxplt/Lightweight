@@ -19,5 +19,7 @@
       <ion-title size="large">vist-profile-page</ion-title>
     </ion-toolbar>
   </ion-header>
-  <app-profile-page-body [user]="this.visitedUser()"></app-profile-page-body>
+  @if (this.visitedUser() !== null && this.visitedUser() !== undefined) {
+    <app-profile-page-body [user]="this.visitedUser()"></app-profile-page-body>
+  }
 </ion-content>
