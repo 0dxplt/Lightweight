@@ -213,7 +213,78 @@ async function register(req, res) {
     }
 }
 
+async function modLogin(req, res) {
+    try {
+        const { username, email, password } = req.body;
+
+        if (!username || !email || !password || username.trim() === '' || email.trim() === '' || password.trim() === '') {
+            return res.status(400).json({
+                success: false,
+                message: "Input not valid"
+            });
+        }
+
+        if (username.length < global.min_mod_username_length || username.length > global.max_mod_username_length) {
+            return res.status(400).json({
+                success: false,
+                message: `Username should be ${global.min_mod_username_length}-${global.max_mod_username_length} characters long`
+            });
+        }
+
+        if (!email.match(emailRegex)) {
+            return res.status(400).json({
+                success: false,
+                message: "Email format is not valid, please insert a correct one"
+            });
+        }
+
+        if (password.length < global.min_mod_password_length || password.length > global.max_mod_password_length) {
+            return res.status(500).json({
+                success: false,
+                message: `Password should be ${global.min_mod_password_length}-${global.max_mod_password_length} characters long`
+            });
+        }
+
+        const moderator = await dbutils.get(`SELECT * FROM Moderatori WHERE email = ?`, [email]);
+        if (!moderator) {
+            return res.status(404).json({
+                success: false,
+                message: "Moderator account not found"
+            });
+        }
+
+        if  (!(await bcrypt.compare(password, moderator.password))) {
+            return res.status(400).json({
+                success: false,
+                message: "Incorrect Password"
+            });
+        }
+
+        const token = jwt.sign({
+            userId: moderator.id,
+            role: 'mod'
+        }, config.jwtSecret);
+
+        delete moderator.password;
+
+        res.status(200).json({
+            success: true,
+            message: "Moderator logged in!",
+            token: token,
+            moderator: moderator
+        });
+
+    } catch(err) {
+        console.log(err);
+        res.status(500).json({
+            success: false,
+            message: "Could not login in as a Moderator"
+        })
+    }
+}
+
 module.exports = {
     login,
-    register
+    register,
+    modLogin
 }
