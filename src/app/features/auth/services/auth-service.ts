@@ -111,6 +111,7 @@ export class AuthService {
         if (resUser.propic) {
           resUser.propic = `${resUser.propic}&t=${new Date().getTime()}`;
         }
+        console.log(resUser);
         this._user.set(resUser);
         localStorage.setItem('loggedUser', JSON.stringify(this._user()));
       })

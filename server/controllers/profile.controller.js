@@ -8,7 +8,6 @@ const path = require('path');
 async function update(req, res) {
     const user = req.body.user ? JSON.parse(req.body.user) : null;
     const profileId = req.body.profileId;
-    // Multer fornisce req.file
     const file = req.file;
 
     let active_transaction = false;
@@ -32,6 +31,7 @@ async function update(req, res) {
                 cognome = ?,
                 weight = ?,
                 height = ?,
+                data_nascita = ?,
                 id_nazione = ?
             WHERE id = ?`,
             [
@@ -40,7 +40,8 @@ async function update(req, res) {
                 user.name, 
                 user.surname, 
                 user.weight, 
-                user.height, 
+                user.height,
+                user.birthdate,
                 user.nationality?.id || null,
                 profileId
             ]
@@ -48,16 +49,17 @@ async function update(req, res) {
 
         if (user.pt) {
             await dbutils.run(
-                `UPDATE PersonalTrainers SET 
-                    email_professionale = ?, 
-                    id_citta = ?, 
-                    id_palestra = ? 
-                WHERE id = ?`,
+                `INSERT INTO PersonalTrainers (id, email_professionale, id_citta, id_palestra)
+                 VALUES (?, ?, ?, ?)
+                 ON CONFLICT(id) DO UPDATE SET
+                    email_professionale = excluded.email_professionale,
+                    id_citta = excluded.id_citta,
+                    id_palestra = excluded.id_palestra`,
                 [
+                    profileId, 
                     user.pt.proEmail, 
                     user.pt.city?.id, 
-                    user.pt.gym?.id, 
-                    profileId
+                    user.pt.gym?.id
                 ]
             );
         }
@@ -83,25 +85,26 @@ async function update(req, res) {
             [profileId]
         );
 
-        if (file) {
-            const ext = '.png'
-            const fileName = `${profileId}${ext}`;
-            const filePath = path.join(config.avatarDir, fileName);
-
-            await fs.writeFile(filePath, file.buffer);
-        }
-
         if (!row) {
             throw new Error("User not found after update");
+        }
+
+        if (file) {
+            const ext = '.png';
+            const fileName = `${profileId}${ext}`;
+            const filePath = path.join(config.avatarDir, fileName);
+            await fs.writeFile(filePath, file.buffer);
+            
+            await dbutils.run("UPDATE Atleti SET img = ? WHERE id = ?", [fileName, profileId]);
         }
 
         const formattedUser = {
             id: row.id,
             username: row.username,
-            name: row.nome,
-            surname: row.cognome,
+            name: row.nome ?? undefined,
+            surname: row.cognome ?? undefined,
             email: row.email,
-            birthdate: row.data_nascita,
+            birthdate: row.data_nascita ?? undefined,
             propic: "http://localhost:10000/api/imgs/users?id=" + row.id,
             weight: row.weight,
             height: row.height,

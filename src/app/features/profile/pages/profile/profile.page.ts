@@ -40,7 +40,7 @@ export class ProfilePage implements OnInit {
       }},
     ];
 
-    if (u && !u.verified && this._canBeVerified()) {
+    if (u && !u.verified ) {
       buttons.push({ text: "Verify Account", handler: () => {
         this.actionSheetController.dismiss();
         this.openVerifyModal();
@@ -165,36 +165,57 @@ export class ProfilePage implements OnInit {
     const { data, role } = await modal.onWillDismiss();
 
     if (role === 'confirm' || role === 'already-valid') {
-      
       const loading = await this.loadingController.create({
         message: 'Processing request...',
       });
       await loading.present();
 
       if (role === 'confirm' && data) {
-        this._updateUser(data.name, data.surname, data.birthdate, data.nationality);
+        this._updateUserAndVerify(data, loading);
+      } else {
+        this._sendValidationRequest(loading);
       }
-
-      setTimeout(() => {
-        this.requestService.new(this.user());
-        loading.dismiss();
-        this._showToast('Validation request sent', 'success');
-      }, 2000);
     }
   }
 
-  _updateUser(name: string | null, surname: string | null, birthdate: string | null, nationality: Nation | null) {
+  private _updateUserAndVerify(data: any, loading: HTMLIonLoadingElement) {
     const u = this.user();
     if (!u) return;
 
     const updatedUser = structuredClone(u);
-    
-    if (name) updatedUser.name = name;
-    if (surname) updatedUser.surname = surname;
-    if (nationality) updatedUser.nationality = nationality;
-    if (birthdate) updatedUser.birthdate = new Date(birthdate);
+    if (data.name) updatedUser.name = data.name;
+    if (data.surname) updatedUser.surname = data.surname;
+    if (data.nationality) updatedUser.nationality = data.nationality;
+    if (data.birthdate) updatedUser.birthdate = data.birthdate;
 
-    this.authService.update(updatedUser, null);
+    this.authService.update(updatedUser, null).subscribe({
+      next: (_) => {
+        this._sendValidationRequest(loading);
+      },
+      error: (err) => {
+        loading.dismiss();
+        this._showToast("Error updating info: " + (err.error?.message ?? 'Unknown'), 'danger');
+      }
+    });
+  }
+
+  private _sendValidationRequest(loading: HTMLIonLoadingElement) {
+    // this.requestService.new(this.user()).subscribe({
+    //   next: () => {
+    //     loading.dismiss();
+    //     this._showToast('Validation request sent successfully', 'success');
+    //   },
+    //   error: (err) => {
+    //     loading.dismiss();
+    //     this._showToast('Error sending request: ' + (err.error?.message ?? 'Unknown'), 'danger');
+    //   }
+    // });
+    setTimeout(() => {
+      // utente aggiornato in authService.update()
+      this.requestService.new(this.user());
+      loading.dismiss();
+      this._showToast('Validation request sent', 'success');
+    }, 2000)
   }
 
   async openPTModal() {
@@ -215,16 +236,11 @@ export class ProfilePage implements OnInit {
       });
       await loading.present();
 
-      // quando si avrà il backend, gestire gli errori (show Toast)
-      setTimeout(() => {
-        loading.dismiss();
-        this._showToast('You are now a Personal Trainer!', 'success');
-        this._addPTInfos(data.proemail, data.gym, data.city);
-      }, Math.random() * 2500 + 500);
+      this._updatePTInfos(data.proemail, data.gym, data.city, loading);
     }
   }
 
-  private _addPTInfos(proemail: string, gym: Gym, city: City) {
+  private _updatePTInfos(proemail: string, gym: Gym, city: City, loading: HTMLIonLoadingElement) {
     if (!this.user()) return;
     const cpy = structuredClone(this.user());
     
@@ -236,6 +252,15 @@ export class ProfilePage implements OnInit {
       city: city
     }
 
-    this.authService.update(cpy, null);
+    this.authService.update(cpy, null).subscribe({
+      next: (_) => {
+        loading.dismiss();
+        this._showToast('Infos updated correctly!', 'success');
+      },
+      error: (err) => {
+        loading.dismiss();
+        this._showToast('Errore: ' + (err.error?.message ?? 'Unknown'), 'danger');
+      }
+    });
   }
 }

@@ -121,6 +121,9 @@ export class SessionService {
     return sessions;
   }
 
+  // updateSessionVisibility
+  // updateSessionValidity
+
   updateSession(session: Session) {
     // query al DB
     console.log("Updating session: \"" + session.workout.name + "\"");
