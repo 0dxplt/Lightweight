@@ -1,4 +1,8 @@
 <div id="main-container">
+  <ion-refresher slot="fixed" [pullFactor]="0.5" [pullMin]="100" [pullMax]="200" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content refreshingSpinner="circles">
+    </ion-refresher-content>
+  </ion-refresher>
   <div id="header-cards">
     <ion-card class="profile-card">
       <div class="avatar-section">
@@ -106,6 +110,12 @@
       <ion-list lines="none">
         @for (item of sessions(); track item.id) {
           <app-session-card [session]="item" (onClick)="openSessionModal(item)"></app-session-card>
+        } @empty {
+          <div class="empty-div">
+            <p>
+              No sessions found.
+            </p>
+          </div>
         }
       </ion-list>
     </ion-card-content>

@@ -124,7 +124,7 @@ export class ViewSessionModalPage implements OnInit {
   async deleteSession() {
     const confirmAlert = await this.alertController.create({
         header: "Confirm",
-        message: "Do you really want to delete \"" + this.session.workout?.name + "\"?",
+        message: "Do you really want to delete \"" + this.session.name + "\"?",
         buttons: [
           {
             text: "No",

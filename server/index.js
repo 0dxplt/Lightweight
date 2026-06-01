@@ -32,6 +32,7 @@ const routeAvatar = require('./routes/users-img.route.js');
 const routeModeratori = require('./routes/moderatori.route.js');
 const routeWorkout = require('./routes/workout.route.js');
 const routeWorkouts = require('./routes/workouts.route.js');
+const routeSessioni = require('./routes/sessioni.route.js');
 const routeAuth = require('./routes/auth.route.js');
 
 // APIs
@@ -47,6 +48,7 @@ app.use("/api/imgs/users", routeAvatar);
 app.use("/api/moderators", authMiddleware, modMiddleware, routeModeratori);
 app.use("/api/workout", authMiddleware, routeWorkout);
 app.use("/api/workouts", authMiddleware, routeWorkouts);
+app.use("/api/sessions", authMiddleware, routeSessioni);
 app.use("/api/auth", routeAuth);
 
 app.listen(PORT, () => {
