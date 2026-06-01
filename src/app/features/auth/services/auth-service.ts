@@ -3,6 +3,7 @@ import { computed, Injectable, Signal, signal, WritableSignal } from '@angular/c
 import { Observable, tap } from 'rxjs';
 import { CurrentSession } from 'src/app/models/current-session.model';
 import { SessionExercise } from 'src/app/models/session-modal-component-info';
+import { SaveSession } from 'src/app/models/session.model';
 import { User } from 'src/app/models/user.model';
 import { Workout, WorkoutVisualization } from 'src/app/models/workout.model';
 import { GLOBAL_RANK_UP } from 'src/app/shared/global';
@@ -17,7 +18,6 @@ export class AuthService {
   private _isLoggedIn = computed(() => this._user() !== null);
 
   user = this._user.asReadonly();
-  private _fakeIdCounter = 1;
 
   private _currentSession = signal<CurrentSession | null>(null);
 
@@ -33,7 +33,7 @@ export class AuthService {
   login(email: string, password: string): Observable<any> {
     return this.http.post<any>(
       `${environment.apiUrl}/api/auth/login`,
-      {email:email, password:password}
+      { email: email, password: password }
     ).pipe(
       tap(response => {
         const resUser = response.user;
@@ -68,14 +68,14 @@ export class AuthService {
   register(username: string, email: string, password: string, weight: number, height: number): Observable<any> {
     return this.http.post<any>(
       `${environment.apiUrl}/api/auth/register`,
-      {username: username, email:email, password:password, weight: weight, height: height}
+      { username: username, email: email, password: password, weight: weight, height: height }
     );
   }
 
   changePassword(oldPass: string, newPass: string): Observable<any> {
     return this.http.post<any>(
-      `${environment.apiUrl}/api/users/change-password`,
-      {oldPass: oldPass, newPass: newPass}
+      `${environment.apiUrl}/api/profile/change-password`,
+      {oldPass: oldPass, newPass: newPass, profileId: this._user()?.id ?? -1}
     );
   }
 
@@ -93,10 +93,29 @@ export class AuthService {
     return this._user();
   }
 
-  update(user: User) {
-    // query al db
-    this._user.set(user);
-    localStorage.setItem('loggedUser', JSON.stringify(this._user()));
+  update(user: User, propic: File | null): Observable<User> {
+    const formData = new FormData();
+    
+    formData.append('user', JSON.stringify(user));
+    formData.append('profileId', (this._user()?.id ?? -1).toString());
+    
+    if (propic) {
+      formData.append('propic', propic);
+    }
+
+    return this.http.post<any>(
+      `${environment.apiUrl}/api/profile/update`,
+      formData
+    ).pipe(
+      tap(resUser => {
+        if (resUser.propic) {
+          resUser.propic = `${resUser.propic}&t=${new Date().getTime()}`;
+        }
+        console.log(resUser);
+        this._user.set(resUser);
+        localStorage.setItem('loggedUser', JSON.stringify(this._user()));
+      })
+    );
   }
 
   updateWithImage(user: User, propic: File | null) {
@@ -110,47 +129,51 @@ export class AuthService {
     localStorage.setItem('loggedUser', JSON.stringify(this._user()));
   }
 
-  follows(otherUsername: string): boolean {
-    if (otherUsername === this._user()?.username) false;
-    // fetch al DB
-    const follows: boolean = true;
-    return follows;
+  follows(other: number): Observable<boolean> {
+    return this.http.post<any>(
+      `${environment.apiUrl}/api/profile/follows`,
+      {profileId: (this.user()?.id ?? -1), otherId: other}
+    );
   }
 
-  follow(otherUsername: string, toBeFollowed: WritableSignal<User | null>) {
-    if (otherUsername === this._user()?.username) return;
-    // query al db
-
-    if (!this._user()) return;
-
-    const cpy = structuredClone(this.user()) as User;
-    cpy.following++;
-    this._user.set(cpy);
-    localStorage.setItem('loggedUser', JSON.stringify(this._user()));
-    console.log(this._user()?.username + ' has followed ' + otherUsername);
-
-    const other = toBeFollowed();
-    if (!other) return;
-    other.followers++;
-    toBeFollowed.set(other);
+  follow(otherId: number, toBeFollowed: WritableSignal<User | null>): Observable<{followed: boolean}> {
+    return this.http.get<any>(`${environment.apiUrl}/api/users/${this.user()?.id ?? -1}/follow/${otherId}`).pipe(
+      tap(data => {
+        if (data.followed) {
+          this._user.update(u => {
+            if (!u) return u;
+            u.following++;
+            return u;
+          });
+          localStorage.setItem('loggedUser', JSON.stringify(this._user()));
+          toBeFollowed.update(u => {
+            if (!u) return u;
+            u.followers++;
+            return u;
+          });
+        }
+      })
+    );
   }
 
-  unfollow(otherUsername: string, toBeUnfollowed: WritableSignal<User | null>) {
-    if (otherUsername === this._user()?.username) return;
-    // query al db
-
-    if (!this._user()) return;
-
-    const cpy = structuredClone(this.user()) as User;
-    cpy.following--;
-    this._user.set(cpy);
-    localStorage.setItem('loggedUser', JSON.stringify(this._user()));
-    console.log(this._user()?.username + ' has unfollowed ' + otherUsername);
-
-    const other = toBeUnfollowed();
-    if (!other) return;
-    other.followers--;
-    toBeUnfollowed.set(other);
+  unfollow(otherId: number, toBeUnfollowed: WritableSignal<User | null>): Observable<{unfollowed: boolean}> {
+    return this.http.get<any>(`${environment.apiUrl}/api/users/${this.user()?.id ?? -1}/unfollow/${otherId}`).pipe(
+      tap(data => {
+        if (data.unfollowed) {
+          this._user.update(u => {
+            if (!u) return u;
+            u.following--;
+            return u;
+          });
+          localStorage.setItem('loggedUser', JSON.stringify(this._user()));
+          toBeUnfollowed.update(u => {
+            if (!u) return u;
+            u.followers--;
+            return u;
+          });
+        }
+      })
+    );
   }
 
   createCurrentSession(workout: WorkoutVisualization) {
@@ -173,8 +196,17 @@ export class AuthService {
     localStorage.setItem('currentSession', JSON.stringify(this._currentSession()));
   }
 
-  finishCurrentSession() {
-    this._currentSession.set(null);
-    localStorage.removeItem('currentSession');
+  finishCurrentSession(session: SaveSession) {
+    console.log(session);
+    return this.http.post<{ message: string }>(
+      `${environment.apiUrl}/api/profile/save-session/`,
+      {session, profileId:this._user()?.id??-1}
+    ).pipe(
+      tap((res) => {
+        console.log(res.message)
+        this._currentSession.set(null);
+        localStorage.removeItem('currentSession');
+      })
+    )
   }
 }

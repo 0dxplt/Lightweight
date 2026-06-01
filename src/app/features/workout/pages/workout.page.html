@@ -102,7 +102,7 @@
       <ion-icon name="settings-outline"></ion-icon>
     </ion-fab-button>
     <ion-fab-list side="end">
-      <ion-fab-button color="secondary" id="open-add-exercise">
+      <ion-fab-button color="secondary" (click)="openAddExercise()">
         <ion-icon name="add-outline"></ion-icon>
       </ion-fab-button>
       <ion-fab-button color="secondary" (click)="saveWorkout()">
@@ -132,13 +132,13 @@
   }
   @else {
   <ion-fab slot="fixed" horizontal="center" vertical="bottom">
-    <ion-fab-button color="secondary" id="open-add-exercise">
+    <ion-fab-button color="secondary" (click)="openAddExercise()">
       <ion-icon name="add-outline"></ion-icon>
     </ion-fab-button>
   </ion-fab>
   }
-  <ion-modal #modal trigger="open-add-exercise" [initialBreakpoint]="0.5" [breakpoints]="[0, 0.25, 0.5, 0.75]"
-    (ionModalWillDismiss)="resetFilter()" (willPresent)="fetchExercises()">
+  <ion-modal #modal [initialBreakpoint]="0.5" [breakpoints]="[0, 0.25, 0.5, 0.75]" (ionModalWillDismiss)="resetFilter()" [expandToScroll]="false"
+    (willPresent)="fetchExercises()">
     <ng-template>
       <ion-content>
         <ion-searchbar #ricerca placeholder="Search" (ionInput)="handleInput($event)"
@@ -148,7 +148,7 @@
             <ion-item>
               <ion-select placeholder="Seleziona i gruppi muscolari" [multiple]="true"
                 (ionChange)="filterExercises($event)">
-                @for (muscleGroup of muscleGroups; track muscleGroup) {
+                @for (muscleGroup of muscleGroups(); track muscleGroup) {
                 <ion-select-option value="{{muscleGroup}}">{{muscleGroup}}</ion-select-option>
                 }
               </ion-select>
@@ -156,7 +156,7 @@
           </ion-list>
         </div>
         <ion-list class="exercises-list">
-          @for (exercise of nameFilteredExercises; track exercise) {
+          @for (exercise of exerciseVisualizer(); track exercise.id) {
           <ion-card class="exercise-item" id="present-alert" [button]="true" (click)="inputModal(exercise)">
             {{exercise.name}}
           </ion-card>

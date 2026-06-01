@@ -9,11 +9,12 @@ import { GLOBAL_RANK_UP, PROPIC_PATH, SEASONAL_RANK_UP, XP_LIMIT } from 'src/app
 import { SessionCardComponent } from "src/app/features/mod/components/session-card/session-card.component";
 import { Session } from 'src/app/models/session.model';
 import { SessionService } from 'src/app/shared/services/session-service';
-import { ModalController } from '@ionic/angular/standalone';
+import { ModalController, RefresherEventDetail } from '@ionic/angular/standalone';
 import { ViewSessionModalPage } from '../../pages/view-session-modal/view-session-modal.page';
 import { PtInfoModalPage } from '../../pages/pt-info-modal/pt-info-modal.page';
 import { FollowingModalPage } from '../../pages/following-modal/following-modal.page';
 import { FollowersModalPage } from '../../pages/followers-modal/followers-modal.page';
+import { IonRefresherCustomEvent } from '@ionic/core';
 
 @Component({
   selector: 'app-profile-page-body',
@@ -121,10 +122,24 @@ export class ProfilePageBodyComponent  implements OnInit {
       return;
     }
 
-    this.sessions.set(this.sessionService.allOf(user.username));
-    if (!this.sameAsProfile()) {
-      this.sessions.set(this.sessions().filter(s => s.shared));
-    }
+    this._loadData();
+  }
+
+  private _loadData(event?: any) {
+    this.sessionService.allOf(this.user()?.id ?? -1).subscribe({
+      next: sessions => {
+        this.sessions.set([...sessions]);
+        if (!this.sameAsProfile()) {
+          this.sessions.set(this.sessions().filter(s => s.shared));
+        }
+        if (event) event.target.complete();
+        this._showToast('Sessions loaded correctly', 'success', 1000);
+      },
+      error: (err) => {
+        if (event) event.target.complete();
+        this._showToast("Error: " + (err.error?.message ?? 'Unknown'), 'danger', 2000);
+      }
+    });
   }
 
   async openPTInfoModal() {
@@ -166,19 +181,33 @@ export class ProfilePageBodyComponent  implements OnInit {
       await loading.present();
 
       if (role === 'delete') {
-        setTimeout(() => {
-          loading.dismiss();
-          console.log("Deleting: " + data.workout?.name);
-          this._showToast('Session removed correctly', 'success', 500);
-          this.sessionService.removeFrom(this.user()?.username, data.id);
-          this._removeFromUI(data)
-        }, Math.random() * 2500 + 500);
+        this.sessionService.removeSession(data.id).subscribe({
+          next: (value) => {
+            if (value.removed) {
+              loading.dismiss();
+              this._removeFromUI(data);
+              this._showToast('Session removed correctly', 'success', 500);              
+            }
+          },
+          error: (err) => {
+            loading.dismiss();
+            this._showToast("Error: " + (err.error?.message ?? 'Unknown'), 'danger', 2000);
+          }
+        });
       } else if (role === 'sharing') {
-        loading.dismiss();
-        console.log("Sharing setted to: " + data.shared);
-        this._showToast('Visibility updated correctly', 'success', 500);
-        this.sessionService.updateSession(data);
-        this._updateUI(data);
+        this.sessionService.updateSessionVisibility(data.id, data.shared).subscribe({
+          next: (value) => {
+            if (value.updated) {
+              loading.dismiss();
+              this._updateUI(data);
+              this._showToast('Visibility updated correctly', 'success', 500);
+            }
+          },
+          error: (err) => {
+            loading.dismiss();
+            this._showToast("Error: " + (err.error?.message ?? 'Unknown'), 'danger', 2000);
+          }
+        });
       }
     }
   }
@@ -245,5 +274,9 @@ export class ProfilePageBodyComponent  implements OnInit {
     });
 
     await modal.present();
+  }
+
+  handleRefresh(event: IonRefresherCustomEvent<RefresherEventDetail>) {
+    this._loadData(event);
   }
 }

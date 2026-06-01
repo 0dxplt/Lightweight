@@ -12,6 +12,9 @@ import { ExerciseModalComponent } from '../components/exercise-modal/exercise-mo
 import { Router } from '@angular/router';
 import { AuthService } from '../../auth/services/auth-service';
 import { WorkoutService } from 'src/app/shared/services/workout-service';
+import { ToastController } from '@ionic/angular';
+import { ExercisesService } from 'src/app/shared/services/exercises-service';
+import { MuscolarGroupsService } from 'src/app/shared/services/muscolar-groups-service';
 
 @Component({
   selector: 'app-workout',
@@ -41,11 +44,15 @@ export class WorkoutPage implements OnInit {
 
   private workoutService = inject(WorkoutService);
 
+  private toastController = inject(ToastController);
+
+  public exercisesService = inject(ExercisesService);
+
+  public muscolarGroupsService = inject(MuscolarGroupsService);
+
   public editMode = false;
 
   public exercises: Exercise[] = [];
-
-  public muscleGroups: string[] = [];
 
   public filteredExercises: Exercise[] = [];
 
@@ -53,12 +60,38 @@ export class WorkoutPage implements OnInit {
 
   public exercisesWorkout = signal<ExerciseWorkout[]>([]);
 
+  public allExercises = signal<Exercise[]>([]);
+
+  public muscleGroups = signal<string[]>([]);
+
   public creatorId: number = 0;
+
   public creatorUsername: string = "";
 
   public creationTimestamp = 0;
 
   public hasExercise = computed(() => this.exercisesWorkout().length > 0);
+
+  public ricerca = signal<string>("");
+
+  public selectedMuscleGroups = signal<string[]>([]);
+
+  public exerciseVisualizer = computed(() => {
+    const all = this.allExercises();
+    const ricerca = this.ricerca().toLowerCase();
+    const gruppi = this.selectedMuscleGroups();
+
+    const workoutExercises = new Set(this.exercisesWorkout().map(ex => ex.exercise.id));
+    return all.filter(ex => {
+      if (workoutExercises.has(ex.id)) return false;
+
+      if (ricerca && !ex.name.toLowerCase().includes(ricerca)) return false;
+
+      if (gruppi.length > 0 && !ex.groups.some(g => gruppi.includes(g.muscolarGroup.name))) return false;
+
+      return true;
+    });
+  });
 
   constructor() { addIcons({ closeOutline, removeCircleOutline, addCircleOutline, settingsOutline, addOutline, saveOutline, checkmarkDoneOutline, pencilOutline, pieChartOutline, playOutline }); }
 
@@ -69,10 +102,10 @@ export class WorkoutPage implements OnInit {
       console.log("Creo il workout");
       const date = new Date();
       this.workoutName = 'Workout ' + date.toLocaleDateString();
+      this.creatorId = this.authService.getUser()?.id??0;
       this.exercisesWorkout.set([]);
-      this.creationTimestamp = date.getDate();
+      this.creationTimestamp = date.getTime();
     } else {
-      //TODO: fetch per ottenere tutti i dati del workout
       this.workoutService.full(this.id).subscribe(wo => {
         this.workoutName = wo.name;
         this.creationTimestamp = wo.creationTimestamp;
@@ -111,22 +144,7 @@ export class WorkoutPage implements OnInit {
   }
 
   filterExercises(event: any) {
-    const muscularGroups = event.detail.value;
-    this.filteredExercises = this.exercises.filter(ex => {
-      if (muscularGroups.length === 0) {
-        return true;
-      }
-      return ex.groups.some(tag => muscularGroups.includes(tag.muscolarGroup.name));
-    })
-    this.nameFilteredExercises = [...this.filteredExercises];
-    if (!this.searchBar) return;
-    const nodoNativo = this.searchBar.nativeElement;
-    const customIonInput = new CustomEvent('ionInput', {
-      detail: { value: nodoNativo.value },
-      bubbles: true,
-      composed: true
-    });
-    nodoNativo.dispatchEvent(customIonInput);
+    this.selectedMuscleGroups.set(event.detail.value || []);
   }
 
   editModeToggle() {
@@ -173,8 +191,8 @@ export class WorkoutPage implements OnInit {
   }
 
   resetFilter() {
-    this.filteredExercises = [...this.exercises];
-    this.nameFilteredExercises = [...this.filteredExercises];
+    this.ricerca.set('');
+    this.selectedMuscleGroups.set([]);
   }
 
   toggleExerciseDesc(exercise: ExerciseWorkout) {
@@ -186,7 +204,7 @@ export class WorkoutPage implements OnInit {
   }
 
   saveWorkout() {
-    this.workoutService.save(this.id, this.workoutName, new Date().getDate(), this.creatorId, this.exercisesWorkout().map(
+    this.workoutService.save(this.id, this.workoutName, new Date().getTime(), this.creatorId, this.exercisesWorkout().map(
       ex => ({
         serie: ex.serie,
         ripetizioni: ex.reps,
@@ -195,103 +213,44 @@ export class WorkoutPage implements OnInit {
       })
     )).subscribe({
       next: (res) => {
+        this.showToast("Workout salvato con successo!", 'success', 2000);
         console.log(res.message);
+        this.router.navigate(["/workouts"]);
       },
       error: (err) => {
         console.log(err.message);
       }
     });
-    this.router.navigate(["/workouts"]);
+  }
+
+  async showToast(message: string, color: string, duration: number) {
+    const toast = await this.toastController.create({
+      message: message,
+      color: color,
+      duration: duration
+    });
+
+    await toast.present();
   }
 
   fetchExercises() {
-    // TODO: fetch al db per ottenere tutti gli esercizi
-    const fetchedExercises = [
-      {
-        id: 35435345,
-        name: "Panca Piana Manubri",
-        desc: "Pigghia na panca, un bilanciere, ti stinnigghi na panca e aisi u bilanciere.",
-        imgpath: "https://static.strengthlevel.com/images/exercises/dumbbell-bench-press/dumbbell-bench-press-800.jpg",
-        difficulty: 4,
-        groups: [
-          {
-            muscolarGroup: { id: 1, name: "Petto" },
-            perc: 55
-          },
-          {
-            muscolarGroup: { id: 2, name: "Tricipiti" },
-            perc: 20
-          },
-          {
-            muscolarGroup: { id: 3, name: "Spalle" },
-            perc: 10
-          },
-          {
-            muscolarGroup: { id: 4, name: "Bicipiti" },
-            perc: 15
-          }
-        ]
+    this.exercisesService.full().subscribe({
+      next: (exercises) => {
+        this.allExercises.set(exercises);
       },
-      {
-        id: 35435345,
-        name: "Panca Piana Bialnciere",
-        desc: "Pigghia na panca, un bilanciere, ti stinnigghi na panca e aisi u bilanciere.",
-        imgpath: "",
-        difficulty: 4,
-        groups: [
-          {
-            muscolarGroup: { id: 1, name: "Petto" },
-            perc: 55
-          },
-          {
-            muscolarGroup: { id: 2, name: "Tricipiti" },
-            perc: 20
-          },
-          {
-            muscolarGroup: { id: 3, name: "Spalle" },
-            perc: 10
-          },
-          {
-            muscolarGroup: { id: 4, name: "Bicipiti" },
-            perc: 15
-          }
-        ]
-      },
-      {
-        id: 35435345,
-        name: "Pressa 45",
-        desc: "Pigghia na panca, un bilanciere, ti stinnigghi na panca e aisi u bilanciere.",
-        imgpath: "",
-        difficulty: 4,
-        groups: [
-          {
-            muscolarGroup: { id: 5, name: "Femorali" },
-            perc: 65
-          },
-          {
-            muscolarGroup: { id: 6, name: "Quadricipiti" },
-            perc: 35
-          }
-        ]
+      error: (err) => {
+        console.log(err.message);
       }
-    ];
+    });
 
-    const exercisesWorkoutSet = new Set(this.exercisesWorkout().map(ex => ex.exercise.name));
-
-    this.exercises = fetchedExercises.filter(ex => !exercisesWorkoutSet.has(ex.name));
-
-    this.filteredExercises = [...this.exercises];
-    this.nameFilteredExercises = [...this.filteredExercises];
-
-    // TODO: fetch per ottenere tutti i gruppi muscolari
-    this.muscleGroups = [
-      "Petto",
-      "Spalle",
-      "Tricipiti",
-      "Quadricipiti",
-      "Femorali",
-      "Bicipiti"
-    ];
+    this.muscolarGroupsService.all().subscribe({
+      next: (data) => {
+        this.muscleGroups.set(data);
+      },
+      error: (err) => {
+        console.log(err.message);
+      }
+    });
   }
 
   createCurrentSession() {
@@ -337,8 +296,10 @@ export class WorkoutPage implements OnInit {
   }
 
   handleInput(event: any) {
-    const target = event.target as HTMLIonSearchbarElement;
-    const query = target.value?.toLowerCase() || '';
-    this.nameFilteredExercises = this.filteredExercises.filter((d) => d.name.toLowerCase().includes(query));
+    this.ricerca.set(event.target.value || '');
+  }
+
+  openAddExercise() {
+    this.exercisesModal.present();
   }
 }

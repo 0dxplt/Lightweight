@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS Esercizi (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    nome TEXT NOT NULL,
+    nome TEXT NOT NULL UNIQUE,
     descrizione TEXT NOT NULL,
     img TEXT,
     difficolta INTEGER NOT NULL
@@ -69,7 +69,7 @@ CREATE TABLE IF NOT EXISTS Atleti (
 CREATE TABLE IF NOT EXISTS PersonalTrainers (
     id INTEGER PRIMARY KEY,
     email_professionale TEXT NOT NULL,
-    id_citta INTEGER NOT NULL, -- Corretto nome colonna
+    id_citta INTEGER NOT NULL,
     id_palestra INTEGER NOT NULL,
     FOREIGN KEY (id) REFERENCES Atleti(id) ON DELETE CASCADE,
     FOREIGN KEY (id_citta) REFERENCES Citta(id) ON DELETE SET NULL,
@@ -129,9 +129,12 @@ CREATE TABLE IF NOT EXISTS Workout (
 
 CREATE TABLE IF NOT EXISTS Sessioni (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
+    id_creatore INTEGER NOT NULL,
     nome TEXT NOT NULL,
     data_svolgimento INTEGER NOT NULL,
-    pubblica BOOLEAN DEFAULT 1 NOT NULL
+    xp INTEGER NOT NULL,
+    pubblica BOOLEAN DEFAULT 1 NOT NULL,
+    FOREIGN KEY(id_creatore) REFERENCES Atleti(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS WorkoutEsercizi (

@@ -26,10 +26,13 @@ const routePalestre = require('./routes/palestre.route.js');
 const routeCitta = require('./routes/citta.route.js');
 const routeGruppiMuscolari = require('./routes/gruppi-muscolari.route.js');
 const routeUsers = require('./routes/users.route.js');
+const routeProfile = require('./routes/profile.route.js');
+const routeRankings = require('./routes/rankings.route.js');
 const routeAvatar = require('./routes/users-img.route.js');
 const routeModeratori = require('./routes/moderatori.route.js');
 const routeWorkout = require('./routes/workout.route.js');
 const routeWorkouts = require('./routes/workouts.route.js');
+const routeSessioni = require('./routes/sessioni.route.js');
 const routeAuth = require('./routes/auth.route.js');
 
 // APIs
@@ -39,10 +42,13 @@ app.use("/api/gyms", authMiddleware, routePalestre);
 app.use("/api/cities", authMiddleware, routeCitta);
 app.use("/api/muscolar-groups", authMiddleware, routeGruppiMuscolari);
 app.use("/api/users", authMiddleware, routeUsers);
+app.use("/api/profile", authMiddleware, routeProfile);
+app.use("/api/rankings", authMiddleware, routeRankings);
 app.use("/api/imgs/users", routeAvatar);
 app.use("/api/moderators", authMiddleware, modMiddleware, routeModeratori);
-app.use("/api/workout", routeWorkout);
-app.use("/api/workouts", routeWorkouts);
+app.use("/api/workout", authMiddleware, routeWorkout);
+app.use("/api/workouts", authMiddleware, routeWorkouts);
+app.use("/api/sessions", authMiddleware, routeSessioni);
 app.use("/api/auth", routeAuth);
 
 app.listen(PORT, () => {

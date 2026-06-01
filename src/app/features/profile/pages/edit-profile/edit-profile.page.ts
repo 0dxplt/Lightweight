@@ -29,6 +29,7 @@ export class EditProfilePage implements OnInit {
   imagePreview = signal<string | null>(null);
 
   user = this.authService.user;
+  
   userForm: FormGroup = new FormGroup({
     username: new FormControl(this.user()?.username, [Validators.required, Validators.minLength(MIN_USERNAME_LENGTH), Validators.maxLength(MAX_USERNAME_LENGTH)]),
     name: new FormControl(this.user()?.name, [Validators.minLength(MIN_NAME_LENGTH), Validators.maxLength(MAX_NAME_LENGTH), Validators.pattern(NAME_REGEX)]),
@@ -88,30 +89,15 @@ export class EditProfilePage implements OnInit {
     }
 
     this.nationService.all().subscribe(nations => {
-      nations.forEach(n => {
-        this.nations.update(value => {
-          value.push(n);
-          return value;
-        })
-      });
+      this.nations.set([...nations]);
     });
 
     this.cityService.all().subscribe(cities => {
-      cities.forEach(c => {
-        this.cities.update(value => {
-          value.push(c);
-          return value;
-        });
-      });
+      this.cities.set([...cities]);
     });
 
     this.gymService.all().subscribe(gyms => {
-      gyms.forEach(g => {
-        this.gyms.update(value => {
-          value.push(g);
-          return value;
-        });
-      });
+      this.gyms.set([...gyms]);
     });
   }
 
@@ -135,11 +121,6 @@ export class EditProfilePage implements OnInit {
       obj1.name === obj2.name &&
       obj1.address === obj2.address
     ) : obj1 === obj2;
-  }
-
-  retrievePropic() {
-    // url(backend) + user.propic
-    return PROPIC_PATH;
   }
 
   private _canConfirmChanges(): boolean {
@@ -198,17 +179,25 @@ export class EditProfilePage implements OnInit {
     });
     await loading.present();
 
-    setTimeout(() => {
-      loading.dismiss();
-      this._showToast('Profile updated!', 'success', 250);
-      setTimeout(() => {
-        const updatedUser: User = this._prepareUserObject(this.userForm.value);
-        this.authService.updateWithImage(updatedUser, this.selectedFile);
+    const updatedUser: User = this._prepareUserObject(this.userForm.value);
+    this.authService.update(updatedUser, this.selectedFile).subscribe({
+      next: (_) => {
+        loading.dismiss();
+    
         this.selectedFile = null;
+        this.imagePreview.set(null); 
+        
         this.userForm.markAsPristine();
+        this._showToast('Profile updated!', 'success', 1000);
+        
         this.router.navigate(["profile"]);
-      }, 250);
-    }, Math.random() * 2500 + 500);
+      },
+      error: (err) => {
+        loading.dismiss();
+        console.log(err);
+        this._showToast('Error: ' + (err.error?.message ?? 'Unknown'), 'danger', 2000);
+      }
+    });
   }
 
   private async _showToast(message: string, color: string, duration: number) {

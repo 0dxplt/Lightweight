@@ -11,7 +11,7 @@ import { RankUser } from 'src/app/models/rank-user.model';
 })
 export class RankingEntryComponent  implements OnInit {
 
-  readonly DEFAULT_AVATAR_ICON: string = '../../../assets/icon/favicon.png';
+  readonly DEFAULT_AVATAR_ICON: string = 'assets/icon/favicon.png';
   rankUser = input.required<RankUser>();
   displayAvatar = signal<string>('');
 
@@ -24,7 +24,7 @@ export class RankingEntryComponent  implements OnInit {
   ngOnInit() {}
 
   onClick(_: Event) {
-    this.router.navigate(["/tabs/profile/" + this.rankUser()?.username]);
+    this.router.navigate([`/tabs/profile/${this.rankUser().username}`]);
   }
 
   handleImageError() {

@@ -46,19 +46,31 @@ async function saveWorkout(req, res) {
     try {
         const { id, nome, data, creatore, exercises } = req.body;
         await dbutils.run('BEGIN TRANSACTION');
-        if (id) {
+        let workoutId = id;
+        if (workoutId) {
             await dbutils.run(
-                "DELETE FROM Workout WHERE ID = ?", [id]
+                "UPDATE Workout SET nome = ?, data_creazione = ?, id_creatore = ? WHERE id = ?",
+                [nome, data, creatore, workoutId]
             );
+
+            await dbutils.run(
+                "DELETE FROM WorkoutEsercizi WHERE id_workout = ?",
+                [workoutId]
+            );
+        } else {
+            await dbutils.run(
+                "INSERT INTO Workout (nome, data_creazione, id_creatore) VALUES (?, ?, ?)",
+                [nome, data, creatore]
+            );
+
+            const result = await dbutils.all("SELECT last_insert_rowid() AS lastId");
+            workoutId = result[0].lastId;
         }
-        await dbutils.run(
-            "INSERT INTO Workout (nome, data_creazione, id_creatore) VALUES (?, ?, ?)",
-            [nome, data, creatore]
-        );
+
         for (const exercise of exercises) {
             await dbutils.run(
                 "INSERT INTO WorkoutEsercizi (serie, ripetizioni, recupero, id_workout, id_esercizio) VALUES (?, ?, ?, ?, ?)",
-                [exercise.serie, exercise.ripetizioni, exercise.recupero, id, exercise.id]
+                [exercise.serie, exercise.ripetizioni, exercise.recupero, workoutId, exercise.id]
             );
         }
 
@@ -67,7 +79,7 @@ async function saveWorkout(req, res) {
             success: true,
             message: "Saved Workout!"
         });
-        
+
     } catch (error) {
         await dbutils.run('ROLLBACK');
         res.status(500).json({

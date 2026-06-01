@@ -1,19 +1,19 @@
-import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
+import { Component, computed, effect, ElementRef, inject, OnInit, signal, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonIcon, IonButtons, IonInput, IonBackButton, IonCard, IonImg, IonChip, IonButton, IonSearchbar, IonFabButton, IonFab, IonFabList, IonModal, IonList, IonItem, IonSelect, IonSelectOption } from '@ionic/angular/standalone';
-import { SessionModalComponent } from 'src/app/shared/components/session-modal/session-modal.component';
 import { Serie, SessionExercise } from 'src/app/models/session-modal-component-info';
 import { BetterMsViewerPipe } from "../../../../shared/pipes/better-ms-viewer-pipe";
 import { Exercise } from 'src/app/models/exercise.model';
 import { ModalController } from '@ionic/angular/standalone';
-import { ExerciseModalComponent } from 'src/app/features/workout/components/exercise-modal/exercise-modal.component';
 import { SessionExerciseModalComponent } from '../../components/session-exercise-modal/session-exercise-modal.component';
 import { addIcons } from 'ionicons';
 import { addCircleOutline, addOutline, checkmarkDoneOutline, closeOutline, pencilOutline, pieChartOutline, removeCircleOutline, settingsOutline } from 'ionicons/icons';
-import { Workout, WorkoutVisualization } from 'src/app/models/workout.model';
+import { WorkoutVisualization } from 'src/app/models/workout.model';
 import { AuthService } from 'src/app/features/auth/services/auth-service';
 import { Router } from '@angular/router';
+import { MuscolarGroupsService } from 'src/app/shared/services/muscolar-groups-service';
+import { SaveSession } from 'src/app/models/session.model';
 
 @Component({
   selector: 'app-current-session',
@@ -23,139 +23,150 @@ import { Router } from '@angular/router';
   imports: [IonItem, IonList, IonModal, IonFabList, IonFab, IonFabButton, IonSearchbar, IonButton, IonChip, IonImg, IonCard, IonBackButton, IonInput, IonButtons, IonIcon, IonContent, IonHeader, IonToolbar, CommonModule, FormsModule, BetterMsViewerPipe, IonSelect, IonSelectOption]
 })
 export class CurrentSessionPage implements OnInit {
-  
+
   public modalCtrl = inject(ModalController);
-  
+
   private authService = inject(AuthService);
-  
+
   private router = inject(Router);
-  
-  @ViewChild('ricerca', { read: ElementRef, static: false }) searchBar!: ElementRef;
 
-  public workout!: WorkoutVisualization;
+  private muscleGroupService = inject(MuscolarGroupsService);
 
-  public sessionExercises: SessionExercise[] = [];
+  public workout = signal<WorkoutVisualization | null>(null);
 
-  public sessionName = "Sessione";
+  public sessionExercises = signal<SessionExercise[]>([]);
 
-  public workoutExercises: Exercise[] = [];
+  public sessionName = signal<string>("");
 
-  public filteredExercises = [...this.workoutExercises];
+  public editMode = signal<boolean>(false);
 
-  public nameFilteredExercises = [...this.filteredExercises];
+  public ricerca = signal<string>('');
 
-  public muscleGroups:string[] = [];
+  public selectedMuscleGroups = signal<string[]>([]);
 
-  public editMode = false;
+  public muscleGroups = signal<string[]>([]);
+
+  public xp: number = 0;
+
+  public workoutExercises = computed(() => {
+    const wo = this.workout();
+    if (!wo) return [];
+    return wo.exercises.map(ex => ex.exercise);
+  });
+
+  public exercisesVisualizer = computed(() => {
+    const exercises = this.workoutExercises();
+    const ricerca = this.ricerca().toLowerCase();
+    const groups = this.selectedMuscleGroups();
+
+    const sessionExercises = new Set(this.sessionExercises().map(ex => ex.nome));
+
+    return exercises.filter(ex => {
+      if (sessionExercises.has(ex.name)) return false;
+
+      if (ricerca && !ex.name.toLowerCase().includes(ricerca)) return false;
+
+      if (groups.length > 0 && !ex.groups.some(g => groups.includes(g.muscolarGroup.name))) return false;
+
+      return true;
+    })
+  })
 
   @ViewChild('modal') exercisesModal!: IonModal;
 
   constructor() {
     addIcons({ settingsOutline, addOutline, pieChartOutline, pencilOutline, closeOutline, removeCircleOutline, addCircleOutline, checkmarkDoneOutline });
+
+    effect(() => {
+      const wo = this.workout();
+      if (wo) {
+        this.authService.updateCurrentSession(
+          this.sessionName(),
+          wo,
+          this.sessionExercises()
+        );
+      }
+    });
   }
 
   ngOnInit() {
     const currentSessionString = localStorage.getItem("currentSession");
     if (currentSessionString) {
       const currentSession = JSON.parse(currentSessionString);
-      this.sessionName = currentSession.nome;
-      this.workout = currentSession.workout;
-      this.sessionExercises = currentSession.exercises;
-      this.workoutExercises = this.workout.exercises.map(ex => ex.exercise);
-      const sessionExercisesSet = new Set(this.sessionExercises.map(ex => ex.nome));
-      this.workoutExercises = this.workoutExercises.filter(ex => !sessionExercisesSet.has(ex.name));
-      this.filteredExercises = [...this.workoutExercises];
-      this.nameFilteredExercises = [...this.filteredExercises];
-      this.muscleGroups = [
-        "Petto",
-        "Spalle",
-        "Tricipiti",
-        "Quadricipiti",
-        "Femorali",
-        "Bicipiti"
-      ];
+      this.sessionName.set(currentSession.nome);
+      this.workout.set(currentSession.workout);
+      this.sessionExercises.set(currentSession.exercises);
+      this.muscleGroupService.all().subscribe({
+        next: (data) => {
+          this.muscleGroups.set(data);
+        },
+        error: (err) => {
+          console.log(err.message);
+        }
+      });
     }
   }
 
   updateSessionName(event: any) {
-    this.sessionName = event.target.value;
-    this.onDidEdit();
+    this.sessionName.set(event.target.value);
   }
 
   removeExercise(exercise: SessionExercise) {
-    this.sessionExercises = this.sessionExercises.filter(ex => ex !== exercise);
-    this.workoutExercises.push(this.adaptExercise(exercise));
-    this.filteredExercises = [...this.workoutExercises];
-    this.nameFilteredExercises = [...this.filteredExercises];
-    this.onDidEdit();
-  }
-
-  modificaValore(serie: any, attr: string, value: number) {
-    serie[attr] += value;
-    if (serie[attr] < 1) {
-      serie[attr] = 1;
-    }
-    this.onDidEdit();
-  }
-
-  onDidEdit() {
-    this.authService.updateCurrentSession(
-      this.sessionName,
-      this.workout,
-      this.sessionExercises
+    this.sessionExercises.update(exercises =>
+      exercises.filter(ex => ex !== exercise)
     );
   }
 
+  modificaValore(serie: any, attr: string, value: number) {
+    this.sessionExercises.update(esercizi => {
+      serie[attr] += value;
+      if (serie[attr] < 1) serie[attr] = 1;
+      return [...esercizi];
+    });
+  }
+
   saveSession() {
-    console.log("Sessione Salvata");
-    this.authService.finishCurrentSession();
-    this.router.navigate(["/workouts"]);
+    const session: SaveSession = {
+      nome: this.sessionName(),
+      dataSvolgimento: new Date().getTime(),
+      xp: this.calcolaXP(),
+      exercises: this.sessionExercises().flatMap(ex => {
+        const exercise = this.workoutExercises().find(excs => excs.name === ex.nome);
+        return ex.serie.map(s => ({
+          exerciseId: exercise!.id,
+          reps: s.reps,
+          weight: s.peso,
+          recovery: s.recuperoMs,
+          valid: true
+        }));
+      })
+    };
+    this.authService.finishCurrentSession(session).subscribe({
+      next: () => {
+        this.router.navigate(["/workouts"]);
+      },
+      error: (err) => {
+        console.error("Errore nel salvataggio della sessione: ", err);
+      }
+    });
   }
 
   resetFilter() {
-    this.filteredExercises = [...this.workoutExercises];
-    this.nameFilteredExercises = [...this.filteredExercises];
+    this.ricerca.set('');
+    this.selectedMuscleGroups.set([]);
   }
 
   filterExercises(event: any) {
-    const muscularGroups = event.detail.value;
-    this.filteredExercises = this.workoutExercises.filter(ex => {
-      if (muscularGroups.length === 0) {
-        return true;
-      }
-      return ex.groups.some(tag => muscularGroups.includes(tag.muscolarGroup.name))
-    });
-    this.nameFilteredExercises = [...this.filteredExercises];
-    if (!this.searchBar) return;
-    const nodoNativo = this.searchBar.nativeElement;
-    const customIonInput = new CustomEvent('ionInput', {
-      detail: { value: nodoNativo.value },
-      bubbles: true,
-      composed: true
-    });
-    nodoNativo.dispatchEvent(customIonInput);
+    this.selectedMuscleGroups.set(event.detail.value || []);
   }
 
   addExercise(exercise: Exercise, peso: number, ripetizioni: number, recuperoMs: number) {
-    this.sessionExercises.push({
+    this.sessionExercises.update(esercizi => [...esercizi, {
       exercisePhotoUrl: (exercise.imgpath) ? exercise.imgpath : "",
       nome: exercise.name,
-      serie: [
-        {
-          peso: peso,
-          reps: ripetizioni,
-          recuperoMs: recuperoMs
-        }
-      ],
-      tags: exercise.groups.map(g => ({
-        nome: g.muscolarGroup.name,
-        perc: g.perc
-      }))
-    });
-    this.workoutExercises = this.workoutExercises.filter(ex => ex !== exercise);
-    this.filteredExercises = [...this.workoutExercises];
-    this.nameFilteredExercises = [...this.filteredExercises];
-    this.onDidEdit();
+      serie: [{ peso: peso, reps: ripetizioni, recuperoMs: recuperoMs }],
+      tags: exercise.groups.map(g => ({ nome: g.muscolarGroup.name, perc: g.perc }))
+    }]);
   }
 
   async inputModal(exercise: Exercise) {
@@ -164,8 +175,8 @@ export class CurrentSessionPage implements OnInit {
       component: SessionExerciseModalComponent,
       componentProps: {
         exercise: exercise,
-        reps: this.workout.exercises.filter(ex => ex.exercise.name === exercise.name)[0].reps,
-        recupero:  this.workout.exercises.filter(ex => ex.exercise.name === exercise.name)[0].recuperoMs
+        reps: this.workout()?.exercises.filter(ex => ex.exercise.name === exercise.name)[0].reps || 10,
+        recupero: this.workout()?.exercises.filter(ex => ex.exercise.name === exercise.name)[0].recuperoMs || 180000
       },
     });
 
@@ -179,22 +190,11 @@ export class CurrentSessionPage implements OnInit {
   }
 
   adaptExercise(exercise: SessionExercise): Exercise {
-    // TODO: fetch al db tramite exercise.nome
-    return {
-      id: 0,
-      name: exercise.nome,
-      desc: "Pigghi a panca",
-      imgpath: exercise.exercisePhotoUrl,
-      difficulty: 4,
-      groups: [
-        {
-          muscolarGroup: {
-            id: 1,
-            name: "Petto"
-          },
-          perc: 100
-        }
-      ]
+    const fullExercise = this.workoutExercises().find(ex => ex.name === exercise.nome);
+    if (fullExercise) {
+      return fullExercise;
+    } else {
+      throw new Error("Esercizio non trovato. Errore di Sistema!!");
     }
   }
 
@@ -203,7 +203,9 @@ export class CurrentSessionPage implements OnInit {
     const modal = await this.modalCtrl.create({
       component: SessionExerciseModalComponent,
       componentProps: {
-        exercise: this.adaptExercise(exercise)
+        exercise: this.adaptExercise(exercise),
+        reps: exercise.serie[0].reps,
+        recupero: exercise.serie[0].recuperoMs
       },
     });
 
@@ -212,31 +214,48 @@ export class CurrentSessionPage implements OnInit {
     const { data, role } = await modal.onWillDismiss();
 
     if (role === 'confirm') {
-      exercise.serie.push({
-        peso: data["peso"],
-        reps: data["ripetizioni"],
-        recuperoMs: data["recuperoMs"]
-      })
+      this.sessionExercises.update(esercizi => {
+        const target = esercizi.find(e => e === exercise);
+        if (target) {
+          target.serie.push({ peso: data["peso"], reps: data["ripetizioni"], recuperoMs: data["recuperoMs"] });
+        }
+        return [...esercizi];
+      });
     }
-    this.onDidEdit();
   }
 
   removeSerie(serie: Serie, sessionExercise: SessionExercise) {
-    sessionExercise.serie = sessionExercise.serie.filter(s => s !== serie);
-    if (sessionExercise.serie.length < 1) {
-      this.removeExercise(sessionExercise);
-    } else {
-      this.onDidEdit();
-    }
+    this.sessionExercises.update(esercizi => {
+      const target = esercizi.find(e => e === sessionExercise);
+      if (target) {
+        target.serie = target.serie.filter(s => s !== serie);
+        if (target.serie.length < 1) {
+          return esercizi.filter(e => e !== sessionExercise);
+        }
+      }
+      return [...esercizi];
+    });
   }
 
   handleInput(event: any) {
-    const target = event.target as HTMLIonSearchbarElement;
-    const query = target.value?.toLowerCase() || '';
-    this.nameFilteredExercises = this.filteredExercises.filter((d) => d.name.toLowerCase().includes(query));
+    this.ricerca.set(event.target.value || '');
   }
 
   editModeToggle() {
-    return this.editMode = !this.editMode;
+    this.editMode.update(v => !v);
+  }
+
+  calcolaXP():number {
+    let sum = 0;
+    for (const exercise of this.sessionExercises()) {
+      const nSerie = exercise.serie.length;
+      for (const serie of exercise.serie) {
+        const pesoUser = this.authService.getUser()!.weight;
+        const altezzaUser = this.authService.getUser()!.height;
+        const difficolta = (3 - this.workoutExercises().filter(ex => ex.name === exercise.nome)[0].difficulty)/2;
+        sum += (serie.reps * serie.peso) * Math.sqrt(nSerie) * Math.log(1 + (pesoUser/serie.peso)) * (1 + (0.5 * (1 - difficolta))) * (1 / ((pesoUser**0.7) * (altezzaUser**0.31)));
+      }
+    }
+    return sum;
   }
 }
