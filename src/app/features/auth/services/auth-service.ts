@@ -79,6 +79,18 @@ export class AuthService {
     );
   }
 
+  refreshProfile(): Observable<User> {
+    const username = this.user()?.username as string;
+    return this.http.get<User>(`${environment.apiUrl}/api/users/${username}`).pipe(
+      tap(user => {
+        const propic = !!user.propic ? `${environment.apiUrl}/api/imgs/users?id=${user.id}` : undefined;
+        user.propic = propic;
+        this._user.set(user);
+        localStorage.setItem('loggedUser', JSON.stringify(user));
+      })
+    );
+  }
+  
   logout() {
     this._user.set(null);
     this._currentSession.set(null);

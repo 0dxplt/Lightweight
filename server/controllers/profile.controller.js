@@ -411,6 +411,56 @@ async function isAreadyReported(req, res) {
     }
 }
 
+async function requestPending(id) {
+    try {
+        const row = await dbutils.get(
+            "SELECT id FROM Richieste WHERE id_richiedente = ? AND id_moderatore IS NULL",
+            [id]
+        );
+        return !!row;
+    } catch(err) {
+        console.error("Database error in requestPresent:", err);
+        throw err;
+    }
+}
+
+async function newRequest(req, res) {
+    let active_transaction = false;
+    try {
+        const profileId = req.user.userId;
+        
+        const pending = await requestPending(profileId);
+        if (pending) {
+            return res.status(200).json({
+                requested: false,
+                message: "A request already exists"
+            });
+        }
+
+        await dbutils.run("BEGIN TRANSACTION");
+        active_transaction = true;
+
+        await dbutils.run(
+            "INSERT INTO Richieste (id_richiedente, timestamp_creazione) VALUES (?, ?)",
+            [profileId, Date.now()]
+        );
+
+        await dbutils.run("COMMIT");
+        active_transaction = false;
+
+        res.status(201).json({requested: true});
+
+    } catch(err) {
+        console.log(err);
+        if (active_transaction)
+            await dbutils.run("ROLLBACK");
+        res.status(500).json({
+            success: false,
+            message: "Could not create a new request"
+        })
+    }
+}
+
 module.exports = {
     update,
     changePassword,
@@ -419,5 +469,6 @@ module.exports = {
     removeSession,
     updateSessionVisibility,
     reportUser,
-    isAreadyReported
+    isAreadyReported,
+    newRequest
 }

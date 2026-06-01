@@ -9,7 +9,7 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <app-profile-page-body [user]="this.user()"></app-profile-page-body>
+  <app-profile-page-body [user]="this.user()" (onRefresh)="this.refreshProfile()"></app-profile-page-body>
   <ion-action-sheet
     trigger="settings-button"
     [buttons]="this.actionSheetButtons()"

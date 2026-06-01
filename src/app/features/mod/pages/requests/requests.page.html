@@ -22,8 +22,8 @@
   </ion-refresher>
 
   <ion-list>
-    @for (item of this.requests; track $index) {
-      <app-request-sliding-item [request]="item" (onApprove)="this.refresh()" (onReject)="this.refresh()" (onReview)="openModal(item)"></app-request-sliding-item>
+    @for (item of this.requests(); track $index) {
+      <app-request-sliding-item [request]="item" (onApprove)="approveRequest(item)" (onReject)="rejectRequest(item)" (onReview)="openModal(item)"></app-request-sliding-item>
     }
   </ion-list>
   <ion-infinite-scroll (ionInfinite)="onIonInfinite($event)" threshold="50px" [disabled]="disabled">

@@ -186,4 +186,16 @@ export class VistProfilePagePage implements OnInit {
     await toast.present();
   }
 
+  refreshUser() {
+    const u = this.visitedUser();
+    if (!u) return;
+    this.userService.user(u.username).subscribe({
+      next: (user) => {
+        this.visitedUser.set(user);
+      },
+      error: (err) => {
+        this._showToast("Error: " + (err.error?.message ?? 'Unknown'), 'danger', 2000);
+      }
+    })
+  }
 }

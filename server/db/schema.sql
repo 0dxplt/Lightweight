@@ -111,9 +111,9 @@ CREATE TABLE IF NOT EXISTS Segnalazioni (
 CREATE TABLE IF NOT EXISTS Richieste (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     id_richiedente INTEGER NOT NULL,
-    timestamp_creazione INTEGER NOT NULL DEFAULT (strftime('%s','now')), -- Parentesi aggiunte
+    timestamp_creazione INTEGER NOT NULL DEFAULT (strftime('%s','now')),
     id_moderatore INTEGER DEFAULT NULL,
-    status TEXT DEFAULT NULL CHECK(status IN ("OK", "REJ")),
+    status TEXT DEFAULT NULL CHECK(status IN ("APPROVED", "REJECTED")),
     timestamp_risoluzione INTEGER DEFAULT NULL,
     FOREIGN KEY(id_richiedente) REFERENCES Atleti(id) ON DELETE CASCADE,
     FOREIGN KEY(id_moderatore) REFERENCES Moderatori(id) ON DELETE CASCADE

@@ -20,6 +20,6 @@
     </ion-toolbar>
   </ion-header>
   @if (this.visitedUser() !== null && this.visitedUser() !== undefined) {
-    <app-profile-page-body [user]="this.visitedUser()"></app-profile-page-body>
+    <app-profile-page-body [user]="this.visitedUser()" (onRefresh)="this.refreshUser()"></app-profile-page-body>
   }
 </ion-content>

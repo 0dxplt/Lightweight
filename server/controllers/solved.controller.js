@@ -78,95 +78,98 @@ async function retrieveUser(id) {
     }
 }
 
-async function getAllFullReports(req, res) {
+async function counter(req, res) {
     try {
-        const rows = await dbutils.all("SELECT * FROM Segnalazioni WHERE id_moderatore IS NULL");
-        if (!rows) {
-            throw new Error("Error retrieving reports");
-        }
+        const reports = await dbutils.all("SELECT * FROM Segnalazioni WHERE id_moderatore IS NOT NULL");
+        const requests = await dbutils.all("SELECT * FROM Richieste WHERE id_moderatore IS NOT NULL");
 
-        const reports = [];
-
-        for (let report of rows) {
-            const reporter = await retrieveUser(report.id_segnalante);
-            const reportee = await retrieveUser(report.id_segnalato);
-
-            reports.push({
-                id: report.id,
-                reporter: reporter,
-                reportee: reportee,
-                timestamp: report.timestamp_creazione,
-                reason: report.motivazione
-            });
-        }
-
-        res.status(200).json(reports);
-
+        res.status(200).json(reports.length + requests.length);
     } catch(err) {
-        console.log(err);
         res.status(500).json({
             success: false,
-            message: "Error retrieving reports"
+            message: "Could not retrieve solveds' count"
         });
     }
 }
 
-async function confirmReport(req, res) {
+async function getFullSolvedReports(req, res) {
     try {
-        const { idReport, idModerator, outcome } = req.body;
-        if (!idReport || !idModerator || !outcome || isNaN(idReport) || isNaN(idModerator) || outcome.trim() === '') {
-            return res.status(400).json({
-                success: false,
-                message: "Invalid input data"
-            });
+        const all = await dbutils.all(
+            "SELECT\
+                Segnalazioni.*,\
+                Moderatori.username AS 'username_moderatore', Moderatori.email AS 'email_moderatore'\
+            FROM Segnalazioni\
+            JOIN Moderatori ON Moderatori.id = Segnalazioni.id_moderatore\
+            WHERE id_moderatore IS NOT NULL"
+        );
+        const solvedReports = [];
+        for (let row of all) {
+            const reporter = await retrieveUser(row.id_segnalante);
+            const reportee = await retrieveUser(row.id_segnalato);
+            const report = {
+                id: row.id,
+                moderator: {
+                    id: row.id_moderatore,
+                    username: row.username_moderatore,
+                    email: row.email_moderatore
+                },
+                report: {
+                    id: row.id,
+                    reporter: reporter,
+                    reportee: reportee,
+                    timestamp: row.timestamp_creazione,
+                    reason: row.motivazione
+                },
+                timestamp: row.timestamp_risoluzione,
+                outcome: row.esito
+            };
+            solvedReports.push(report);
         }
 
-        let active_transactions = false;
-
-        await dbutils.run("BEGIN TRANSACTION");
-        active_transactions = true;
-
-        await dbutils.run(
-            "UPDATE Segnalazioni SET id_moderatore = ?, timestamp_risoluzione = ?, esito = ? WHERE id = ?",
-            [
-                idModerator,
-                Date.now(),
-                outcome,
-                idReport
-            ]
-        );
-
-        await dbutils.run("COMMIT");
-        active_transactions = false;
-
-        res.status(201).json({confirmed: true});
-    } catch (err) {
-        if (active_transactions)
-            await dbutils.run("ROLLBACK");
-        res.status(500).json({
-            success: false,
-            message: "Could not confirm report"
-        })
-    }
-}
-
-async function counter(req, res) {
-    try {
-        const rows = await dbutils.all("SELECT * FROM Segnalazioni WHERE id_moderatore IS NULL");
-        if (!rows)
-            throw new Error("Could not retrieve the number of reports");
-
-        res.status(200).json(rows.length);
+        res.status(200).json(solvedReports);
     } catch(err) {
         res.status(500).json({
             success: false,
-            message: "Could not retrieve the number of reports"
-        })
-    } 
+            message: "Could not retrieve solved reports"
+        });
+    }
+}
+
+async function getFullSolvedRequests(req, res) {
+    try {
+        const all = await dbutils.all("SELECT Richieste.*, Moderatori.username AS 'username_moderatore', Moderatori.email AS 'email_moderatore' FROM Richieste JOIN Moderatori ON Moderatori.id = Richieste.id_moderatore WHERE id_moderatore IS NOT NULL");
+        const solvedRequests = [];
+        for (let row of all) {
+            const user = await retrieveUser(row.id_richiedente);
+            let request = {
+                id: row.id,
+                request: {
+                    id: row.id,
+                    timestamp: row.timestamp_creazione,
+                    user: user
+                },
+                moderator: {
+                    id: row.id_moderatore,
+                    username: row.username_moderatore,
+                    email: row.email_moderatore
+                },
+                status: row.status,
+                timestamp: row.timestamp_risoluzione
+            };
+            solvedRequests.push(request);
+        }
+
+        res.status(200).json(solvedRequests);
+    } catch(err) {
+        res.status(500).json({
+            success: false,
+            message: "Could not retrieve solved requests"
+        });
+    }
 }
 
 module.exports = {
-    getAllFullReports,
-    confirmReport,
-    counter
+    counter,
+    getFullSolvedReports,
+    getFullSolvedRequests
 }

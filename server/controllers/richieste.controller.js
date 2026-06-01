@@ -78,95 +78,124 @@ async function retrieveUser(id) {
     }
 }
 
-async function getAllFullReports(req, res) {
+async function getAllFullRequests(req, res) {
     try {
-        const rows = await dbutils.all("SELECT * FROM Segnalazioni WHERE id_moderatore IS NULL");
+        const rows = await dbutils.all("SELECT * FROM Richieste WHERE id_moderatore IS NULL");
         if (!rows) {
             throw new Error("Error retrieving reports");
         }
 
-        const reports = [];
-
-        for (let report of rows) {
-            const reporter = await retrieveUser(report.id_segnalante);
-            const reportee = await retrieveUser(report.id_segnalato);
-
-            reports.push({
-                id: report.id,
-                reporter: reporter,
-                reportee: reportee,
-                timestamp: report.timestamp_creazione,
-                reason: report.motivazione
+        const requests = [];
+        for (let request of rows) {
+            const requester = await retrieveUser(request.id_richiedente);
+            requests.push({
+                id: request.id,
+                timestamp: request.timestamp_creazione,
+                user: requester
             });
         }
 
-        res.status(200).json(reports);
-
-    } catch(err) {
-        console.log(err);
+        res.status(200).json(requests);
+    } catch (err) {
         res.status(500).json({
             success: false,
-            message: "Error retrieving reports"
+            message: "Error retrieving requests"
         });
     }
 }
 
-async function confirmReport(req, res) {
+async function approveRequest(req, res) {
     try {
-        const { idReport, idModerator, outcome } = req.body;
-        if (!idReport || !idModerator || !outcome || isNaN(idReport) || isNaN(idModerator) || outcome.trim() === '') {
+        const { request, moderatorId } = req.body;
+        if (!request || !moderatorId || isNaN(moderatorId)) {
             return res.status(400).json({
                 success: false,
                 message: "Invalid input data"
             });
         }
 
-        let active_transactions = false;
+        let active_transaction = false;
 
         await dbutils.run("BEGIN TRANSACTION");
-        active_transactions = true;
+        active_transaction = true;
 
         await dbutils.run(
-            "UPDATE Segnalazioni SET id_moderatore = ?, timestamp_risoluzione = ?, esito = ? WHERE id = ?",
-            [
-                idModerator,
-                Date.now(),
-                outcome,
-                idReport
-            ]
+            "UPDATE Richieste SET id_moderatore = ?, status = ?, timestamp_risoluzione = ? WHERE id = ?",
+            [moderatorId, 'APPROVED', Date.now(), request.id]
         );
 
         await dbutils.run("COMMIT");
-        active_transactions = false;
+        active_transaction = false;
 
-        res.status(201).json({confirmed: true});
+        res.status(201).json({rejected: true});
     } catch (err) {
-        if (active_transactions)
+        if (active_transaction)
             await dbutils.run("ROLLBACK");
         res.status(500).json({
             success: false,
-            message: "Could not confirm report"
-        })
+            message: "Error approving request"
+        });
+    }
+}
+
+async function rejectRequest(req, res) {
+    try {
+        const { request, moderatorId } = req.body;
+        if (!request || !moderatorId || isNaN(moderatorId)) {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid input data"
+            });
+        }
+
+        let active_transaction = false;
+
+        await dbutils.run("BEGIN TRANSACTION");
+        active_transaction = true;
+
+        await dbutils.run(
+            "UPDATE Richieste SET id_moderatore = ?, status = ?, timestamp_risoluzione = ? WHERE id = ?",
+            [moderatorId, 'REJECTED', Date.now(), request.id]
+        );
+
+        const requester = request.user.id;
+        await dbutils.run(
+            "UPDATE Atleti SET verificato = ? WHERE id = ?",
+            [1, requester]
+        );
+
+        await dbutils.run("COMMIT");
+        active_transaction = false;
+
+        res.status(201).json({approved: true});
+    } catch (err) {
+        if (active_transaction)
+            await dbutils.run("ROLLBACK");
+        res.status(500).json({
+            success: false,
+            message: "Error approving request"
+        });
     }
 }
 
 async function counter(req, res) {
     try {
-        const rows = await dbutils.all("SELECT * FROM Segnalazioni WHERE id_moderatore IS NULL");
+        const rows = await dbutils.all("SELECT * FROM Richieste WHERE id_moderatore IS NULL");
         if (!rows)
-            throw new Error("Could not retrieve the number of reports");
+            throw new Error("Could not retrieve the number of requests");
 
         res.status(200).json(rows.length);
     } catch(err) {
         res.status(500).json({
             success: false,
-            message: "Could not retrieve the number of reports"
+            message: "Could not retrieve the number of requests"
         })
     } 
 }
 
 module.exports = {
-    getAllFullReports,
-    confirmReport,
+    getAllFullRequests,
+    approveRequest,
+    rejectRequest,
     counter
 }

@@ -15,6 +15,10 @@ export class ReportService {
     return this.http.get<Report[]>(`${environment.apiUrl}/api/reports/full`);
   }
 
+  numberOfReports(): Observable<number> {
+    return this.http.get<number>(`${environment.apiUrl}/api/reports/count`);
+  }
+
   confirmReport(id_report: number, id_moderator: number | undefined, outcome: string): Observable<{confirmed: boolean}> {
     return this.http.post<any>(
       `${environment.apiUrl}/api/reports/confirm-report`,
