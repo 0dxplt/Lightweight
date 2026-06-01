@@ -22,5 +22,8 @@ router.post('/change-password', canAccessProfile, controller.changePassword);
 router.post('/save-session', canAccessProfile, controller.saveSession);
 router.post('/remove-session', canAccessProfile, controller.removeSession);
 router.post('/update-session-visibility', canAccessProfile, controller.updateSessionVisibility);
+router.post('/report-user', controller.reportUser);
+router.post('/already-reported', controller.isAreadyReported);
+router.post('/new-verify-request', controller.newRequest);
 
 module.exports = router;

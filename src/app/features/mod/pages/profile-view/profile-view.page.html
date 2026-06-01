@@ -10,7 +10,7 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  
+
   <!-- Header: Avatar e nomi -->
   <div class="ion-text-center ion-margin-bottom">
     <ion-avatar style="width: 100px; height: 100px; margin: 0 auto;">
@@ -21,14 +21,16 @@
   </div>
 
   <!-- Moderator Action: Toggle Verificato -->
-  <ion-list-header>
-    <ion-label color="tertiary">Actions</ion-label>
-  </ion-list-header>
-  <ion-item>
-    <ion-icon slot="start" name="checkmark-circle" color="primary"></ion-icon>
-    <ion-label>Verified Account</ion-label>
-    <ion-toggle [checked]="user()?.verified" (ionChange)="onToggleVerified($event)"></ion-toggle>
-  </ion-item>
+  @if(canEditVerified()) {
+    <ion-list-header>
+      <ion-label color="tertiary">Actions</ion-label>
+    </ion-list-header>
+    <ion-item>
+      <ion-icon slot="start" name="checkmark-circle" color="primary"></ion-icon>
+      <ion-label>Verified Account</ion-label>
+      <ion-toggle [checked]="user()?.verified" (ionChange)="onToggleVerified($event)"></ion-toggle>
+    </ion-item>
+  }
 
   <!-- Info Personali -->
   <ion-list-header>
@@ -39,7 +41,7 @@
   </ion-item>
   <ion-item>
     <ion-label>Nationality: <strong>{{ user()?.nationality?.name }}</strong></ion-label>
-    <ion-text slot="end">{{ user()?.nationality?.flag }}</ion-text>
+    <img [src]="user()?.nationality?.flag" [alt]="user()?.nationality?.name" class="flag-icon" />
   </ion-item>
   <ion-item>
     <ion-label>Stats: <strong>{{ user()?.weight }}kg / {{ user()?.height }}cm</strong></ion-label>
@@ -53,7 +55,8 @@
     <ion-label>Levels: S-{{ user()?.sLevel }} / G-{{ user()?.gLevel }}</ion-label>
   </ion-item>
   <ion-item>
-    <ion-label>S-XP Points: <strong>{{ user()?.sxp }}</strong> / G-XP Points: <strong>{{ user()?.gxp }}</strong></ion-label>
+    <ion-label>S-XP Points: <strong>{{ user()?.sxp }}</strong> / G-XP Points: <strong>{{ user()?.gxp
+        }}</strong></ion-label>
   </ion-item>
   <ion-item>
     <ion-label>Followers: <strong>{{ user()?.followers }}</strong></ion-label>

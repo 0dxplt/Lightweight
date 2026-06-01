@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RefresherEventDetail } from '@ionic/angular/standalone';
@@ -9,7 +9,7 @@ import { ReportService } from '../../services/report-service';
 import { IonInfiniteScrollCustomEvent, IonRefresherCustomEvent } from '@ionic/core';
 import { ReportSlidingItemComponent } from "../../components/report-sliding-item/report-sliding-item.component";
 import { ExtendedReportModalPage } from '../extended-report-modal/extended-report-modal.page';
-import { AlertController, IonicModule, ModalController } from '@ionic/angular';
+import { AlertController, IonicModule, ModalController, ToastController } from '@ionic/angular';
 import { ModAuthService } from '../../services/mod-auth-service';
 
 @Component({
@@ -21,12 +21,12 @@ import { ModAuthService } from '../../services/mod-auth-service';
 })
 export class ReportsPage implements OnInit {
 
-  private _reports: Report[] = [];
+  private _reports = signal<Report[]>([]);
   private _start = 0;
   private _limit = 25;
   private _isLoading: boolean = false;
 
-  reports: Report[] = [];
+  reports = signal<Report[]>([]);
   disabled: boolean = false;
   isAlertOpen: boolean = false;
 
@@ -35,25 +35,47 @@ export class ReportsPage implements OnInit {
     private reportService: ReportService,
     private location: Location,
     private modalController: ModalController,
-    private alertController: AlertController) {}
-
-  ngOnInit() {
+    private alertController: AlertController,
+    private toastController: ToastController
+  ) {
     addIcons({'arrow-back':arrowBack});
-    this.refresh();
   }
 
-  refresh() {
-    this._reports = this.reportService.reports();
-    this.reports = [];
-    this._start = 0;
-    this._addReports();
+  ngOnInit() {
+    this._loadData();
+  }
+
+  _loadData(event?: any) {
+    this.reportService.reports().subscribe({
+      next: (reports) => {
+        this._reports.set([...reports]);
+        this.reports.set([]);
+        this._start = 0;
+        this.disabled = false;
+        this._addReports();
+        if (event) event.target.complete();
+        this._showToast('Reports loaded correctly', 'success', 500);
+      },
+      error: (err) => {
+        this._showToast("Error: " + (err.error?.message ?? 'Unkown'), 'danger', 2000);
+        if (event) event.target.complete();
+      }
+    })
   }
 
   private _addReports() {
-    const length = this._reports.length;
-    for (let i = 0; i < this._limit && this.reports.length < length; i++) {
-      this.reports.push(this._reports[this._start++]);
+    const all = this._reports();
+    const currentVisible = this.reports();
+    
+    if (currentVisible.length >= all.length) {
+      this.disabled = true;
+      return;
     }
+
+    const nextBatch = all.slice(this._start, this._start + this._limit);
+    
+    this.reports.update(prev => [...prev, ...nextBatch]);
+    this._start += this._limit;
   }
 
   goBack() {
@@ -76,10 +98,7 @@ export class ReportsPage implements OnInit {
   }
 
   handleRefresh(event: IonRefresherCustomEvent<RefresherEventDetail>) {
-    setTimeout(() => {
-      this.refresh();
-      event.target.complete();
-    }, 2000);
+    this._loadData(event);
   }
 
   async openModal(report: Report) {
@@ -100,8 +119,17 @@ export class ReportsPage implements OnInit {
   }
 
   private _confirmReport(report: Report, outcome: string) {
-    this.reportService.confirmReport(report.id, this.modAuthService.getModerator()?.id, outcome);
-    this.refresh();
+    this.reportService.confirmReport(report.id, this.modAuthService.getModerator()?.id, outcome).subscribe({
+      next: (value) => {
+        if (value.confirmed) {
+          this._showToast("Report #" + report.id + " solved correctly", 'success', 1000);
+          this._loadData();
+        }
+      },
+      error: (err) => {
+        this._showToast("Error: " + (err.error?.message ?? 'Unknown'), 'danger', 2000);
+      }
+    })
   }
 
   async requestOutcome(report: Report) {
@@ -144,4 +172,12 @@ export class ReportsPage implements OnInit {
     await alert.present();
   }
 
+  private async _showToast(message: string, color: string, duration: number) {
+    const toast = await this.toastController.create({
+      message: message,
+      color: color,
+      duration: duration
+    });
+    await toast.present();
+  }
 }

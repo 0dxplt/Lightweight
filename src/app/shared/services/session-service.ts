@@ -22,7 +22,7 @@ export class SessionService {
 
   updateSessionValidity(sessionId: number, sessionCreator: number, exercises: SessionExercise[]): Observable<{updated: boolean}> {
     return this.http.post<any>(
-      `${environment.apiUrl}/api/mod/update-session-validity`,
+      `${environment.apiUrl}/api/moderators/update-session-validity`,
       {sessionId:sessionId, sessionCreator:sessionCreator, exercises:exercises}
     );
   }

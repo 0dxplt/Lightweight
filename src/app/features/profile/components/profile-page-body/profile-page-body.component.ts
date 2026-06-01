@@ -1,4 +1,4 @@
-import { Component, computed, input, model, OnInit, signal } from '@angular/core';
+import { Component, computed, input, model, OnInit, output, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { IonicModule, LoadingController, ToastController } from '@ionic/angular';
 import { addIcons } from 'ionicons';
@@ -34,11 +34,6 @@ export class ProfilePageBodyComponent  implements OnInit {
     const user = this.user();
     if (!user) return false;
     return user.pt !== null && user.pt !== undefined;
-  });
-  hasPropic = computed(() => {
-    const user = this.user();
-    if (!user) return false;
-    return user.propic !== null && user.propic !== undefined && user.propic !== PROPIC_PATH;
   });
   hasName = computed(() => {
     const user = this.user();
@@ -99,6 +94,7 @@ export class ProfilePageBodyComponent  implements OnInit {
   });
 
   sessions = signal<Session[]>([]);
+  onRefresh = output<void>();
 
   constructor(
     private router: Router,
@@ -278,5 +274,6 @@ export class ProfilePageBodyComponent  implements OnInit {
 
   handleRefresh(event: IonRefresherCustomEvent<RefresherEventDetail>) {
     this._loadData(event);
+    this.onRefresh.emit();
   }
 }

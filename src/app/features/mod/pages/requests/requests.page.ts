@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonInfiniteScrollCustomEvent, IonRefresherCustomEvent, RefresherEventDetail } from '@ionic/core';
@@ -9,6 +9,9 @@ import { RequestService } from '../../services/request-service';
 import { RequestSlidingItemComponent } from '../../components/request-sliding-item/request-sliding-item.component';
 import { IonicModule, ModalController } from '@ionic/angular';
 import { ExtendedRequestModalPage } from '../extended-request-modal/extended-request-modal.page';
+import { ToastController } from '@ionic/angular/standalone';
+import { UserService } from 'src/app/shared/services/user-service';
+import { ModAuthService } from '../../services/mod-auth-service';
 
 @Component({
   selector: 'app-requests',
@@ -19,45 +22,73 @@ import { ExtendedRequestModalPage } from '../extended-request-modal/extended-req
 })
 export class RequestsPage implements OnInit {
 
-  private _requests: ValidationRequest[] = [];
+  private _requests = signal<ValidationRequest[]>([]);
   private _start = 0;
   private _limit = 25;
   private _isLoading = false;
   
-  requests: ValidationRequest[] = [];
+  requests = signal<ValidationRequest[]>([]);
   disabled: boolean = false;
 
-
   constructor(
+    private modAuthService: ModAuthService,
     private requestService: RequestService,
+    private userService: UserService,
     private location: Location,
-    private modalController: ModalController
-  ) {}
-
-  refresh() {
-    this._requests = this.requestService.requests();
-    this.requests = [];
-    this._start = 0;
-    this._addRequests();
-  }
-
-  private _addRequests(){
-    const length = this._requests.length;
-    for (let i = 0; i < this._limit && this.requests.length < length; i++) {
-      this.requests.push(this._requests[this._start++]);
-    }
+    private modalController: ModalController,
+    private toastController: ToastController
+  ) {
+    addIcons({'arrow-back':arrowBack});
   }
 
   ngOnInit() {
-    addIcons({'arrow-back':arrowBack});
-    this.refresh();
+    this._loadData();
+  }
+
+  _loadData(event?: any) {
+    this.requestService.requests().subscribe({
+      next: (requests) => {
+        this._requests.set([...requests]);
+        this.requests.set([]);
+        this._start = 0;
+        this.disabled = false;
+        this._addRequests();
+        if (event) event.target.complete();
+        this._showToast('Requests loaded correctly', 'success', 500);
+      },
+      error: (err) => {
+        if (event) event.target.complete();
+        this._showToast("Error: " + (err.error?.message ?? 'Unknown'), 'danger', 2000);
+      }
+    });
+  }
+
+  private async _showToast(message: string, color: string, duration: number) {
+    const toast = await this.toastController.create({
+      message: message,
+      color: color,
+      duration: duration
+    });
+    await toast.present();
+  }
+
+  private _addRequests(){
+    const all = this._requests();
+    const currentVisible = this.requests();
+
+    if (currentVisible.length >= all.length) {
+      this.disabled = true;
+      return;
+    }
+
+    const nextBatch = all.slice(this._start, this._start + this._limit);
+    
+    this.requests.update(prev => [...prev, ...nextBatch]);
+    this._start += this._limit;
   }
 
   handleRefresh(event: IonRefresherCustomEvent<RefresherEventDetail>) {
-    setTimeout(() => {
-      this.refresh();
-      event.target.complete();
-    }, 2000);
+    this._loadData(event);
   }
 
   onIonInfinite(event: IonInfiniteScrollCustomEvent<void>) {
@@ -97,12 +128,30 @@ export class RequestsPage implements OnInit {
   }
 
   approveRequest(request: ValidationRequest) {
-    this.requestService.approve(request);
-    this.refresh();
+    this.requestService.approve(this.modAuthService.moderator()?.id ?? -1, request).subscribe({
+      next: (value) => {
+        if (value.approved) {
+          this._showToast("Request approved!", 'success', 1000);
+        }
+        this._loadData();
+      },
+      error: (err) => {
+        this._showToast("Error: " + (err.error?.message ?? 'Unknown'), 'danger', 2000);
+      }
+    });
   }
 
   rejectRequest(request: ValidationRequest) {
-    this.requestService.reject(request);
-    this.refresh();
+    this.requestService.reject(this.modAuthService.moderator()?.id ?? -1,request).subscribe({
+      next: (value) => {
+        if (value.rejected) {
+          this._showToast("Request Rejected!", 'success', 1000);
+        }
+        this._loadData();
+      },
+      error: (err) => {
+        this._showToast("Error: " + (err.error?.message ?? 'Unknown'), 'danger', 2000);
+      }
+    });
   }
 }

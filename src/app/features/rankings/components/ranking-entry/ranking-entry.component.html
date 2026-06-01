@@ -7,7 +7,7 @@
 
   <!-- 2. AVATAR (Subito dopo il rango) -->
   <ion-avatar slot="start" class="profile-pic">
-    <img [src]="displayAvatar()" (error)="handleImageError()">
+    <img [src]="rankUser().avatar || '/assets/icon/favicon.png'">
   </ion-avatar>
 
   <!-- 3. INFO UTENTE (Username + Badge) -->

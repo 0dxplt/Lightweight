@@ -29,7 +29,7 @@ export class SessionViewPage implements OnInit {
   private _isLoading = false;
 
   user = signal<User | null>(null);
-  sessions!: Session[];
+  sessions = signal<Session[]>([]);
   disabled = false;
 
   constructor(
@@ -48,26 +48,33 @@ export class SessionViewPage implements OnInit {
 
     this.userService.user(tmp as string).subscribe(user => {
       this.user.set(user); 
-      this.refresh();
+      this._loadSessions();
     })
   }
 
-  private _addSessions() {
-    const length = this._sessions.length;
-    for (let i = 0; i < this._limit && this.sessions.length < length; i++)
-      this.sessions.push(this._sessions()[this._start++]);
-  }
-
-  refresh() {
-    const u = this.user();
-    if (!u) return this.location.back();
-    
-    this.sessionService.allOf(u.id).subscribe(sessions => {
+  private _loadSessions(event?: any) {
+    this.sessionService.allOf(this.user()?.id ?? -1).subscribe(sessions => {
       this._sessions.set([...sessions]);
       this._start = 0;
-      this.sessions = [];
+      this.sessions.set([]);
       this._addSessions();
+      if (event) event.target.complete();
     });
+  }
+
+  private _addSessions() {
+    const all = this._sessions();
+    const currentVisible = this.sessions();
+    
+    if (currentVisible.length >= all.length) {
+      this.disabled = true;
+      return;
+    }
+
+    const nextBatch = all.slice(this._start, this._start + this._limit);
+    
+    this.sessions.update(prev => [...prev, ...nextBatch]);
+    this._start += this._limit;
   }
 
   onIonInfinite(event: IonInfiniteScrollCustomEvent<void>) {
@@ -89,10 +96,7 @@ export class SessionViewPage implements OnInit {
   }
 
   handleRefresh(event: IonRefresherCustomEvent<RefresherEventDetail>) {
-    setTimeout(() => {
-      this.refresh();
-      event.target.complete();
-    }, 2000);
+    this._loadSessions(event);
   }
 
   goBack() {
@@ -116,12 +120,16 @@ export class SessionViewPage implements OnInit {
       this.sessionService.updateSessionValidity(data.id, this.user()?.id ?? -1, data.exercises).subscribe({
         next: (value) => {
           if (value.updated) {
-            var index = this.sessions.findIndex(s => s.id === data.id);
+            console.log("VALIDITY OK");
+            var index = this.sessions().findIndex(s => s.id === data.id);
             if (index !== -1) {
-              this.sessions[index] = data;
+              this.sessions.update(value => {
+                value[index] = data;
+                return value;
+              });
             }
 
-            var index = this.sessions.findIndex(s => s.id === data.id);
+            var index = this.sessions().findIndex(s => s.id === data.id);
             if (index !== -1) {
               this._sessions.update(value => {
                 value[index] = data;

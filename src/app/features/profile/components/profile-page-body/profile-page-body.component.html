@@ -7,7 +7,7 @@
     <ion-card class="profile-card">
       <div class="avatar-section">
         <ion-avatar>
-          <img [src]="hasPropic() ? user()?.propic : 'assets/icon/favicon.png'" alt="propic">
+          <img [src]="user()?.propic || '/assets/icon/favicon.png'" alt="propic">
         </ion-avatar>
       </div>
 

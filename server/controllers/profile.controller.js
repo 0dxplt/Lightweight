@@ -260,12 +260,9 @@ async function saveSession(req, res) {
             "INSERT INTO Sessioni (id_creatore, nome, data_svolgimento, xp) VALUES (?, ?, ?, ?)",
             [profileId, session.nome, session.dataSvolgimento, session.xp]
         );
-        console.log("Pippo");
         
         const result = await dbutils.all("SELECT last_insert_rowid() AS lastId");
         sessionId = result[0].lastId;
-
-        console.log(sessionId);
 
         for (serie of session.exercises) {
             await dbutils.run(
@@ -348,11 +345,130 @@ async function updateSessionVisibility(req, res) {
     }
 }
 
+async function alreadyReported(reporter, reportee) {
+    try {
+        const row = await dbutils.get(
+            "SELECT id FROM Segnalazioni WHERE id_segnalante = ? AND id_segnalato = ? AND id_moderatore IS NULL",
+            [reporter, reportee]
+        );
+        return !!row;
+    } catch(err) {
+        console.error("Database error in alreadyReported:", err);
+        throw err;
+    }
+}
+
+async function reportUser(req, res) {
+    let active_transaction = false;
+    try {
+        const { reportee, reason } = req.body;
+        const profileId = req.user.userId;
+
+        if (!reportee || !reason || isNaN(reportee) || reason.trim() === '') {
+            return res.status(400).json({ success: false, message: "Invalid input data" });
+        }
+
+        const already = await alreadyReported(profileId, reportee);
+        if (already) {
+            return res.status(200).json({ reported: false, message: "User already reported" });
+        }
+
+        await dbutils.run("BEGIN TRANSACTION");
+        active_transaction = true;
+
+        await dbutils.run(
+            "INSERT INTO Segnalazioni (id_segnalante, id_segnalato, timestamp_creazione, motivazione) VALUES (?, ?, ?, ?)",
+            [profileId, reportee, Date.now(), reason]
+        );
+
+        await dbutils.run("COMMIT");
+        active_transaction = false;
+
+        return res.status(201).json({ reported: true });
+
+    } catch (err) {
+        if (active_transaction) await dbutils.run("ROLLBACK");
+        console.error("Error in reportUser:", err);
+        return res.status(500).json({ success: false, message: "Could not report user" });
+    }
+}
+
+async function isAreadyReported(req, res) {
+    try {
+        const {reportee} = req.body;
+        
+        if (!reportee || isNaN(reportee)) {
+            return res.status(400).json({ success: false, message: "Invalid reportee id" });
+        }
+
+        const profileId = req.user.userId;
+        const reported = await alreadyReported(profileId, reportee);
+        
+        return res.status(200).json(reported);
+    } catch(err) {
+        console.error("Error in isAreadyReported:", err);
+        return res.status(500).json({ success: false, message: "Could not retrieve report info" });
+    }
+}
+
+async function requestPending(id) {
+    try {
+        const row = await dbutils.get(
+            "SELECT id FROM Richieste WHERE id_richiedente = ? AND id_moderatore IS NULL",
+            [id]
+        );
+        return !!row;
+    } catch(err) {
+        console.error("Database error in requestPresent:", err);
+        throw err;
+    }
+}
+
+async function newRequest(req, res) {
+    let active_transaction = false;
+    try {
+        const profileId = req.user.userId;
+        
+        const pending = await requestPending(profileId);
+        if (pending) {
+            return res.status(200).json({
+                requested: false,
+                message: "A request already exists"
+            });
+        }
+
+        await dbutils.run("BEGIN TRANSACTION");
+        active_transaction = true;
+
+        await dbutils.run(
+            "INSERT INTO Richieste (id_richiedente, timestamp_creazione) VALUES (?, ?)",
+            [profileId, Date.now()]
+        );
+
+        await dbutils.run("COMMIT");
+        active_transaction = false;
+
+        res.status(201).json({requested: true});
+
+    } catch(err) {
+        console.log(err);
+        if (active_transaction)
+            await dbutils.run("ROLLBACK");
+        res.status(500).json({
+            success: false,
+            message: "Could not create a new request"
+        })
+    }
+}
+
 module.exports = {
     update,
     changePassword,
     follows,
     saveSession,
     removeSession,
-    updateSessionVisibility
+    updateSessionVisibility,
+    reportUser,
+    isAreadyReported,
+    newRequest
 }
