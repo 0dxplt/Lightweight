@@ -37,8 +37,8 @@ async function updateSessionValidity(req, res) {
 
         for (let exercise of exercises) {
             await dbutils.run(
-                "UPDATE SessioniEsercizi SET valida = ? WHERE id_sessione = ?",
-                [exercise.valid ? 1 : 0, sessionId]
+                "UPDATE SessioniEsercizi SET valida = ? WHERE id = ? AND id_sessione = ?",
+                [exercise.valid ? 1 : 0, exercise.id, sessionId]
             );
         }
 

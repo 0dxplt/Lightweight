@@ -65,7 +65,14 @@ export class VistProfilePagePage implements OnInit {
             console.log("Errore: " + (err.error?.message ?? 'Unknown'));
           }
         })
-        this.reported.set(this.reportService.exists(this.authService.user()?.id, user.id));
+        this.reportService.exists(user.id).subscribe({
+          next: (value) => {
+            this.reported.set(value);
+          },
+          error: (err) => {
+            console.log("Errore: " + (err.error?.message ?? 'Unknown'));
+          }
+        })
       },
       error: (err) => {
         console.error('Errore caricamento utente', err);
@@ -151,14 +158,19 @@ export class VistProfilePagePage implements OnInit {
       });
       await loading.present();
 
-      // da sostituire con Observable/Promise quando avremo il backend
-      setTimeout(() => {
-        loading.dismiss();
-        this.reportService.report(reporter.id, reportee.id, reason);
-        this._showToast('Report sent successfully', 'success', 2000);
-        this.reported.set(true);
-      }, 500);
-      
+      this.reportService.report(reportee.id, reason).subscribe({
+        next: (value) => {
+          loading.dismiss();
+          if (value.reported) {
+            this._showToast('Report sent successfully', 'success', 2000);
+            this.reported.set(true);
+          }
+        },
+        error: (err) => {
+          this._showToast("Error: " + (err.error?.message ?? 'Unkown'), 'danger', 2000);
+          loading.dismiss();
+        }
+      });
     } else if (role === 'confirm' && !data?.values?.reason) {
       this._showToast('You must provide a reason', 'danger', 2000);
     }

@@ -21,8 +21,10 @@
   </ion-refresher>
 
   <ion-list>
-    @for (item of this.sessions; track $index) {
+    @for (item of this.sessions(); track $index) {
       <app-session-card [session]="item" (onClick)="openSessionModal($event)"></app-session-card>
+    } @empty {
+      <p>No session found.</p>
     }
   </ion-list>
   <ion-infinite-scroll (ionInfinite)="onIonInfinite($event)" [disabled]="disabled">
