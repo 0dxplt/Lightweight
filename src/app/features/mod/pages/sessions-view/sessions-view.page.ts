@@ -8,7 +8,7 @@ import { UserService } from 'src/app/shared/services/user-service';
 import { Session } from 'src/app/models/session.model';
 import { SessionService } from 'src/app/shared/services/session-service';
 import { IonInfiniteScrollCustomEvent, IonRefresherCustomEvent, RefresherEventDetail } from '@ionic/core';
-import { IonicModule } from '@ionic/angular';
+import { IonicModule, ToastController } from '@ionic/angular';
 import { addIcons } from 'ionicons';
 import { arrowBack } from 'ionicons/icons';
 import { ModalController } from '@ionic/angular/standalone';
@@ -23,7 +23,7 @@ import { SessionViewModalPage } from '../session-view-modal/session-view-modal.p
 })
 export class SessionViewPage implements OnInit {
 
-  private _sessions!: Session[];
+  private _sessions = signal<Session[]>([]);
   private _start = 0;
   private _limit = 10;
   private _isLoading = false;
@@ -37,7 +37,8 @@ export class SessionViewPage implements OnInit {
     private location: Location,
     private userService: UserService,
     private sessionService: SessionService,
-    private modalController: ModalController
+    private modalController: ModalController,
+    private toastController: ToastController
   ) {}
 
   ngOnInit() {
@@ -54,17 +55,19 @@ export class SessionViewPage implements OnInit {
   private _addSessions() {
     const length = this._sessions.length;
     for (let i = 0; i < this._limit && this.sessions.length < length; i++)
-      this.sessions.push(this._sessions[this._start++]);
+      this.sessions.push(this._sessions()[this._start++]);
   }
 
   refresh() {
     const u = this.user();
     if (!u) return this.location.back();
     
-    this._sessions = this.sessionService.allOf(u.username);
-    this._start = 0;
-    this.sessions = [];
-    this._addSessions();
+    this.sessionService.allOf(u.id).subscribe(sessions => {
+      this._sessions.set([...sessions]);
+      this._start = 0;
+      this.sessions = [];
+      this._addSessions();
+    });
   }
 
   onIonInfinite(event: IonInfiniteScrollCustomEvent<void>) {
@@ -110,17 +113,37 @@ export class SessionViewPage implements OnInit {
     const { data, role } = await modal.onWillDismiss();
 
     if (role === 'confirm' && data) {
-      this.sessionService.updateSession(data);
+      this.sessionService.updateSessionValidity(data.id, this.user()?.id ?? -1, data.exercises).subscribe({
+        next: (value) => {
+          if (value.updated) {
+            var index = this.sessions.findIndex(s => s.id === data.id);
+            if (index !== -1) {
+              this.sessions[index] = data;
+            }
 
-      var index = this.sessions.findIndex(s => s.id === data.id);
-      if (index !== -1) {
-        this.sessions[index] = data;
-      }
-
-      var index = this.sessions.findIndex(s => s.id === data.id);
-      if (index !== -1) {
-        this._sessions[index] = data;
-      }
+            var index = this.sessions.findIndex(s => s.id === data.id);
+            if (index !== -1) {
+              this._sessions.update(value => {
+                value[index] = data;
+                return value;
+              })
+            }
+            this._showToast('Session updated correctly', 'success', 1000);
+          }
+        },
+        error: (err) => {
+          this._showToast("Error: " + (err.error?.message ?? 'Unknown'), 'danger', 2000);
+        }
+      });
     }
+  }
+
+  private async _showToast(message: string, color: string, duration: number) {
+    const toast = await this.toastController.create({
+      message: message,
+      color: color,
+      duration: duration
+    });
+    await toast.present();
   }
 }

@@ -5,7 +5,7 @@ import { Workout } from "./workout.model";
 export type Session = {
     id: number;
     user: User;
-    workout: Workout;
+    name: string;
     timestamp: number;
     shared: boolean;
     xp?: number

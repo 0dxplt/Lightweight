@@ -20,5 +20,7 @@ router.post('/update', upload.single('propic'), canAccessProfile, controller.upd
 router.post('/follows', canAccessProfile, controller.follows);
 router.post('/change-password', canAccessProfile, controller.changePassword);
 router.post('/save-session', canAccessProfile, controller.saveSession);
+router.post('/remove-session', canAccessProfile, controller.removeSession);
+router.post('/update-session-visibility', canAccessProfile, controller.updateSessionVisibility);
 
 module.exports = router;

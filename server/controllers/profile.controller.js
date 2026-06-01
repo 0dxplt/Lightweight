@@ -288,9 +288,71 @@ async function saveSession(req, res) {
     }
 }
 
+async function removeSession(req, res) {
+    const { id } = req.body;
+    const userId = req.user.userId;
+    let active_transaction = false;
+
+    try {
+        await dbutils.run("BEGIN TRANSACTION");
+        active_transaction = true;
+
+        await dbutils.run(
+            "DELETE FROM Sessioni WHERE id = ? AND id_creatore = ?",
+            [id, userId]
+        );
+
+        await dbutils.run("COMMIT");
+        active_transaction = false;
+
+        res.status(200).json({removed: true});
+    } catch(err) {
+        if (active_transaction)
+            await dbutils.run("ROLLBACK");
+
+        res.status(500).json({
+            success: false,
+            message: "Error deleting session"
+        })
+    }
+}
+
+async function updateSessionVisibility(req, res) {
+    const { sessionId, visibility } = req.body;
+    const userId = req.user.userId;
+    let active_transaction = false;
+    
+    try {
+        await dbutils.run("BEGIN TRANSACTION");
+        active_transaction = true;
+
+        await dbutils.run(
+            "UPDATE Sessioni SET pubblica = ? WHERE id = ? AND id_creatore = ?",
+            [visibility ? 1 : 0, sessionId, userId]
+        );
+
+        await dbutils.run("COMMIT");
+        active_transaction = false;
+
+        res.status(201).json({updated: true});
+    } catch(err) {
+        console.log(err);
+        
+        if (active_transaction)
+            await dbutils.run("ROLLBACK");
+
+        res.status(500).json({
+            success: false,
+            message: "Error updating session's visibility"
+        })
+    }
+}
+
 module.exports = {
     update,
     changePassword,
     follows,
-    saveSession
+    saveSession,
+    removeSession,
+    updateSessionVisibility
 }
