@@ -48,7 +48,7 @@ export class UserService {
     );
   }
 
-  updateVerified(userId: number, value: boolean): Observable<any> {
+  updateVerified(userId: number, value: boolean): Observable<{status_changed: true}> {
     return this.http.post<any>(
       `${environment.apiUrl}/api/moderators/update-verify`,
       {userId:userId, value:value}

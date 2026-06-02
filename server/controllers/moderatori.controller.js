@@ -58,7 +58,33 @@ async function updateSessionValidity(req, res) {
     }
 }
 
+async function updateVerify(req, res) {
+    const { userId, value } = req.body;
+    let active_transaction = false;
+    try {
+
+        await dbutils.run("BEGIN TRANSACTION");
+
+        await dbutils.run(
+            "UPDATE Atleti SET verificato = ? WHERE id = ?",
+            [value ? 1 : 0, userId]
+        );
+
+        await dbutils.run("COMMIT");
+
+        res.status(200).json({status_changed: true});
+    } catch(err) {
+        if (active_transaction)
+            await dbutils.run("ROLLBACK");
+        res.status(500).json({
+            success: false,
+            message: "Could not update verified status"
+        });
+    }
+}
+
 module.exports = {
     getAllModerators,
-    updateSessionValidity
+    updateSessionValidity,
+    updateVerify
 }

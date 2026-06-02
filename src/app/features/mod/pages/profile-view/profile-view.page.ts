@@ -8,6 +8,7 @@ import { UserService } from 'src/app/shared/services/user-service';
 import { IonToggleCustomEvent } from '@ionic/core';
 import { addIcons } from 'ionicons';
 import { arrowBack, checkmarkCircle } from 'ionicons/icons';
+import { ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-profile-view',
@@ -25,7 +26,8 @@ export class ProfileViewPage implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private location: Location,
-    private userService: UserService
+    private userService: UserService,
+    private toastController: ToastController
   ) {
       addIcons({arrowBack,checkmarkCircle});
     }
@@ -57,12 +59,31 @@ export class ProfileViewPage implements OnInit {
     this.location.back();
   }
 
+  private async _showToast(message: string, color: string, duration: number) {
+    const toast = await this.toastController.create({
+      message: message,
+      color: color,
+      duration: duration
+    });
+    await toast.present();
+  }
+
   saveChanges() {
     const u = this.user();
     if (!u) return;
 
-    if (this._originalValue != u.verified)
-      this.userService.updateVerified(u.id, u.verified);
+    if (this._originalValue != u.verified) {
+      this.userService.updateVerified(u.id, u.verified).subscribe({
+        next: (value) => {
+          if (value.status_changed) {
+            this._showToast('User\'s status modified', 'success', 500);
+          }
+        },
+        error: (err) => {
+          this._showToast('Error: ' + (err.error?.message ?? 'Unknown'), 'danger', 2000);
+        }
+      });
+    }
     this.goBack();
   }
 }
