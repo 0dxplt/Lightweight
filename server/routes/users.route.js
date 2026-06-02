@@ -3,6 +3,7 @@ const router = express.Router();
 const controller = require('../controllers/users.controller');
 const { route } = require('./esercizi.route');
 
+router.get('/minimal', controller.getAllUsersMinimal);
 router.get('/:username', controller.getUser);
 router.get('/:username/followers', controller.getFollowers);
 router.get('/:username/followings', controller.getFollowings);

@@ -102,12 +102,14 @@
       <ion-icon name="settings-outline"></ion-icon>
     </ion-fab-button>
     <ion-fab-list side="end">
-      <ion-fab-button color="secondary" (click)="openAddExercise()">
-        <ion-icon name="add-outline"></ion-icon>
-      </ion-fab-button>
       <ion-fab-button color="secondary" (click)="saveWorkout()">
         <ion-icon name="save-outline"></ion-icon>
       </ion-fab-button>
+      @if (hasId()) {
+      <ion-fab-button color="secondary" (click)="deleteWorkout()">
+        <ion-icon name="trash-outline"></ion-icon>
+      </ion-fab-button>
+      }
     </ion-fab-list>
     <ion-fab-list side="start">
       @if (editMode) {
@@ -124,6 +126,9 @@
       </ion-fab-button>
     </ion-fab-list>
     <ion-fab-list side="top">
+      <ion-fab-button color="secondary" (click)="openAddExercise()">
+        <ion-icon name="add-outline"></ion-icon>
+      </ion-fab-button>
       <ion-fab-button color="secondary" (click)="startSessionWorkout()">
         <ion-icon name="play-outline"></ion-icon>
       </ion-fab-button>
@@ -137,8 +142,8 @@
     </ion-fab-button>
   </ion-fab>
   }
-  <ion-modal #modal [initialBreakpoint]="0.5" [breakpoints]="[0, 0.25, 0.5, 0.75]" (ionModalWillDismiss)="resetFilter()" [expandToScroll]="false"
-    (willPresent)="fetchExercises()">
+  <ion-modal #modal [initialBreakpoint]="0.5" [breakpoints]="[0, 0.25, 0.5, 0.75]" (ionModalWillDismiss)="resetFilter()"
+    [expandToScroll]="false" (willPresent)="fetchExercises()">
     <ng-template>
       <ion-content>
         <ion-searchbar #ricerca placeholder="Search" (ionInput)="handleInput($event)"

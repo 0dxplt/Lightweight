@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { map, Observable, tap } from 'rxjs';
 import { Exercise } from 'src/app/models/exercise.model';
 import { WorkoutVisualization } from 'src/app/models/workout.model';
@@ -10,9 +10,10 @@ import { environment } from 'src/environments/environment';
 })
 export class WorkoutService {
   private http = inject(HttpClient);
+  public workoutId = signal<number | null>(null);
 
-  full(id_workout: number): Observable<WorkoutVisualization> {
-    return this.http.get<{
+  full(id_workout: number | null): Observable<WorkoutVisualization> {
+    return this.http.post<{
       nome_workout: string,
       data_creazione: number,
       username: string,
@@ -26,10 +27,12 @@ export class WorkoutService {
       img: string | null,
       difficolta: number,
       gruppi_muscolari: string
-    }[]>(environment.apiUrl + "/api/workout/" + id_workout).pipe(
+    }[]>(environment.apiUrl + "/api/workout/",
+      {id: id_workout}
+    ).pipe(
       map(rows => {
         const workoutVisualization: WorkoutVisualization = {
-          id: id_workout,
+          id: (id_workout) ? id_workout : -1,
           creatorUsername: rows[0].username,
           creatorId: rows[0].creatore_id,
           name: rows[0].nome_workout,
@@ -72,6 +75,13 @@ export class WorkoutService {
     return this.http.post<{ message: string }>(
       `${environment.apiUrl}/api/workout/save/`,
       { id:id, nome: nome, data: data, creatore: creatore, exercises: exercises }
+    );
+  }
+
+  delete(id: number | null): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(
+      `${environment.apiUrl}/api/workout/delete/`,
+      { id:id }
     );
   }
 }

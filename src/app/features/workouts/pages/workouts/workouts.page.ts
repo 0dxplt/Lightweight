@@ -9,6 +9,7 @@ import { WorkoutMiniCard } from 'src/app/models/workout-mini-card.model';
 import { AuthService } from 'src/app/features/auth/services/auth-service';
 import { WorkoutsService } from 'src/app/shared/services/workouts-service';
 import { filter, Subscription } from 'rxjs';
+import { WorkoutService } from 'src/app/shared/services/workout-service';
 
 @Component({
   selector: 'app-workouts',
@@ -26,6 +27,7 @@ export class WorkoutsPage implements OnInit, OnDestroy{
   public authService = inject(AuthService);
 
   private workoutsService = inject(WorkoutsService);
+  private workoutService = inject(WorkoutService);
 
   private router = inject(Router);
 
@@ -66,5 +68,10 @@ export class WorkoutsPage implements OnInit, OnDestroy{
         console.error("Errore nel recupero dei workout: ", err);
       }
     });
+  }
+
+  goToWorkout(id: number | null) {
+    this.workoutService.workoutId.set(id);
+    this.router.navigate(["/workout"]);
   }
 }

@@ -17,7 +17,7 @@
   }
   <div class="exercises">
     @for (workout of workouts(); track workout) {
-    <ion-card class="workout-card" [button]="true" [routerLink]="['/workout', workout.id]">
+    <ion-card class="workout-card" [button]="true" (click)="goToWorkout(workout.id)">
       <div class="title">
         <h1>{{workout.nome}}</h1>
       </div>
@@ -31,7 +31,7 @@
     </ion-card>
     }
   </div>
-  <ion-fab slot="fixed" horizontal="center" vertical="bottom" [routerLink]="['/workout']">
+  <ion-fab slot="fixed" horizontal="center" vertical="bottom" (click)="goToWorkout(null)">
     <ion-fab-button color="secondary">
       <ion-icon name="add-outline"></ion-icon>
     </ion-fab-button>

@@ -13,9 +13,9 @@
   <ion-header collapse="condense">
   </ion-header>
   <div class="sessions">
-    @for (user of user_sessions; track user) {
+    @for (user of user_sessions(); track user) {
     <app-user-card id="open-session-modal" [username]="user.username" [sessionName]="user.sessionName"
-      [gainedXP]="user.gainedXP" [tags]="user.tags" [avatarUrl]="user.avatarUrl" [verified]="user.verified"
+      [gainedXP]="user.gainedXP" [tags]="user.tags" [avatarUrl]="user.avatarUrl || '/assets/icon/favicon.png'" [verified]="user.verified"
       [pt]="user.pt" [sessionId]="user.sessionId"></app-user-card>
     }
     @empty {

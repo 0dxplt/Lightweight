@@ -33,6 +33,7 @@ const routeModeratori = require('./routes/moderatori.route.js');
 const routeWorkout = require('./routes/workout.route.js');
 const routeWorkouts = require('./routes/workouts.route.js');
 const routeAuth = require('./routes/auth.route.js');
+const routeFeed = require('./routes/feed.route.js');
 
 // APIs
 app.use("/api/exercises", authMiddleware, routeEsercizi);
@@ -48,6 +49,7 @@ app.use("/api/moderators", authMiddleware, modMiddleware, routeModeratori);
 app.use("/api/workout", authMiddleware, routeWorkout);
 app.use("/api/workouts", authMiddleware, routeWorkouts);
 app.use("/api/auth", routeAuth);
+app.use("/api/feed", authMiddleware, routeFeed);
 
 app.listen(PORT, () => {
     console.log(`Server backend avviato sulla porta ${PORT}`);

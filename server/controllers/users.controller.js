@@ -97,7 +97,7 @@ async function getUser(req, res) {
 
         res.status(200).json(user);
 
-    } catch(err) {
+    } catch (err) {
         console.log(err);
         res.status(500).json({
             success: false,
@@ -145,7 +145,7 @@ async function getFollowers(req, res) {
                 "SELECT * FROM Atleti WHERE id = ?",
                 [followerId]
             );
-            
+
             if (!user) {
                 return res.status(500).json({
                     success: false,
@@ -219,7 +219,7 @@ async function getFollowers(req, res) {
 
         res.status(200).json(users);
 
-    } catch(err) {
+    } catch (err) {
         res.status(500).json({
             success: false,
             message: "Could not retrieve followers"
@@ -266,7 +266,7 @@ async function getFollowings(req, res) {
                 "SELECT * FROM Atleti WHERE id = ?",
                 [followerId]
             );
-            
+
             if (!user) {
                 return res.status(500).json({
                     success: false,
@@ -340,7 +340,7 @@ async function getFollowings(req, res) {
 
         res.status(200).json(users);
 
-    } catch(err) {
+    } catch (err) {
         res.status(500).json({
             success: false,
             message: "Could not retrieve followers"
@@ -388,9 +388,9 @@ async function follow(req, res) {
 
         await dbutils.run("COMMIT");
 
-        res.status(200).json({followed: true});
+        res.status(200).json({ followed: true });
 
-    } catch(err) {
+    } catch (err) {
         await dbutils.run("ROLLBACK");
         console.log(err);
         res.status(500).json({
@@ -440,9 +440,9 @@ async function unfollow(req, res) {
 
         await dbutils.run("COMMIT");
 
-        res.status(200).json({unfollowed: true});
+        res.status(200).json({ unfollowed: true });
 
-    } catch(err) {
+    } catch (err) {
         await dbutils.run("ROLLBACK");
         console.log(err);
         res.status(500).json({
@@ -452,10 +452,23 @@ async function unfollow(req, res) {
     }
 }
 
+async function getAllUsersMinimal(req, res) {
+    const userId = req.user.userId;
+    try {
+        const rows = await dbutils.all(`SELECT username, nome, cognome, img FROM Atleti WHERE id != ?`, [userId]);
+        res.json(rows);
+    } catch (error) {
+        res.status(500).json({
+            err: error.message
+        });
+    }
+}
+
 module.exports = {
     getUser,
     getFollowers,
     getFollowings,
     follow,
     unfollow,
+    getAllUsersMinimal
 }

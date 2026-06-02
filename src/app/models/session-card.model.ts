@@ -4,7 +4,7 @@ export type SessionCard = {
     sessionId: number;
     gainedXP: number;
     tags: string[];
-    avatarUrl: string;
+    avatarUrl: string | null;
     verified: boolean;
     pt: boolean;
 }

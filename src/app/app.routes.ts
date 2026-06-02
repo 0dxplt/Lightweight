@@ -54,10 +54,6 @@ export const routes: Routes = [
     loadComponent: () => import('./features/workout/pages/workout.page').then(m => m.WorkoutPage)
   },
   {
-    path: 'workout/:id',
-    loadComponent: () => import('./features/workout/pages/workout.page').then(m => m.WorkoutPage)
-  },
-  {
     path: 'mod',
     canActivate: [modAuthGuard(true)],
     children: [

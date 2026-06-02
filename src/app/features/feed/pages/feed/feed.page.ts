@@ -11,6 +11,8 @@ import { SessionModalComponent } from "src/app/shared/components/session-modal/s
 import { ModalController } from '@ionic/angular/standalone';
 import { Router } from '@angular/router';
 import { IonSearchbarCustomEvent, SearchbarInputEventDetail } from '@ionic/core';
+import { FeedService } from 'src/app/shared/services/feed-service';
+import { UserService } from 'src/app/shared/services/user-service';
 @Component({
   selector: 'app-feed',
   templateUrl: './feed.page.html',
@@ -23,71 +25,38 @@ export class FeedPage implements OnInit {
   private modalController = inject(ModalController);
   private router = inject(Router);
 
-  private data: SearchUserInfo[] = [];
+  private data = signal<SearchUserInfo[]>([]);
 
-  public user_sessions: SessionCard[] = [];
+  public user_sessions = signal<SessionCard[]>([]);
 
   public users = signal<SearchUserInfo[] | null>(null);
+
+  private feedService = inject(FeedService);
+
+  private userService = inject(UserService);
 
   constructor() {
     addIcons({ searchOutline });
   }
 
   ngOnInit() {
-    // TODO: fetch al db
-    this.data = [
-      {
-        username: "giovanni",
-        name: "Giovanni",
-        surname: "Esposito",
-        avatarUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRuCFcnFU-TPgls_fB_Jw1lCXlhgIcdFZPAd9Yd3c5ByMfs3x1CsT1F1YDvUQn5Uqc1eJkqtfulYApjOeOe5IM__iLozHusE6wKe9j2OGI&s=10"
+    this.userService.getUsersMinimal().subscribe({
+      next: (data) => {
+        this.data.set(data);
+        this.users.set([...this.data()]);
       },
-      {
-        username: "marco",
-        name: "Marco",
-        surname: "Esposito",
-        avatarUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRuCFcnFU-TPgls_fB_Jw1lCXlhgIcdFZPAd9Yd3c5ByMfs3x1CsT1F1YDvUQn5Uqc1eJkqtfulYApjOeOe5IM__iLozHusE6wKe9j2OGI&s=10"
-      },
-      {
-        username: "luigino",
-        name: "Luigi",
-        surname: "Esposito",
-        avatarUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRuCFcnFU-TPgls_fB_Jw1lCXlhgIcdFZPAd9Yd3c5ByMfs3x1CsT1F1YDvUQn5Uqc1eJkqtfulYApjOeOe5IM__iLozHusE6wKe9j2OGI&s=10"
+      error: (err) => {
+        console.error(err);
       }
-    ];
-    this.users.set([...this.data]);
-    this.user_sessions = [
-      {
-        username: "pippoesp",
-        sessionName: "fazzu petto",
-        sessionId: 34424,
-        gainedXP: 104,
-        tags: ["Petto", "Tricipiti", "Spalle", "Quadricipiti"],
-        avatarUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRuCFcnFU-TPgls_fB_Jw1lCXlhgIcdFZPAd9Yd3c5ByMfs3x1CsT1F1YDvUQn5Uqc1eJkqtfulYApjOeOe5IM__iLozHusE6wKe9j2OGI&s=10",
-        verified: true,
-        pt: true,
+    })
+    this.feedService.getFeed().subscribe({
+      next: (data) => {
+        this.user_sessions.set(data);
       },
-      {
-        username: "pippoesp",
-        sessionName: "fazzu petto",
-        sessionId: 34424,
-        gainedXP: 104,
-        tags: ["Petto", "Tricipiti", "Spalle", "Quadricipiti"],
-        avatarUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRuCFcnFU-TPgls_fB_Jw1lCXlhgIcdFZPAd9Yd3c5ByMfs3x1CsT1F1YDvUQn5Uqc1eJkqtfulYApjOeOe5IM__iLozHusE6wKe9j2OGI&s=10",
-        verified: true,
-        pt: true,
-      },
-      {
-        username: "pippoesp",
-        sessionName: "fazzu petto",
-        sessionId: 34424,
-        gainedXP: 104,
-        tags: ["Petto", "Tricipiti", "Spalle", "Quadricipiti"],
-        avatarUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRuCFcnFU-TPgls_fB_Jw1lCXlhgIcdFZPAd9Yd3c5ByMfs3x1CsT1F1YDvUQn5Uqc1eJkqtfulYApjOeOe5IM__iLozHusE6wKe9j2OGI&s=10",
-        verified: true,
-        pt: true,
+      error: (err) => {
+        console.log(err);
       }
-    ];
+    });
 
   }
 
@@ -95,11 +64,11 @@ export class FeedPage implements OnInit {
     const query = event.detail.value?.toLowerCase() || '';
 
     if (!query.trim()) {
-      this.users.set([...this.data]);
+      this.users.set([...this.data()]);
       return;
     }
 
-    const filtered = this.data.filter(u => {
+    const filtered = this.data().filter(u => {
       const username = u.username.toLowerCase();
       const name = u.name?.toLowerCase() || '';
       const surname = u.surname?.toLowerCase() || '';

@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
+import { SearchUserInfo } from 'src/app/models/search-user-info.model';
 import { User } from 'src/app/models/user.model';
 import { environment } from 'src/environments/environment';
 
@@ -57,5 +58,20 @@ export class UserService {
     return this.http.get<any[]>(`${environment.apiUrl}/api/users/${username}/followings`).pipe(
       map(data => data.map(value => this._mapUserFromData(value)))
     );
+  }
+
+  getUsersMinimal():Observable<SearchUserInfo[]>{
+    return this.http.get<any[]>(`${environment.apiUrl}/api/users/minimal`).pipe(
+      map(rows => {
+        return rows.map(row => {
+          return {
+            username: row.username,
+            name: row.nome,
+            surname: row.cognome,
+            avatarUrl: row.img
+          }
+        })
+      })
+    )
   }
 }

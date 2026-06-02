@@ -1,9 +1,8 @@
 const dbutils = require('../db/database.utils');
 
-// nome wo, creatore wo, data creazione, join wo esercizi => serie, reps, recupero, join esercizio => id, nome, desc, img, difficulty, join groups => perc, join musculargroups => id, name
 async function getFullWorkout(req, res) {
     try {
-        const id = req.params.id;
+        const id = req.body.id;
         const rows = await dbutils.all(`
             SELECT Workout.nome AS nome_workout,
             Workout.data_creazione,
@@ -89,7 +88,20 @@ async function saveWorkout(req, res) {
     }
 }
 
+async function deleteWorkout(req, res) {
+    try {
+        const id = req.body.id;
+        await dbutils.run(`DELETE FROM Workout WHERE id = ?`, [id]);
+        res.json({message: "Workout eliminato con successo"});
+    } catch (error) {
+        res.status(500).json({
+            err: error.message
+        });
+    }
+}
+
 module.exports = {
     getFullWorkout,
-    saveWorkout
+    saveWorkout,
+    deleteWorkout
 }

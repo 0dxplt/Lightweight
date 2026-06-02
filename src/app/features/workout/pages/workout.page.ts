@@ -6,7 +6,7 @@ import { Exercise } from 'src/app/models/exercise.model';
 import { ExerciseWorkout, Workout, WorkoutVisualization } from 'src/app/models/workout.model';
 import { BetterMsViewerPipe } from "../../../shared/pipes/better-ms-viewer-pipe";
 import { addIcons } from 'ionicons';
-import { addCircleOutline, addOutline, checkmarkDoneOutline, closeCircleOutline, closeOutline, pencilOutline, pieChartOutline, removeCircleOutline, saveOutline, settingsOutline, playOutline } from 'ionicons/icons';
+import { addCircleOutline, addOutline, checkmarkDoneOutline, closeCircleOutline, closeOutline, pencilOutline, pieChartOutline, removeCircleOutline, saveOutline, settingsOutline, playOutline, trashOutline } from 'ionicons/icons';
 import { ChartModalComponent } from 'src/app/shared/components/chart-modal/chart-modal.component';
 import { ExerciseModalComponent } from '../components/exercise-modal/exercise-modal.component';
 import { Router } from '@angular/router';
@@ -52,12 +52,6 @@ export class WorkoutPage implements OnInit {
 
   public editMode = false;
 
-  public exercises: Exercise[] = [];
-
-  public filteredExercises: Exercise[] = [];
-
-  public nameFilteredExercises: Exercise[] = [];
-
   public exercisesWorkout = signal<ExerciseWorkout[]>([]);
 
   public allExercises = signal<Exercise[]>([]);
@@ -69,6 +63,8 @@ export class WorkoutPage implements OnInit {
   public creatorUsername: string = "";
 
   public creationTimestamp = 0;
+
+  public hasId = computed(() => this.workoutService.workoutId());
 
   public hasExercise = computed(() => this.exercisesWorkout().length > 0);
 
@@ -93,25 +89,29 @@ export class WorkoutPage implements OnInit {
     });
   });
 
-  constructor() { addIcons({ closeOutline, removeCircleOutline, addCircleOutline, settingsOutline, addOutline, saveOutline, checkmarkDoneOutline, pencilOutline, pieChartOutline, playOutline }); }
+  constructor() { addIcons({ closeOutline, removeCircleOutline, addCircleOutline, settingsOutline, saveOutline, trashOutline, checkmarkDoneOutline, pencilOutline, pieChartOutline, addOutline, playOutline }); }
 
 
   ngOnInit() {
-    console.log(this.id);
-    if (!this.id) {
+    if (!this.workoutService.workoutId()) {
       console.log("Creo il workout");
       const date = new Date();
       this.workoutName = 'Workout ' + date.toLocaleDateString();
-      this.creatorId = this.authService.getUser()?.id??0;
+      this.creatorId = this.authService.getUser()?.id ?? 0;
       this.exercisesWorkout.set([]);
       this.creationTimestamp = date.getTime();
     } else {
-      this.workoutService.full(this.id).subscribe(wo => {
-        this.workoutName = wo.name;
-        this.creationTimestamp = wo.creationTimestamp;
-        this.creatorId = wo.creatorId;
-        this.creatorUsername = wo.creatorUsername;
-        this.exercisesWorkout.set(wo.exercises);
+      this.workoutService.full(this.workoutService.workoutId()).subscribe({
+        next: (wo) => {
+          this.workoutName = wo.name;
+          this.creationTimestamp = wo.creationTimestamp;
+          this.creatorId = wo.creatorId;
+          this.creatorUsername = wo.creatorUsername;
+          this.exercisesWorkout.set(wo.exercises);
+        },
+        error: (err) => {
+          console.log(err.message);
+        }
       });
     }
   }
@@ -301,5 +301,19 @@ export class WorkoutPage implements OnInit {
 
   openAddExercise() {
     this.exercisesModal.present();
+  }
+
+  deleteWorkout() {
+    this.workoutService.delete(this.workoutService.workoutId()).subscribe({
+      next: (res) => {
+        this.showToast("Workout eliminato con successo!", 'success', 2000);
+        console.log(res.message);
+        this.router.navigate(["/workouts"]);
+        this.workoutService.workoutId.set(null);
+      },
+      error: (err) => {
+        console.log(err.message);
+      }
+    })
   }
 }

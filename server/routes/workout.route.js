@@ -2,7 +2,10 @@ const express = require('express');
 const router = express.Router();
 const controller = require('../controllers/workout.controller');
 
-router.get('/:id', controller.getFullWorkout);
-router.post('/save', controller.saveWorkout);
+const canAccessWorkout = require("../middlewares/workout.middleware");
+
+router.post('/', canAccessWorkout, controller.getFullWorkout);
+router.post('/save', canAccessWorkout, controller.saveWorkout);
+router.post('/delete', canAccessWorkout, controller.deleteWorkout);
 
 module.exports = router;
