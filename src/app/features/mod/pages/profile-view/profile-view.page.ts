@@ -14,26 +14,28 @@ import { arrowBack, checkmarkCircle } from 'ionicons/icons';
   templateUrl: './profile-view.page.html',
   styleUrls: ['./profile-view.page.scss'],
   standalone: true,
-  imports: [IonButton, IonText, IonToggle, IonIcon, IonItem, IonLabel, IonListHeader, IonAvatar, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule]
+  imports: [IonButton, IonToggle, IonIcon, IonItem, IonLabel, IonListHeader, IonAvatar, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule]
 })
 export class ProfileViewPage implements OnInit {
 
   private _originalValue: boolean = false;
   user = signal<User | undefined>(undefined);
+  canEditVerified = signal<boolean>(false);
 
   constructor(
     private route: ActivatedRoute,
     private location: Location,
     private userService: UserService
-  ) {}
+  ) {
+      addIcons({arrowBack,checkmarkCircle});
+    }
 
   ngOnInit() {
-    addIcons({
-      arrowBack,
-      checkmarkCircle
-    });
     const tmp = this.route.snapshot.paramMap.get('username');
     if (!tmp) return this.location.back();
+
+    const editParam = this.route.snapshot.queryParamMap.get('editVerified');
+    this.canEditVerified.set(editParam === 'true');
 
     this.userService.user(tmp as string).subscribe({
       next: (user) => {
@@ -60,7 +62,7 @@ export class ProfileViewPage implements OnInit {
     if (!u) return;
 
     if (this._originalValue != u.verified)
-      this.userService.updateVerified(u);
+      this.userService.updateVerified(u.id, u.verified);
     this.goBack();
   }
 }

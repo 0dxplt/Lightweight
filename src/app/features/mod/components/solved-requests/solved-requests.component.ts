@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { IonContent, IonRefresher, IonRefresherContent, IonList, IonInfiniteScroll, IonInfiniteScrollContent } from "@ionic/angular/standalone";
 import { SolvedService } from '../../services/solved-service';
 import { SolvedRequest } from 'src/app/models/solved_request.model';
 import { IonInfiniteScrollCustomEvent, IonRefresherCustomEvent, RefresherEventDetail } from '@ionic/core';
 import { SolvedRequestItemComponent } from "../solved-request-item/solved-request-item.component";
+import { ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-solved-requests',
@@ -12,32 +13,62 @@ import { SolvedRequestItemComponent } from "../solved-request-item/solved-reques
   imports: [IonContent, IonRefresher, IonRefresherContent, IonList, IonInfiniteScroll, IonInfiniteScrollContent, SolvedRequestItemComponent]
 })
 export class SolvedRequestsComponent  implements OnInit {
-  private _solvedRequests: SolvedRequest[] = [];
+  private _solvedRequests = signal<SolvedRequest[]>([]);
   private _start: number = 0;
   private _limit = 50;
   private _isLoading: boolean = false;
 
-  solvedRequests: SolvedRequest[] = [];
+  solvedRequests = signal<SolvedRequest[]>([]);
   disabled: boolean = false;
 
-  constructor(private solvedService: SolvedService) {}
+  constructor(
+    private solvedService: SolvedService,
+    private toastController: ToastController
+  ) {}
 
-  private refresh() {
-    this._solvedRequests = this.solvedService.getSolvedRequests();
-    this.solvedRequests = [];
-    this._start = 0;
-    this._addSolvedRequests();
+    ngOnInit() {
+      this._loadData();
+    }
+
+  private _loadData(event?: any) {
+    this.solvedService.getSolvedRequests().subscribe({
+      next: (requests) => {
+        this._solvedRequests.set([...requests]);
+        this.solvedRequests.set([]);
+        this._start = 0;
+        this.disabled = false;
+        this._addSolvedRequests();
+        if (event) event.target.complete();
+        this._showToast("Solved Requests loaded succesfully!", 'success', 1000);
+      },
+      error: (err) => {
+        this._showToast("Error: " + (err.error?.message ?? 'Unknown'), 'danger', 2000);
+      }
+    })
   }
 
-  ngOnInit() {
-    this.refresh();
+  private async _showToast(message: string, color: string, duration: number) {
+    const toast = await this.toastController.create({
+      message: message,
+      color: color,
+      duration: duration
+    });
+    await toast.present();
   }
 
   private _addSolvedRequests() {
-    const length = this._solvedRequests.length;
-    for (let i = 0; i < this._limit && this.solvedRequests.length < length; i++) {
-      this.solvedRequests.push(this._solvedRequests[this._start++]);
+    const all = this._solvedRequests();
+    const currentVisible = this.solvedRequests();
+    
+    if (currentVisible.length >= all.length) {
+      this.disabled = true;
+      return;
     }
+
+    const nextBatch = all.slice(this._start, this._start + this._limit);
+    
+    this.solvedRequests.update(prev => [...prev, ...nextBatch]);
+    this._start += this._limit;
   }
 
   onIonInfinite(event: IonInfiniteScrollCustomEvent<void>) {
@@ -56,9 +87,6 @@ export class SolvedRequestsComponent  implements OnInit {
   }
 
   handleRefresh(event: IonRefresherCustomEvent<RefresherEventDetail>) {
-    setTimeout(() => {
-      this.refresh();
-      event.target.complete();
-    }, 2000);
+    this._loadData(event);
   }
 }

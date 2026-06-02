@@ -37,7 +37,14 @@ export class ExtendedReportModalPage implements OnInit {
   goToProfileView(username: string | null | undefined) {
     if (!username) return;
     this.dismiss();
-    this.router.navigate(["mod/profile-view/" + username]);
+    this.router.navigate(
+      ['mod/profile-view/', username],
+      {
+        queryParams: {
+          editVerified: true
+        }
+      }
+    );
   }
 
   goToSessionsView(username: string | null | undefined) {

@@ -22,7 +22,7 @@
   </ion-refresher>
 
   <ion-list>
-    @for (item of this.reports; track $index) {
+    @for (item of this.reports(); track $index) {
       <app-report-sliding-item [report]="item" (onConfirm)="requestOutcome(item)" (onReview)="this.openModal(item)"></app-report-sliding-item>
     }
   </ion-list>

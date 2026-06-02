@@ -200,22 +200,20 @@ export class ProfilePage implements OnInit {
   }
 
   private _sendValidationRequest(loading: HTMLIonLoadingElement) {
-    // this.requestService.new(this.user()).subscribe({
-    //   next: () => {
-    //     loading.dismiss();
-    //     this._showToast('Validation request sent successfully', 'success');
-    //   },
-    //   error: (err) => {
-    //     loading.dismiss();
-    //     this._showToast('Error sending request: ' + (err.error?.message ?? 'Unknown'), 'danger');
-    //   }
-    // });
-    setTimeout(() => {
-      // utente aggiornato in authService.update()
-      this.requestService.new(this.user());
-      loading.dismiss();
-      this._showToast('Validation request sent', 'success');
-    }, 2000)
+    this.requestService.new().subscribe({
+      next: (value) => {
+        loading.dismiss();
+        if (value.requested) {
+          this._showToast('Validation request sent successfully', 'success');
+        } else {
+          this._showToast(value?.message ?? '', 'danger');
+        }
+      },
+      error: (err) => {
+        loading.dismiss();
+        this._showToast('Error sending request: ' + (err.error?.message ?? 'Unknown'), 'danger');
+      }
+    });
   }
 
   async openPTModal() {
@@ -262,5 +260,13 @@ export class ProfilePage implements OnInit {
         this._showToast('Errore: ' + (err.error?.message ?? 'Unknown'), 'danger');
       }
     });
+  }
+
+  refreshProfile() {
+    this.authService.refreshProfile().subscribe({
+      error: (err) => {
+        this._showToast("Error: " + (err.error?.message ?? 'Unknown'), 'danger');
+      }
+    })
   }
 }

@@ -11,6 +11,7 @@ import { environment } from 'src/environments/environment';
 export class UserService {
 
   private _mapUserFromData(data: any): User {
+    console.log(data);
     return ({
       id: data.id,
       email: data.email,
@@ -25,7 +26,7 @@ export class UserService {
       following: data.numero_followed,
       sessions: data.numero_sessioni,
       verified: data.verificato === 0 ? false : true,
-      propic: !data.img ? undefined : `${environment.apiUrl}/api/imgs/users?id=${data.id}`,
+      propic: !!data.propic ? `${environment.apiUrl}/api/imgs/users?id=${data.id}` : undefined,
       birthdate: !data.data_nascita ? undefined : data.data_nascita,
       name: !data.nome ? undefined : data.nome,
       surname: !data.cognome ? undefined : data.cognome,
@@ -38,14 +39,20 @@ export class UserService {
 
   user(username: string): Observable<User> {
     return this.http.get<any>(`${environment.apiUrl}/api/users/${username}`).pipe(
-      map(data => this._mapUserFromData(data))
+      map(data => {
+        const propic = this._mapUserFromData(data).propic;
+        console.log(propic);
+        data.propic = propic;
+        return data;
+      })
     );
   }
 
-  // Spostare in mod?
-  updateVerified(user: User) {
-    // Query al DB
-    console.log("New Verified: " + user.verified); 
+  updateVerified(userId: number, value: boolean): Observable<any> {
+    return this.http.post<any>(
+      `${environment.apiUrl}/api/moderators/update-verify`,
+      {userId:userId, value:value}
+    );
   }
 
   followersOf(username: string): Observable<User[]> {

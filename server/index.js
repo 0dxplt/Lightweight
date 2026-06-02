@@ -30,8 +30,12 @@ const routeProfile = require('./routes/profile.route.js');
 const routeRankings = require('./routes/rankings.route.js');
 const routeAvatar = require('./routes/users-img.route.js');
 const routeModeratori = require('./routes/moderatori.route.js');
+const routeSegnalazioni = require('./routes/segnalazioni.route.js');
+const routeRichieste = require('./routes/richieste.route.js');
+const routeSolved = require('./routes/solved.route.js');
 const routeWorkout = require('./routes/workout.route.js');
 const routeWorkouts = require('./routes/workouts.route.js');
+const routeSessioni = require('./routes/sessioni.route.js');
 const routeAuth = require('./routes/auth.route.js');
 const routeFeed = require('./routes/feed.route.js');
 
@@ -46,8 +50,12 @@ app.use("/api/profile", authMiddleware, routeProfile);
 app.use("/api/rankings", authMiddleware, routeRankings);
 app.use("/api/imgs/users", routeAvatar);
 app.use("/api/moderators", authMiddleware, modMiddleware, routeModeratori);
+app.use("/api/reports", authMiddleware, modMiddleware, routeSegnalazioni);
+app.use("/api/requests", authMiddleware, modMiddleware, routeRichieste);
+app.use("/api/solved", authMiddleware, modMiddleware, routeSolved);
 app.use("/api/workout", authMiddleware, routeWorkout);
 app.use("/api/workouts", authMiddleware, routeWorkouts);
+app.use("/api/sessions", authMiddleware, routeSessioni);
 app.use("/api/auth", routeAuth);
 app.use("/api/feed", authMiddleware, routeFeed);
 

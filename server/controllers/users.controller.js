@@ -5,6 +5,84 @@ const config = require('../config/env');
 const fs = require('fs');
 const path = require('path');
 
+async function retrieveUser(username) {
+    try {
+        const dbUser = await dbutils.get(`
+            SELECT a.*, 
+                   n.id as n_id, n.nome as n_nome, n.country_code as n_cc, n.bandiera as n_f
+            FROM Atleti a
+            LEFT JOIN Nazioni n ON a.id_nazione = n.id
+            WHERE a.username = ?`, [username]);
+
+        if (!dbUser) return null;
+
+        const dbPt = await dbutils.get(`
+            SELECT pt.email_professionale,
+                   c.id as c_id, c.nome as c_nome,
+                   cn.id as cn_id, cn.nome as cn_nome, cn.country_code as cn_cc, cn.bandiera as cn_f,
+                   p.id as g_id, p.nome as g_nome, p.indirizzo as g_addr, p.lat as g_lat, p.lng as g_lng
+            FROM PersonalTrainers pt
+            LEFT JOIN Citta c ON pt.id_citta = c.id
+            LEFT JOIN Nazioni cn ON c.id_nazione = cn.id
+            LEFT JOIN Palestre p ON pt.id_palestra = p.id
+            WHERE pt.id = ?`, [dbUser.id]);
+
+        const user = {
+            id: dbUser.id,
+            username: dbUser.username,
+            name: dbUser.nome || undefined,
+            surname: dbUser.cognome || undefined,
+            email: dbUser.email,
+            birthdate: dbUser.data_nascita ? dbUser.data_nascita : undefined,
+            propic: dbUser.img || undefined,
+            weight: dbUser.weight,
+            height: dbUser.height,
+            
+            nationality: dbUser.n_id ? {
+                id: dbUser.n_id,
+                name: dbUser.n_nome,
+                shortform: dbUser.n_cc,
+                flag: dbUser.n_f
+            } : undefined,
+
+            sLevel: dbUser.livello_stagionale,
+            gLevel: dbUser.livello_globale,
+            sxp: dbUser.xp_stagionali,
+            gxp: dbUser.xp_globali,
+            followers: dbUser.numero_followers,
+            following: dbUser.numero_followed,
+            sessions: dbUser.numero_sessioni,
+            verified: dbUser.verificato === 1,
+
+            pt: dbPt ? {
+                proEmail: dbPt.email_professionale,
+                city: {
+                    id: dbPt.c_id,
+                    name: dbPt.c_nome,
+                    nation: {
+                        id: dbPt.cn_id,
+                        name: dbPt.cn_nome,
+                        shortform: dbPt.cn_cc,
+                        flag: dbPt.cn_f
+                    }
+                },
+                gym: {
+                    id: dbPt.g_id,
+                    name: dbPt.g_nome,
+                    address: dbPt.g_addr,
+                    lat: dbPt.g_lat || undefined,
+                    lng: dbPt.g_lng || undefined
+                }
+            } : undefined
+        };
+
+        return user;
+    } catch (error) {
+        console.error("Error in retrieveUser:", error);
+        throw error;
+    }
+}
+
 async function getUser(req, res) {
     try {
         const username = req.params.username;
@@ -22,72 +100,7 @@ async function getUser(req, res) {
             });
         }
 
-        const user = await dbutils.get(
-            "SELECT * FROM Atleti WHERE Atleti.username = ?",
-            [username]
-        );
-
-        if (!user) {
-            return res.status(404).json({
-                success: false,
-                message: "Username not found"
-            });
-        }
-
-        if (user.id_nazione) {
-            const nazione = await dbutils.get(
-                "SELECT id, nome AS 'name', country_code AS 'shortform', bandiera AS 'flag' FROM Nazioni WHERE id = ?",
-                [user.id_nazione]
-            );
-            user.nazione = nazione;
-        }
-
-        const query = `
-            SELECT 
-                PT.email_professionale AS proEmail,
-                C.id AS city_id,
-                C.nome AS city_name,
-                N.id AS nation_id,
-                N.nome AS nation_name,
-                N.country_code AS nation_shortform,
-                N.bandiera AS nation_flag,
-                P.id AS gym_id,
-                P.nome AS gym_name,
-                P.indirizzo AS gym_address,
-                P.lat AS gym_lat,
-                P.lng AS gym_lng
-            FROM PersonalTrainers PT
-            JOIN Citta C ON PT.id_citta = C.id
-            JOIN Nazioni N ON C.id_nazione = N.id
-            JOIN Palestre P ON PT.id_palestra = P.id
-            WHERE PT.id = ?
-        `;
-
-        const row = await dbutils.get(query, [user.id]);
-
-        if (row) {
-            const pt = {
-                proEmail: row.proEmail,
-                city: {
-                    id: row.city_id,
-                    name: row.city_name,
-                    nation: {
-                        id: row.nation_id,
-                        name: row.nation_name,
-                        shortform: row.nation_shortform,
-                        flag: row.nation_flag
-                    }
-                },
-                gym: {
-                    id: row.gym_id,
-                    name: row.gym_name,
-                    address: row.gym_address,
-                    lat: row.gym_lat,
-                    lng: row.gym_lng
-                }
-            };
-            user.pt = pt;
-        }
+        const user = await retrieveUser(username);
 
         const filepath = config.avatarDir + "/" + user.id + ".png";
         if (fs.existsSync(filepath))

@@ -5,7 +5,7 @@
   </ion-refresher>
 
   <ion-list>
-    @for (item of this.solvedRequests; track $index) {
+    @for (item of this.solvedRequests(); track $index) {
       <app-solved-request-item [solvedRequest]="item"></app-solved-request-item>
     }
   </ion-list>

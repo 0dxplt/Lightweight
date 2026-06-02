@@ -1,6 +1,6 @@
 <ion-header class="ion-no-border">
   <ion-toolbar color="light">
-    <ion-title>{{session.workout.name}}</ion-title>
+    <ion-title>{{session.name}}</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="close()" color="medium">Close</ion-button>
     </ion-buttons>
@@ -27,7 +27,7 @@
             <div class="tags">
               @for (tag of getExerciseTags(group.sets); track tag.muscolarGroup.id) {
                 <span class="tag-badge">
-                  {{tag.muscolarGroup.name}} <small>{{tag.perc * 100}}%</small>
+                  {{tag.muscolarGroup.name}} <small>{{tag.perc}}%</small>
                 </span>
               }
             </div>
