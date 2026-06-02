@@ -1,4 +1,4 @@
-import { Component, computed, input, model, OnInit, output, signal } from '@angular/core';
+import { Component, computed, effect, input, model, OnInit, output, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { IonicModule, LoadingController, ToastController } from '@ionic/angular';
 import { addIcons } from 'ionicons';
@@ -105,6 +105,11 @@ export class ProfilePageBodyComponent  implements OnInit {
     private toastController: ToastController
   ) {
     addIcons({barbellOutline, checkmarkCircle});
+    effect(() => {
+      const user = this.user();
+      if (!!user)
+        this._loadData();
+    })
   }
 
   ngOnInit() {
