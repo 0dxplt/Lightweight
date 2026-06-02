@@ -2,7 +2,7 @@ const dbutils = require('../db/database.utils');
 
 async function getAllGyms(req, res) {
     try { 
-        const rows = await dbutils.all("SELECT * FROM Palestre");
+        const rows = await dbutils.all("SELECT * FROM Palestre ORDER BY nome ASC");
         res.json(rows);
     } catch(error) {
         res.status(500).json({

@@ -13,7 +13,7 @@ async function getAllCities(req, res) {
 
 async function getAllFullCities(req, res) {
     try {
-        const allCities = await dbutils.all("SELECT * FROM Citta");
+        const allCities = await dbutils.all("SELECT * FROM Citta ORDER BY id_nazione ASC, nome ASC");
         const fullCities = [];
         for (let city of allCities) {
             const country = await dbutils.get(`SELECT * FROM Nazioni WHERE Nazioni.id = ${city.id_nazione}`);
