@@ -16,7 +16,7 @@ export class RankingService {
       rank: data.rank,
       username: data.username,
       pt: data.pt,
-      avatar: !data.avatar ? undefined : data.avatar
+      avatar: !!data.avatar ? `${environment.apiUrl}/api/imgs/users?id=${data.avatar}`.split('.')[0] : "/assets/icon/favicon.png"
     };
   }
 
