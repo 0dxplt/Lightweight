@@ -92,8 +92,11 @@ async function update(req, res) {
         if (file) {
             const ext = '.png';
             const fileName = `${profileId}${ext}`;
+            console.log(fileName);
             const filePath = path.join(config.avatarDir, fileName);
+            console.log(filePath, "-", config.avatarDir);
             await fs.writeFile(filePath, file.buffer);
+            console.log(file.buffer);
             
             await dbutils.run("UPDATE Atleti SET img = ? WHERE id = ?", [fileName, profileId]);
         }
@@ -165,7 +168,7 @@ async function update(req, res) {
         }
 
         console.error("Update Error:", err);
-        res.status(500).json({ success: false, message: "Error during profile update" });
+        res.status(500).json({ success: false, message: "Error during profile update" + err });
     }
 }
 
