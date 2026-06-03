@@ -9,7 +9,7 @@
 
 <ion-content class="ion-padding">
   <div class="date-time">
-    <p>{{sessionInfo().timestamp}}</p>
+    <p>{{sessionInfo().timestamp | datefy}}</p>
   </div>
   <div class="exercises">
     @for (exercise of sessionInfo().exercises; track exercise) {

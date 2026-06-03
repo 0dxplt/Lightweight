@@ -6,12 +6,13 @@ import { addIcons } from 'ionicons';
 import { statsChart } from 'ionicons/icons';
 import { ChartModalComponent } from '../chart-modal/chart-modal.component';
 import { SessionService } from '../../services/session-service';
+import { DatefyPipe } from "../../pipes/datefy-pipe";
 
 @Component({
   selector: 'app-session-modal',
   templateUrl: './session-modal.component.html',
   styleUrls: ['./session-modal.component.scss'],
-  imports: [IonIcon, IonFabButton, IonFab, IonImg, IonContent, IonToolbar, IonTitle, IonButtons, IonHeader, IonButton, IonChip, BetterMsViewerPipe],
+  imports: [IonIcon, IonFabButton, IonFab, IonImg, IonContent, IonToolbar, IonTitle, IonButtons, IonHeader, IonButton, IonChip, BetterMsViewerPipe, DatefyPipe],
 })
 export class SessionModalComponent implements OnInit {
 
@@ -31,167 +32,14 @@ export class SessionModalComponent implements OnInit {
 
   ngOnInit() {
     console.log("Modale aperto con Session ID:", this.sessionId);
-    this.sessionService.get(9).subscribe({
+    this.sessionService.get(this.sessionId).subscribe({
       next: (data) => {
-        console.log("Dati: ", data);
+        this.sessionInfo.set(data);
       },
       error: (err) => {
         console.log(err.message);
       }
     });
-    this.sessionInfo.set(
-      {
-        nome: "Fazzu Petto",
-        timestamp: 1779189570,
-        exercises: [
-          {
-            exercisePhotoUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRuCFcnFU-TPgls_fB_Jw1lCXlhgIcdFZPAd9Yd3c5ByMfs3x1CsT1F1YDvUQn5Uqc1eJkqtfulYApjOeOe5IM__iLozHusE6wKe9j2OGI&s=10",
-            nome: "Panca Piana Manubri",
-            serie: [
-              {
-                peso: 37.5,
-                reps: 8,
-                recuperoMs: 185000
-              },
-              {
-                peso: 37.5,
-                reps: 8,
-                recuperoMs: 3000
-              },
-              {
-                peso: 37.5,
-                reps: 8,
-                recuperoMs: 3000
-              },
-              {
-                peso: 37.5,
-                reps: 8,
-                recuperoMs: 3000
-              }
-            ],
-            tags: [
-              {
-                nome: "Petto",
-                perc: 55,
-              },
-              {
-                nome: "Spalle",
-                perc: 25,
-              },
-              {
-                nome: "Tricipiti",
-                perc: 20,
-              }
-            ]
-          },
-          {
-            exercisePhotoUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRuCFcnFU-TPgls_fB_Jw1lCXlhgIcdFZPAd9Yd3c5ByMfs3x1CsT1F1YDvUQn5Uqc1eJkqtfulYApjOeOe5IM__iLozHusE6wKe9j2OGI&s=10",
-            nome: "Panca Inclinata",
-            serie: [
-              {
-                peso: 37.5,
-                reps: 8,
-                recuperoMs: 3000
-              },
-              {
-                peso: 37.5,
-                reps: 8,
-                recuperoMs: 3000
-              },
-              {
-                peso: 37.5,
-                reps: 8,
-                recuperoMs: 3000
-              }
-            ],
-            tags: [
-              {
-                nome: "Petto",
-                perc: 55,
-              },
-              {
-                nome: "Spalle",
-                perc: 25,
-              },
-              {
-                nome: "Tricipiti",
-                perc: 20,
-              }
-            ]
-          },
-          {
-            exercisePhotoUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRuCFcnFU-TPgls_fB_Jw1lCXlhgIcdFZPAd9Yd3c5ByMfs3x1CsT1F1YDvUQn5Uqc1eJkqtfulYApjOeOe5IM__iLozHusE6wKe9j2OGI&s=10",
-            nome: "Croci Macchinario",
-            serie: [
-              {
-                peso: 37.5,
-                reps: 8,
-                recuperoMs: 3000
-              },
-              {
-                peso: 37.5,
-                reps: 8,
-                recuperoMs: 3000
-              },
-              {
-                peso: 37.5,
-                reps: 8,
-                recuperoMs: 3000
-              }
-            ],
-            tags: [
-              {
-                nome: "Petto",
-                perc: 55,
-              },
-              {
-                nome: "Spalle",
-                perc: 25,
-              },
-              {
-                nome: "Bicipiti",
-                perc: 20,
-              }
-            ]
-          },
-          {
-            exercisePhotoUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRuCFcnFU-TPgls_fB_Jw1lCXlhgIcdFZPAd9Yd3c5ByMfs3x1CsT1F1YDvUQn5Uqc1eJkqtfulYApjOeOe5IM__iLozHusE6wKe9j2OGI&s=10",
-            nome: "Panca Piana",
-            serie: [
-              {
-                peso: 37.5,
-                reps: 8,
-                recuperoMs: 3000
-              },
-              {
-                peso: 37.5,
-                reps: 8,
-                recuperoMs: 3000
-              },
-              {
-                peso: 37.5,
-                reps: 8,
-                recuperoMs: 3000
-              }
-            ],
-            tags: [
-              {
-                nome: "Quadricipiti",
-                perc: 55,
-              },
-              {
-                nome: "Femorali",
-                perc: 25,
-              },
-              {
-                nome: "Addome",
-                perc: 20,
-              }
-            ]
-          }
-        ]
-      }
-    )
   }
 
   close() {
