@@ -103,15 +103,13 @@ export class EditProfilePage implements OnInit {
 
   compareNationalities(obj1: Nation | undefined | null, obj2: Nation | undefined | null): boolean {
     return obj1 && obj2 ? (
-      obj1.id === obj2.id &&
-      obj1.name === obj2.name
+      obj1.id === obj2.id
     ) : obj1 === obj2;
   }
 
   compareCities(obj1: City | undefined | null, obj2: City | undefined | null): boolean {
     return obj1 && obj2 ? (
-      obj1.id === obj2.id &&
-      obj1.name === obj2.name
+      obj1.id === obj2.id
     ) : obj1 === obj2;
   }
 
@@ -252,14 +250,13 @@ export class EditProfilePage implements OnInit {
     if (data) {
       this.gymService.new(data.name, data.address, data.lat, data.lng).subscribe({
         next: (res) => {
+          const newGym = {
+            ...data,
+            id: res.gymId
+          };
+          this.gyms.update(value => [...value, newGym]);
+          this.userForm.get('gym')?.setValue(newGym);
           this._showToast(res.message, 'success', 2000);
-
-          this.gyms.update(value => {
-            value.push(data);
-            return value;
-          });
-
-          this.userForm.get('gym')?.setValue(data);
         },
         error: (err) => {
           this._showToast(
@@ -283,5 +280,57 @@ export class EditProfilePage implements OnInit {
       };
       reader.readAsDataURL(file);
     }
+  }
+
+  minUsernameLength(): number {
+    return MIN_USERNAME_LENGTH;
+  }
+
+  maxUsernameLength(): number {
+    return MAX_USERNAME_LENGTH;
+  }
+
+  usernameErrorText(): string {
+    return `Username must be ${MIN_USERNAME_LENGTH}-${MAX_USERNAME_LENGTH} characters long`
+  }
+
+  minNameLength(): number {
+    return MIN_NAME_LENGTH;
+  }
+
+  maxNameLength(): number {
+    return MAX_NAME_LENGTH;
+  }
+
+  nameErrorText(): string {
+    const name: string = this.userForm.value.name ?? '';
+    if (!name.match(NAME_REGEX))
+      return "Name does not match the regex";
+    else
+      return `Name must be ${MIN_NAME_LENGTH}-${MAX_NAME_LENGTH} characters long`;
+  }
+
+  minSurnameLength(): number {
+    return MIN_NAME_LENGTH;
+  }
+
+  maxSurnameLength(): number {
+    return MAX_NAME_LENGTH;
+  }
+
+  surnameErrorText(): string {
+    const surname: string = this.userForm.value.surname ?? '';
+    if (!surname.match(SURNAME_REGEX))
+      return "Surname does not match the regex";
+    else
+      return `Surname must be ${MIN_NAME_LENGTH}-${MAX_NAME_LENGTH} characters long`;
+  }
+
+  weightErrorText(): string {
+    return `Weight must be a number between ${MIN_WEIGHT_VALUE}kg and ${MAX_WEIGHT_VALUE}kg`;
+  }
+
+  heightErrorText(): string {
+    return `Height must be a number between ${MIN_HEIGHT_VALUE}cm and ${MAX_HEIGHT_VALUE}cm`;
   }
 }

@@ -23,7 +23,7 @@ export class GymService {
     );
   }
 
-  new(name: string, address: string, lat: number, lng: number): Observable<{message: string}> {
+  new(name: string, address: string, lat: number, lng: number): Observable<{message: string, gymId?: number}> {
     return this.http.post<{message: string}>(
       `${environment.apiUrl}/api/gyms/new`,
       {name:name, address:address, lat:lat, lng:lng}

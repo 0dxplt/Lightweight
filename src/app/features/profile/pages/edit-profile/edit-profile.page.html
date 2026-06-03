@@ -11,69 +11,86 @@
       style="display: none;">
     </div>
     <div id="user-info-container">
-      <ion-item lines="inset">
+      <ion-item lines="none">
         <ion-input
           formControlName="username"
           label="Username",
-          labelPlacement="floating">
+          labelPlacement="floating",
+          [counter]="true"
+          [minlength]="minUsernameLength()"
+          [maxlength]="maxUsernameLength()"
+          [errorText]="usernameErrorText()">
         </ion-input>
       </ion-item>
-      <ion-item lines="inset">
+      <ion-item lines="none">
         <ion-input
           [required]="this.verified()"
           formControlName="name"
           label="Name",
-          labelPlacement="floating">
+          labelPlacement="floating"
+          [counter]="true"
+          [minlength]="minNameLength()"
+          [maxlength]="maxNameLength()"
+          [errorText]="nameErrorText()">
         </ion-input>
       </ion-item>
-      <ion-item lines="inset">
+      <ion-item lines="none">
         <ion-input
           [required]="this.verified()"
           formControlName="surname"
           label="Surname",
-          labelPlacement="floating">
+          labelPlacement="floating"
+          [counter]="true"
+          [minlength]="minSurnameLength()"
+          [maxlength]="maxSurnameLength()"
+          [errorText]="surnameErrorText()">
         </ion-input>
       </ion-item>
-      <ion-item lines="inset">
+      <ion-item lines="none">
         <ion-input
           formControlName="email"
           label="Email",
-          labelPlacement="floating">
+          labelPlacement="floating"
+          errorText="Invalid email (es: try@again.please)">
         </ion-input>
       </ion-item>
-      <ion-item lines="inset">
+      <ion-item lines="none">
         <ion-input
           [required]="this.verified()"
           type="date"
           formControlName="birthdate"
           label="Birthdate",
-          labelPlacement="floating">
+          labelPlacement="floating"
+          errorText="Insert a valid date">
         </ion-input>
       </ion-item>
-      <ion-item lines="inset">
+      <ion-item lines="none">
         <ion-input
           formControlName="weight"
           type="number"
           label="Weight",
-          labelPlacement="floating">
+          labelPlacement="floating"
+          [errorText]="weightErrorText()">
         </ion-input>
       </ion-item>
-      <ion-item lines="inset">
+      <ion-item lines="none">
         <ion-input
-          formControlName="height",
+          formControlName="height"
           type="number"
           label="Height",
-          labelPlacement="floating">
+          labelPlacement="floating"
+          [errorText]="heightErrorText()">
         </ion-input>
       </ion-item>
-      <ion-item lines="inset">
+      <ion-item lines="none">
         <ion-select
         [required]="this.verified()"
         label="Nation" 
           labelPlacement="floating" 
           formControlName="nationality" 
           interface="modal"
-          [compareWith]="compareNationalities">
+          [compareWith]="compareNationalities"
+          errorText="Insert a valid Nation">
           @for (item of this.nations(); track item.id) {
             <ion-select-option [value]="item">{{ item.name }}</ion-select-option>
           }
@@ -84,33 +101,36 @@
     @if (this.isPT()) {
       <div id="pt-container">
         <div id="pt-info-container">
-          <ion-item>
+          <ion-item lines="none">
             <ion-input
               formControlName="proemail"
-              label="Professional Email",
-              labelPlacement="floating">
+              label="Professional Email"
+              labelPlacement="floating"
+              errorText="Invalid email (es: try@again.please)">
             </ion-input>
           </ion-item>
-          <ion-item>
+          <ion-item lines="none">
             <ion-select
               [compareWith]="compareCities"
               label="City" 
               labelPlacement="floating" 
               formControlName="city" 
-              interface="modal">
+              interface="modal"
+              errorText="Insert a valid City">
               @for (item of this.cities(); track item.id) {
                 <ion-select-option [value]="item">{{ item.name }} ({{item.nation.name}})</ion-select-option>
               }
             </ion-select>
           </ion-item>
-          <ion-item>
+          <ion-item lines="none">
             <ion-select 
               [compareWith]="compareGyms"
               label="Gym" 
               labelPlacement="floating" 
               formControlName="gym" 
               interface="modal"
-              (ionChange)="gymChanged($event)">
+              (ionChange)="gymChanged($event)"
+              errorText="Insert a valid Gym">
               @for (item of this.gyms(); track item.id) {
                 <ion-select-option [value]="item">{{ item.name }} ({{ item.address }})</ion-select-option>
               }
