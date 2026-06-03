@@ -78,6 +78,13 @@ export class WorkoutService {
     );
   }
 
+  create(nome: string, data: number, exercises: {serie: number, ripetizioni: number, recupero: number, id: number}[]): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(
+      `${environment.apiUrl}/api/workout/create/`,
+      {nome: nome, data: data, exercises: exercises }
+    );
+  }
+
   delete(id: number | null): Observable<{ message: string }> {
     return this.http.post<{ message: string }>(
       `${environment.apiUrl}/api/workout/delete/`,

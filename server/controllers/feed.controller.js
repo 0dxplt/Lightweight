@@ -24,8 +24,6 @@ async function getUserFeed(req, res) {
             GROUP BY Sessioni.id
             ORDER BY Sessioni.data_svolgimento DESC
             `, [profileId, Date.now() - 86400000]);
-            console.log(profileId);
-            console.log(rows);
         res.json(rows);
     } catch (error) {
         res.status(500).json(error.message);

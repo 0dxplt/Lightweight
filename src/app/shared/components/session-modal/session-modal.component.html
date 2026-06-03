@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>{{sessionInfo.nome}}</ion-title>
+    <ion-title>{{sessionInfo().nome}}</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="close()">Close</ion-button>
     </ion-buttons>
@@ -9,10 +9,10 @@
 
 <ion-content class="ion-padding">
   <div class="date-time">
-    <p>{{sessionInfo.timestamp}}</p>
+    <p>{{sessionInfo().timestamp}}</p>
   </div>
   <div class="exercises">
-    @for (exercise of sessionInfo.exercises; track exercise) {
+    @for (exercise of sessionInfo().exercises; track exercise) {
     <div class="exercise">
       <div class="header">
         <div class="avatar">

@@ -145,6 +145,46 @@ async function getAllFullSessions(req, res) {
     }
 }
 
+async function getSingleSession(req, res) {
+    try {
+        const sessionId = req.params.id;
+
+        const rows = await dbutils.all(`
+        SELECT
+        Sessioni.nome. AS nome_sessione,
+        Sessioni.data_svolgimento,
+        peso,
+        ripetizioni,
+        recupero,
+        Esercizi.nome,
+        Esercizi.id,
+        Esercizi.descrizione,
+        Esercizi.img,
+        json_group_array(
+                json_object(
+                    'id', GruppiMuscolari.id,
+                    'nome', GruppiMuscolari.nome,
+                    'percentuale', EserciziGruppiMuscolari.perc
+                )
+            ) AS gruppi_muscolari
+        FROM Sessioni
+        JOIN SessioniEsercizi ON Sessioni.id = SessioniEsercizi.id_sessione
+        JOIN Esercizi ON SessioniEsercizi.id_esercizio = Esercizi.id
+        JOIN EserciziGruppiMuscolari ON Esercizi.id = EserciziGruppiMuscolari.id_esercizio
+        JOIN GruppiMuscolari ON EserciziGruppiMuscolari.id_gruppo_muscolare = GruppiMuscolari.id
+        WHERE Sessioni.id = ?
+        GROUP BY SessioniEsercizi.id
+        `, [sessionId]);
+
+        res.json(rows);
+    }
+    catch (error) {
+        console.error("Error in getSingleSession:", error);
+        res.status(500).json({ success: false, message: "Internal Server Error" });
+    }
+}
+
 module.exports = {
-    getAllFullSessions
+    getAllFullSessions,
+    getSingleSession
 }

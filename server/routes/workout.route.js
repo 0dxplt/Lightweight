@@ -7,5 +7,6 @@ const canAccessWorkout = require("../middlewares/workout.middleware");
 router.post('/', canAccessWorkout, controller.getFullWorkout);
 router.post('/save', canAccessWorkout, controller.saveWorkout);
 router.post('/delete', canAccessWorkout, controller.deleteWorkout);
+router.post('/create', controller.createWorkout);
 
 module.exports = router;

@@ -15,7 +15,7 @@ const canAccessWorkout = async (req, res, next) => {
     if (!workoutId) {
         return res.status(403).json({
             success: false,
-            message: "You must specify the workout to delete"
+            message: "You must specify the workout id"
         });
     }
     try {
