@@ -282,8 +282,8 @@ async function saveSession(req, res) {
 
         for (serie of session.exercises) {
             await dbutils.run(
-                "INSERT INTO SessioniEsercizi (peso, ripetizioni, recupero, id_sessione, id_esercizio) VALUES (?, ?, ?, ?, ?)",
-                [serie.weight, serie.reps, serie.recovery, sessionId, serie.exerciseId]
+                "INSERT INTO SessioniEsercizi (peso, ripetizioni, recupero, id_sessione, id_esercizio, valida) VALUES (?, ?, ?, ?, ?, ?)",
+                [serie.weight, serie.reps, serie.recovery, sessionId, serie.exerciseId, serie.valid ? 1 : 0]
             );
         }
         await dbutils.run('COMMIT');

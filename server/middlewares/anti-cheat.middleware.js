@@ -9,7 +9,7 @@ const calcolaXP = async (userId, series) => {
     const parameters = exercisesIds.map(() => '?').join(',');
 
     const esercizi = await dbutils.all(
-        `SELECT id, difficolta FROM esercizi WHERE id = ${parameters}`,
+        `SELECT id, difficolta FROM esercizi WHERE id IN (${parameters})`,
         exercisesIds
     );
 
@@ -39,29 +39,88 @@ const antiCheat = async (req, res, next) => {
 
         // logica anticheat
 
+        const avgs = await dbutils.all(`
+            SELECT
+                SessioniEsercizi.id_esercizio,
+                AVG (SessioniEsercizi.peso) AS peso_medio
+            FROM SessioniEsercizi
+            JOIN Sessioni ON SessioniEsercizi.id_sessione = Sessioni.id
+            JOIN Atleti ON Sessioni.id_creatore = Atleti.id
+            WHERE Atleti.id = ? AND SessioniEsercizi.valida = 1
+            GROUP BY SessioniEsercizi.id_esercizio`,
+            [userId]
+        );
+        
+        const avgMap = Object.fromEntries(
+            avgs.map(row => [row.id_esercizio, row.peso_medio])
+        );
+
         for (serie of series) {
-            const avg = await dbutils.all(`
-                SELECT
-                AVG (
-                    SessioniEsercizi.peso
-                ) AS peso_medio
-                FROM SessioniEsercizi
-                JOIN Sessioni ON SessioniEsercizi.id_sessione = Sessioni.id
-                JOIN Atleti ON Sessioni.id_creatore = Atleti.id
-                WHERE SessioniEsercizi.id_esercizio = ? AND Atleti.id = ?
-                GROUP BY SessioniEsercizi.id_esercizio
-                `, [serie.exerciseId, userId]);
-            console.log(avg);
+            if (avgMap[serie.exerciseId]) {
+                // console.log(serie + " => esiste già")
+                // console.log("Peso serie: " + serie.weight);
+                // console.log("Peso avg: " + avgMap[serie.exerciseId]);
+                const diff = serie.weight - avgMap[serie.exerciseId];
+                if (diff > 0 && diff > 0.5 * avgMap[serie.exerciseId]) {
+                    console.log(serie + " is not valid anymore");
+                    serie.valid = false;
+                }
+            } else {
+                // console.log(serie + " => prima volta")
+                const avgRow = await dbutils.get(`
+                    SELECT AVG(max_peso) as 'media' FROM (
+                        SELECT 
+                            Esercizi.nome as 'nome esercizio',
+                            GruppiMuscolari.nome as 'gruppo muscolare',
+                            EserciziGruppiMuscolari.perc,
+                            MAX(SessioniEsercizi.peso) as 'max_peso'
+                        FROM
+                            Esercizi JOIN
+                            EserciziGruppiMuscolari ON Esercizi.id = EserciziGruppiMuscolari.id_esercizio JOIN
+                            GruppiMuscolari ON GruppiMuscolari.id = EserciziGruppiMuscolari.id_gruppo_muscolare JOIN
+                            SessioniEsercizi ON SessioniEsercizi.id_esercizio = Esercizi.id JOIN
+                            Sessioni ON Sessioni.id = SessioniEsercizi.id_sessione
+                        WHERE Sessioni.id_creatore = ? AND SessioniEsercizi.valida = 1 AND EserciziGruppiMuscolari.id_gruppo_muscolare = (
+                            SELECT EserciziGruppiMuscolari.id_gruppo_muscolare FROM EserciziGruppiMuscolari
+                                WHERE EserciziGruppiMuscolari.id_esercizio = ?
+                                ORDER BY perc DESC 
+                                LIMIT 1
+                            ) AND EserciziGruppiMuscolari.perc = (
+                                SELECT MAX(EserciziGruppiMuscolari.perc)
+                                FROM EserciziGruppiMuscolari
+                                WHERE EserciziGruppiMuscolari.id_esercizio = Esercizi.id
+                            )
+                        GROUP BY Esercizi.id
+                    )`,
+                    [userId, serie.exerciseId]
+                );
+
+                if (avgRow.media) {
+                    // console.log("AVG ROW: " + avgRow);
+                    const offset = 50;
+                    const limit = avgRow.media + offset;
+    
+                    if (serie.weight > limit)
+                        serie.valid = false;
+                } else {
+                    // Hardcoded
+                    // console.log(serie + " => Hardcoded");
+                    if (serie.weight > 400)
+                        serie.valid = false;
+                }
+            }
         }
 
-        req.body.xp = await calcolaXP(req.user.userId, series);
+        const valids = series.filter(s => s.valid);
+        console.log(valids);
+        req.body.xp = await calcolaXP(req.user.userId, valids);
         next();
     } catch (error) {
+        console.log(error);
         return res.status(503).json({
             success: false,
             message: "Errore nel verificare la sessione"
         });
-        console.log(error);
     }
 }
 module.exports = antiCheat
