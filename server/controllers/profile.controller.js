@@ -427,6 +427,42 @@ async function requestPending(id) {
     }
 }
 
+async function satisfiesConditions(id) {
+    try {
+        const row = await dbutils.get(
+            "SELECT numero_followers, numero_sessioni, data_nascita FROM Atleti WHERE id = ?",
+            [id]
+        );
+        if (!row) {
+            return false;
+        }
+        const followers = row.numero_followers;
+        const sessions = row.numero_sessioni;
+        const birthdate = row.data_nascita;
+
+        if (birthdate) return false;
+      
+        const birthDateObj = new Date(birthdate);
+        const today = new Date();
+        
+        let age = today.getFullYear() - birthDateObj.getFullYear();
+        const monthDiff = today.getMonth() - birthDateObj.getMonth();
+        
+        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDateObj.getDate())) {
+            age--;
+        }
+    
+        return (
+            age >= global.verify_min_age && 
+            followers >= global.verify_min_followers && 
+            sessions >= global.verify_min_sessions
+        );
+    } catch(err) {
+        console.error("Database error in requestPresent:", err);
+        throw err;
+    }
+}
+
 async function newRequest(req, res) {
     let active_transaction = false;
     try {
@@ -437,6 +473,14 @@ async function newRequest(req, res) {
             return res.status(200).json({
                 requested: false,
                 message: "A request already exists"
+            });
+        }
+
+        const satisfies = await satisfiesConditions(profileId);
+        if (!satisfies) {
+            return res.status(403).json({
+                requested: false,
+                message: "You don't satisfy the requirements"
             });
         }
 
