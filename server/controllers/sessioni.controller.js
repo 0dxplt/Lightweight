@@ -151,29 +151,54 @@ async function getSingleSession(req, res) {
 
         const rows = await dbutils.all(`
         SELECT
-        Sessioni.nome. AS nome_sessione,
-        Sessioni.data_svolgimento,
-        peso,
-        ripetizioni,
-        recupero,
-        Esercizi.nome,
-        Esercizi.id,
-        Esercizi.descrizione,
-        Esercizi.img,
+        nome_sessione,
+        data_svolgimento,
+        nome,
+        id,
+        descrizione,
+        img,
+        gruppi_muscolari,
         json_group_array(
-                json_object(
-                    'id', GruppiMuscolari.id,
-                    'nome', GruppiMuscolari.nome,
-                    'percentuale', EserciziGruppiMuscolari.perc
-                )
-            ) AS gruppi_muscolari
-        FROM Sessioni
-        JOIN SessioniEsercizi ON Sessioni.id = SessioniEsercizi.id_sessione
-        JOIN Esercizi ON SessioniEsercizi.id_esercizio = Esercizi.id
-        JOIN EserciziGruppiMuscolari ON Esercizi.id = EserciziGruppiMuscolari.id_esercizio
-        JOIN GruppiMuscolari ON EserciziGruppiMuscolari.id_gruppo_muscolare = GruppiMuscolari.id
-        WHERE Sessioni.id = ?
-        GROUP BY SessioniEsercizi.id
+            json_object(
+                'recuperoMs',
+                recupero,
+                'peso',
+                peso,
+                'reps',
+                ripetizioni
+            )
+        ) AS serie
+        FROM (
+            SELECT
+                Sessioni.nome AS nome_sessione,
+                Sessioni.data_svolgimento,
+                peso,
+                ripetizioni,
+                recupero,
+                Esercizi.nome,
+                Esercizi.id,
+                Esercizi.descrizione,
+                Esercizi.img,
+                json_group_array(
+                    json_object(
+                        'nome',
+                        GruppiMuscolari.nome,
+                        'percentuale',
+                        EserciziGruppiMuscolari.perc
+                    )
+                ) AS gruppi_muscolari
+            FROM
+                Sessioni
+                JOIN SessioniEsercizi ON Sessioni.id = SessioniEsercizi.id_sessione
+                JOIN Esercizi ON SessioniEsercizi.id_esercizio = Esercizi.id
+                JOIN EserciziGruppiMuscolari ON Esercizi.id = EserciziGruppiMuscolari.id_esercizio
+                JOIN GruppiMuscolari ON EserciziGruppiMuscolari.id_gruppo_muscolare = GruppiMuscolari.id
+            WHERE
+                Sessioni.id = ?
+            GROUP BY
+                SessioniEsercizi.id
+        )
+        GROUP BY id
         `, [sessionId]);
 
         res.json(rows);

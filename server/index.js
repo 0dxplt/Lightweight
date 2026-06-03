@@ -55,7 +55,7 @@ app.use("/api/requests", authMiddleware, modMiddleware, routeRichieste);
 app.use("/api/solved", authMiddleware, modMiddleware, routeSolved);
 app.use("/api/workout", authMiddleware, routeWorkout);
 app.use("/api/workouts", authMiddleware, routeWorkouts);
-app.use("/api/sessions", authMiddleware, routeSessioni);
+app.use("/api/sessions", routeSessioni);
 app.use("/api/auth", routeAuth);
 app.use("/api/feed", authMiddleware, routeFeed);
 
