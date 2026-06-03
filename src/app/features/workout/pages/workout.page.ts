@@ -25,8 +25,6 @@ import { MuscolarGroupsService } from 'src/app/shared/services/muscolar-groups-s
 })
 export class WorkoutPage implements OnInit {
 
-  @Input() id!: number;
-
   @ViewChild('modal') exercisesModal!: IonModal;
   @ViewChild('ricerca', { read: ElementRef, static: false }) searchBar!: ElementRef;
 
@@ -204,7 +202,8 @@ export class WorkoutPage implements OnInit {
   }
 
   saveWorkout() {
-    this.workoutService.save(this.id, this.workoutName, new Date().getTime(), this.creatorId, this.exercisesWorkout().map(
+    console.log(this.workoutService.workoutId());
+    this.workoutService.save(this.workoutService.workoutId()!, this.workoutName, new Date().getTime(), this.creatorId, this.exercisesWorkout().map(
       ex => ({
         serie: ex.serie,
         ripetizioni: ex.reps,
@@ -214,6 +213,26 @@ export class WorkoutPage implements OnInit {
     )).subscribe({
       next: (res) => {
         this.showToast("Workout salvato con successo!", 'success', 2000);
+        console.log(res.message);
+        this.router.navigate(["/workouts"]);
+      },
+      error: (err) => {
+        console.log(err.message);
+      }
+    });
+  }
+
+  createWorkout() {
+    this.workoutService.create(this.workoutName, new Date().getTime(), this.exercisesWorkout().map(
+      ex => ({
+        serie: ex.serie,
+        ripetizioni: ex.reps,
+        recupero: ex.recuperoMs,
+        id: ex.exercise.id
+      })
+    )).subscribe({
+      next: (res) => {
+        this.showToast("Workout creato con successo!", 'success', 2000);
         console.log(res.message);
         this.router.navigate(["/workouts"]);
       },
@@ -255,7 +274,7 @@ export class WorkoutPage implements OnInit {
 
   createCurrentSession() {
     const workout: WorkoutVisualization = {
-      id: this.id,
+      id: this.workoutService.workoutId()!,
       creatorUsername: this.creatorUsername,
       creatorId: this.creatorId,
       name: this.workoutName,

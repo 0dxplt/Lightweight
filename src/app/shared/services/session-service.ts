@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { AuthService } from 'src/app/features/auth/services/auth-service';
 import { SessionExercise } from 'src/app/models/session-exercise.model';
 import { Session } from 'src/app/models/session.model';
@@ -44,5 +44,13 @@ export class SessionService {
       `${environment.apiUrl}/api/profile/remove-session`,
       {id:id, profileId: this.authService.user()?.id ?? -1}
     );
+  }
+
+  get(id: number):Observable<any>{
+    return this.http.get(`${environment.apiUrl}/api/sessions/` + id).pipe(
+      tap((rows) => {
+        console.log("DATi",rows);
+      })
+    )
   }
 }

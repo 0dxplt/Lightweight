@@ -102,12 +102,17 @@
       <ion-icon name="settings-outline"></ion-icon>
     </ion-fab-button>
     <ion-fab-list side="end">
+      @if (hasId()) {
       <ion-fab-button color="secondary" (click)="saveWorkout()">
         <ion-icon name="save-outline"></ion-icon>
       </ion-fab-button>
-      @if (hasId()) {
       <ion-fab-button color="secondary" (click)="deleteWorkout()">
         <ion-icon name="trash-outline"></ion-icon>
+      </ion-fab-button>
+      }
+      @else {
+      <ion-fab-button color="secondary" (click)="createWorkout()">
+        <ion-icon name="save-outline"></ion-icon>
       </ion-fab-button>
       }
     </ion-fab-list>
