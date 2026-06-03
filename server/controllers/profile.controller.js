@@ -11,7 +11,6 @@ async function update(req, res) {
     const file = req.file;
 
     let active_transaction = false;
-
     if (!user || !profileId) {
         return res.status(400).json({
             success: false,
@@ -20,6 +19,19 @@ async function update(req, res) {
     }
 
     try {
+
+        const tmp = await dbutils.get("SELECT verificato FROM Atleti WHERE id = ?", [profileId]);
+        const verified = tmp.verificato === 1 ? true : false;
+        
+        if (verified && (
+            !user.name || !user.surname || !user.birthdate || user.nationality
+        )) {
+            return res.status(400).json({
+                success: false,
+                message: "You have a verified account: Name, Surname, Birthdate and Nationality are mandatory"
+            });
+        }
+
         await dbutils.run("BEGIN TRANSACTION");
         active_transaction = true;
 
@@ -37,11 +49,11 @@ async function update(req, res) {
             [
                 user.username, 
                 user.email, 
-                user.name, 
-                user.surname, 
+                user.name || null, 
+                user.surname || null, 
                 user.weight, 
                 user.height,
-                user.birthdate,
+                user.birthdate || null,
                 user.nationality?.id || null,
                 profileId
             ]
