@@ -267,6 +267,29 @@ async function follows(req, res) {
     }
 }
 
+async function updateUserRank(userId, deltaXp) {
+    await dbutils.run(`
+        UPDATE Atleti
+        SET xp_stagionali = xp_stagionali + ?,
+            xp_globali = xp_globali + ?
+        WHERE id = ?`,
+        [deltaXp, deltaXp, userId]
+    );
+
+    const xp = await dbutils.get(`
+        SELECT xp_stagionali, xp_globali
+        FROM Atleti WHERE id = ?`,
+        [userId]
+    );
+
+    await dbutils.run(`
+        UPDATE Atleti
+        SET livello_stagionale = livello_stagionale + ?, livello_globale = livello_globale + ?
+        WHERE id = ?`,
+        [deltaXp, deltaXp, userId]
+    );
+}
+
 async function saveSession(req, res) {
     try {
         const {session, xp} = req.body;
@@ -286,6 +309,9 @@ async function saveSession(req, res) {
                 [serie.weight, serie.reps, serie.recovery, sessionId, serie.exerciseId, serie.valid ? 1 : 0]
             );
         }
+
+        await updateUserRank(profileId, xp);
+
         await dbutils.run('COMMIT');
         res.json({
             success: true,
