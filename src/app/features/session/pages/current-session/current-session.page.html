@@ -102,6 +102,7 @@
     }
   </div>
   <ion-fab slot="fixed" horizontal="center" vertical="bottom">
+    @if (hasExercise()) {
     <ion-fab-button color="secondary">
       <ion-icon name="settings-outline"></ion-icon>
     </ion-fab-button>
@@ -120,9 +121,15 @@
         <ion-icon name="pencil-outline"></ion-icon>
       </ion-fab-button>
     </ion-fab-list>
+    }
+    @else {
+      <ion-fab-button color="secondary" id="open-add-exercise-session">
+        <ion-icon name="add-outline"></ion-icon>
+      </ion-fab-button>
+    }
   </ion-fab>
-  <ion-modal #modal trigger="open-add-exercise-session" [initialBreakpoint]="0.5" [breakpoints]="[0, 0.25, 0.5, 0.75]" [expandToScroll]="false"
-    (ionModalWillDismiss)="resetFilter()">
+  <ion-modal #modal trigger="open-add-exercise-session" [initialBreakpoint]="0.5" [breakpoints]="[0, 0.25, 0.5, 0.75]"
+    [expandToScroll]="false" (ionModalWillDismiss)="resetFilter()">
     <ng-template>
       <ion-content>
         <ion-searchbar placeholder="Search" (ionInput)="handleInput($event)"></ion-searchbar>
