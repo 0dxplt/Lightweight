@@ -1,4 +1,4 @@
-import { Component, computed, effect, input, model, OnInit, output, signal } from '@angular/core';
+import { Component, computed, effect, input, OnInit, output, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { IonicModule, LoadingController, ToastController } from '@ionic/angular';
 import { addIcons } from 'ionicons';
@@ -15,12 +15,13 @@ import { PtInfoModalPage } from '../../pages/pt-info-modal/pt-info-modal.page';
 import { FollowingModalPage } from '../../pages/following-modal/following-modal.page';
 import { FollowersModalPage } from '../../pages/followers-modal/followers-modal.page';
 import { IonRefresherCustomEvent } from '@ionic/core';
+import { ToIntPipe } from "../../../../shared/pipes/to-int-pipe";
 
 @Component({
   selector: 'app-profile-page-body',
   templateUrl: './profile-page-body.component.html',
   styleUrls: ['./profile-page-body.component.scss'],
-  imports: [IonicModule, SessionCardComponent]
+  imports: [IonicModule, SessionCardComponent, ToIntPipe]
 })
 export class ProfilePageBodyComponent  implements OnInit {
 
