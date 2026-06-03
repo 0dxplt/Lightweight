@@ -9,7 +9,7 @@ const calcolaXP = async (userId, series) => {
     const parameters = exercisesIds.map(() => '?').join(',');
 
     const esercizi = await dbutils.all(
-        `SELECT id, difficolta FROM esercizi WHERE id = ${parameters}`,
+        `SELECT id, difficolta FROM esercizi WHERE id IN (${parameters})`,
         exercisesIds
     );
 
