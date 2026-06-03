@@ -62,7 +62,7 @@ const antiCheat = async (req, res, next) => {
                 // console.log("Peso avg: " + avgMap[serie.exerciseId]);
                 const diff = serie.weight - avgMap[serie.exerciseId];
                 if (diff > 0 && diff > 0.5 * avgMap[serie.exerciseId]) {
-                    console.log(serie + " is not valid anymore");
+                    // console.log(serie + " is not valid anymore");
                     serie.valid = false;
                 }
             } else {
@@ -112,7 +112,7 @@ const antiCheat = async (req, res, next) => {
         }
 
         const valids = series.filter(s => s.valid);
-        console.log(valids);
+        // console.log(valids);
         req.body.xp = await calcolaXP(req.user.userId, valids);
         next();
     } catch (error) {

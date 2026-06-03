@@ -46,6 +46,8 @@ export class CurrentSessionPage implements OnInit {
 
   public muscleGroups = signal<string[]>([]);
 
+  public hasExercise = computed(() => this.sessionExercises().length > 0);
+
   public xp: number = 0;
 
   public workoutExercises = computed(() => {
