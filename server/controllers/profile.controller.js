@@ -257,11 +257,12 @@ async function follows(req, res) {
 
 async function saveSession(req, res) {
     try {
-        const {session, profileId} = req.body;
+        const {session, xp} = req.body;
+        const profileId = req.user.userId;
         await dbutils.run('BEGIN TRANSACTION');
         await dbutils.run(
             "INSERT INTO Sessioni (id_creatore, nome, data_svolgimento, xp) VALUES (?, ?, ?, ?)",
-            [profileId, session.nome, session.dataSvolgimento, session.xp]
+            [profileId, session.nome, session.dataSvolgimento, xp]
         );
         
         const result = await dbutils.all("SELECT last_insert_rowid() AS lastId");

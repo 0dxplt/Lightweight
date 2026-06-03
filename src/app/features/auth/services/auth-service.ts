@@ -212,7 +212,7 @@ export class AuthService {
     console.log(session);
     return this.http.post<{ message: string }>(
       `${environment.apiUrl}/api/profile/save-session/`,
-      {session, profileId:this._user()?.id??-1}
+      {session}
     ).pipe(
       tap((res) => {
         console.log(res.message)
