@@ -68,4 +68,28 @@ export class ModLoginPage implements OnInit {
     });
     await toast.present();
   }
+
+  usernameMinLength(): number {
+    return MIN_MOD_USERNAME_LENGTH;
+  }
+
+  usernameMaxLength(): number {
+    return MAX_MOD_USERNAME_LENGTH;
+  }
+
+  usernameErrorText(): string {
+    return `Username must be ${MIN_MOD_USERNAME_LENGTH}-${MAX_MOD_USERNAME_LENGTH} charaters long`;
+  }
+
+  passwordMinLength(): number {
+    return MIN_MOD_PASSWORD_LENGTH;
+  }
+
+  passwordMaxLength(): number {
+    return MAX_MOD_PASSWORD_LENGTH;
+  }
+
+  passwordErrorText(): string {
+    return `Password must be ${MIN_MOD_PASSWORD_LENGTH}-${MAX_MOD_PASSWORD_LENGTH} charaters long`;
+  }
 }
