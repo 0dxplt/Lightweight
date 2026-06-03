@@ -21,42 +21,40 @@
     <form [formGroup]="ptFormGroup" (ngSubmit)="confirm()">
       
       <!-- Email Professionale -->
-      <ion-item class="input-item" lines="full">
+      <ion-item class="input-item" lines="none">
         <ion-input
           label="Professional Email"
           labelPlacement="floating"
           type="email"
-          formControlName="proemail">
+          formControlName="proemail"
+          errorText="Invalid email (es: try@again.please)">
         </ion-input>
       </ion-item>
 
       <!-- Palestra -->
-       <ion-list>
-         <ion-item class="input-item" lines="full">
+         <ion-item class="input-item" lines="none">
            <ion-select label="Gym" 
              labelPlacement="stacked" 
              formControlName="gym" 
              placeholder="Select Gym"
              interface="modal"
-             (ionChange)="onGymChange($event)">
+             (ionChange)="onGymChange($event)"
+             errorText="Insert a valid Gym">
              @for (item of this.gyms(); track item.id) {
                <ion-select-option [value]="item">{{ item.name }}, {{ item.address }}</ion-select-option>
              }
              <ion-select-option value="ADD_NEW" class="add-new-option">Add new gym</ion-select-option>
            </ion-select>
          </ion-item>
-       </ion-list>
 
       <!-- Città -->
-       <ion-list>
-         <ion-item class="input-item" lines="full">
-           <ion-select label="City" labelPlacement="floating" formControlName="city" interface="modal">
+         <ion-item class="input-item" lines="none">
+           <ion-select label="City" labelPlacement="floating" formControlName="city" interface="modal" errorText="Insert a valid City">
              @for (item of this.cities(); track item.id) {
                <ion-select-option [value]="item">{{ item.name }} ({{ item.nation.name }})</ion-select-option>
              }
            </ion-select>
          </ion-item>
-       </ion-list>
 
       <ion-button 
         type="submit" 

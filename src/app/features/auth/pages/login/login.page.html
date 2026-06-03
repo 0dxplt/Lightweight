@@ -5,23 +5,28 @@
       <ion-icon></ion-icon>
     </div>
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-      <ion-item>
+      <ion-item lines="none">
         <ion-input
           id="login-email-input"
           type="email"
           formControlName="email"
           label="Email"
-          labelPlacement="floating">
+          labelPlacement="floating"
+          errorText="Invalid email (es: try@again.please)">
         </ion-input>
       </ion-item>
 
-      <ion-item>
+      <ion-item lines="none">
         <ion-input
           id="login-password-input"
           [type]="showPassword ? 'text' : 'password'"
           formControlName="password"
           label="Password"
-          labelPlacement="floating">
+          labelPlacement="floating"
+          [counter]="true"
+          [minlength]="minPasswordLength()"
+          [maxlength]="maxPasswordLength()"
+          errorText="Password must be 8 to 32 characters long">
         </ion-input>
         <ion-icon
           [name]="showPassword ? 'eye-off-outline' : 'eye-outline'" 

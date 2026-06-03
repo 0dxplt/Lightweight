@@ -6,14 +6,35 @@ import { addIcons } from 'ionicons';
 import { eyeOffOutline, eyeOutline } from 'ionicons/icons';
 import { MAX_PASSWORD_LENGTH, MIN_PASSWORD_LENGTH } from 'src/app/shared/global';
 
-export const passwordMatchValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
-  const password = control.get('newPassword');
-  const confirmPassword = control.get('repeatPass');
+export const passwordMatchValidator: ValidatorFn = (group: AbstractControl) => {
+  const password = group.get('newPassword');
+  const repeat = group.get('repeatPass');
 
-  if (!password || !confirmPassword) return null;
+  if (!password || !repeat) return null;
 
-  return password.value === confirmPassword.value ? null : { passwordMismatch: true };
+  if (password.value !== repeat.value) {
+    repeat.setErrors({ passwordMismatch: true });
+  } else if (repeat.hasError('passwordMismatch')) {
+    repeat.setErrors(null);
+  }
+
+  return null;
 };
+
+export const differentPasswordValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+  const password = control.get('newPassword');
+  const oldPassword = control.get('oldPassword');
+
+  if (!password || !oldPassword) return null;
+  
+  if (password.value === oldPassword.value) {
+    password.setErrors({ passwordMatch: true });
+  } else if (password.hasError('passwordMatch')) {
+    password.setErrors(null);
+  }
+
+  return password.value !== oldPassword.value ? null : { passwordMatch: true };
+}
 
 @Component({
   selector: 'app-change-password-modal',
@@ -28,7 +49,7 @@ export class ChangePasswordModalPage implements OnInit {
     oldPassword: new FormControl('', [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH), Validators.maxLength(MAX_PASSWORD_LENGTH)]),
     newPassword: new FormControl('', [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH), Validators.maxLength(MAX_PASSWORD_LENGTH)]),
     repeatPass: new FormControl('', [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH), Validators.maxLength(MAX_PASSWORD_LENGTH)])
-  }, { validators: passwordMatchValidator });
+  }, { validators: [passwordMatchValidator, differentPasswordValidator] });
 
   oldPasswordType = signal<"text" | "password">("password");
   newPasswordType = signal<"text" | "password">("password");
@@ -56,12 +77,6 @@ export class ChangePasswordModalPage implements OnInit {
   ngOnInit() {
   }
 
-  private _dismiss() {
-    this.modalController.dismiss({
-      dismissed: true
-    });
-  }
-
   cancel() {
     return this.modalController.dismiss(null, 'cancel');
   }
@@ -83,5 +98,43 @@ export class ChangePasswordModalPage implements OnInit {
 
   toggleRep() {
     this.repPasswordType.update(t => t === "password" ? "text" : "password");
+  }
+
+  minPasswordLength(): number {
+    return MIN_PASSWORD_LENGTH;
+  }
+
+  maxPasswordLength(): number {
+    return MAX_PASSWORD_LENGTH;
+  }
+
+  oldPasswordError(): string {
+    return `Password must be ${MIN_PASSWORD_LENGTH}-${MAX_PASSWORD_LENGTH} charaters long`;
+  }
+
+  newPasswordError(): string {
+    const newPasswordControl = this.changePasswordFormGroup.get('newPassword');
+    if (newPasswordControl?.hasError('required')) {
+      return 'Password is required';
+    }
+    if (newPasswordControl?.hasError('minlength') || newPasswordControl?.hasError('maxlength')) {
+      return `Password must be ${MIN_PASSWORD_LENGTH}-${MAX_PASSWORD_LENGTH} characters long`;
+    }
+    if (newPasswordControl?.hasError('passwordMatch')) {
+      return 'New password must be different from old password';
+    }
+    return '';
+  }
+ 
+  repeatPasswordError(): string {
+    const repeatPassControl = this.changePasswordFormGroup.get('repeatPass');
+    if (repeatPassControl?.hasError('required')) return 'Password is required';
+    if (repeatPassControl?.hasError('minlength') || repeatPassControl?.hasError('maxlength')) {
+      return `Password must be ${MIN_PASSWORD_LENGTH}-${MAX_PASSWORD_LENGTH} characters long`;
+    }
+    if (repeatPassControl?.hasError('passwordMismatch')) {
+      return 'Passwords do not match';
+    }
+    return '';
   }
 }

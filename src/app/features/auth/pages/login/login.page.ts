@@ -81,4 +81,12 @@ export class LoginPage implements OnInit {
     });
     await toast.present();
   }
+
+  minPasswordLength(): number {
+    return MIN_PASSWORD_LENGTH;
+  }
+
+  maxPasswordLength(): number {
+    return MAX_PASSWORD_LENGTH;
+  }
 }

@@ -84,4 +84,37 @@ export class VerifyProfileModalPage implements OnInit {
     return this.modalController.dismiss(null, 'cancel');
   }
 
+  
+  minNameLength(): number {
+    return MIN_NAME_LENGTH;
+  }
+
+  maxNameLength(): number {
+    return MAX_NAME_LENGTH;
+  }
+
+  nameErrorText(): string {
+    const name: string = this.verifyForm.get('name')?.value || '';
+    if (!name.match(NAME_REGEX))
+      return "Name does not match the regex";
+    else
+      return `Name must be ${MIN_NAME_LENGTH}-${MAX_NAME_LENGTH} characters long`;
+  }
+
+  minSurnameLength(): number {
+    return MIN_NAME_LENGTH;
+  }
+
+  maxSurnameLength(): number {
+    return MAX_NAME_LENGTH;
+  }
+
+  surnameErrorText(): string {
+    const surname: string = this.verifyForm.get('surname')?.value || '';
+    if (!surname.match(SURNAME_REGEX))
+      return "Surname does not match the regex";
+    else
+      return `Surname must be ${MIN_NAME_LENGTH}-${MAX_NAME_LENGTH} characters long`;
+  }
+
 }

@@ -18,40 +18,55 @@
       
       <!-- Nome -->
       @if (verifyForm.contains('name')) {
-        <ion-item class="input-item" lines="full">
-          <ion-input label="Name" labelPlacement="floating" formControlName="name"></ion-input>
+        <ion-item class="input-item" lines="none">
+          <ion-input
+          label="Name"
+          labelPlacement="floating"
+          formControlName="name"
+          [counter]="true"
+          [minlength]="minNameLength()"
+          [maxlength]="maxNameLength()"
+          [errorText]="nameErrorText()"></ion-input>
         </ion-item>
-        @if (verifyForm.get('name')?.errors?.['pattern']) {
+        <!-- @if (verifyForm.get('name')?.errors?.['pattern']) {
           <ion-note color="danger">Insert a valid name</ion-note>
-        }
+        } -->
       }
 
       <!-- Cognome -->
       @if (verifyForm.contains('surname')) {
-        <ion-item class="input-item" lines="full">
-          <ion-input label="Surname" labelPlacement="floating" formControlName="surname"></ion-input>
+        <ion-item class="input-item" lines="none">
+          <ion-input
+            label="Surname"
+            labelPlacement="floating"
+            formControlName="surname"
+            [counter]="true"
+            [minlength]="minSurnameLength()"
+            [maxlength]="maxSurnameLength()"
+            [errorText]="surnameErrorText()"></ion-input>
         </ion-item>
-        @if (verifyForm.get('surname')?.errors?.['pattern']) {
+        <!-- @if (verifyForm.get('surname')?.errors?.['pattern']) {
           <ion-note color="danger">Insert a valid surname</ion-note>
-        }
+        } -->
       }
 
       <!-- Data di Nascita -->
       @if (verifyForm.contains('birthdate')) {
-        <ion-item class="input-item" lines="full">
+        <ion-item class="input-item" lines="none">
           <ion-input 
             label="Birthdate" 
             labelPlacement="floating" 
             type="date" 
-            formControlName="birthdate">
+            formControlName="birthdate"
+            errorText="Insert a valid Date">
           </ion-input>
         </ion-item>
       }
 
       <!-- Nazionalità -->
       @if (verifyForm.contains('nationality')) {
-        <ion-item class="input-item" lines="full">
-          <ion-select label="Nationality" labelPlacement="floating" formControlName="nationality">
+        <ion-item class="input-item" lines="none">
+          <ion-select label="Nationality" labelPlacement="floating" formControlName="nationality" errorText="Insert a valid Nation">
             @for (nation of nations(); track nation.id) {
               <ion-select-option [value]="nation">{{ nation.name }}</ion-select-option>
             }

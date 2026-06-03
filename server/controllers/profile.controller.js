@@ -11,7 +11,6 @@ async function update(req, res) {
     const file = req.file;
 
     let active_transaction = false;
-
     if (!user || !profileId) {
         return res.status(400).json({
             success: false,
@@ -20,6 +19,19 @@ async function update(req, res) {
     }
 
     try {
+
+        const tmp = await dbutils.get("SELECT verificato FROM Atleti WHERE id = ?", [profileId]);
+        const verified = tmp.verificato === 1 ? true : false;
+        
+        if (verified && (
+            !user.name || !user.surname || !user.birthdate || user.nationality
+        )) {
+            return res.status(400).json({
+                success: false,
+                message: "You have a verified account: Name, Surname, Birthdate and Nationality are mandatory"
+            });
+        }
+
         await dbutils.run("BEGIN TRANSACTION");
         active_transaction = true;
 
@@ -37,11 +49,11 @@ async function update(req, res) {
             [
                 user.username, 
                 user.email, 
-                user.name, 
-                user.surname, 
+                user.name || null, 
+                user.surname || null, 
                 user.weight, 
                 user.height,
-                user.birthdate,
+                user.birthdate || null,
                 user.nationality?.id || null,
                 profileId
             ]
@@ -428,6 +440,42 @@ async function requestPending(id) {
     }
 }
 
+async function satisfiesConditions(id) {
+    try {
+        const row = await dbutils.get(
+            "SELECT numero_followers, numero_sessioni, data_nascita FROM Atleti WHERE id = ?",
+            [id]
+        );
+        if (!row) {
+            return false;
+        }
+        const followers = row.numero_followers;
+        const sessions = row.numero_sessioni;
+        const birthdate = row.data_nascita;
+
+        if (birthdate) return false;
+      
+        const birthDateObj = new Date(birthdate);
+        const today = new Date();
+        
+        let age = today.getFullYear() - birthDateObj.getFullYear();
+        const monthDiff = today.getMonth() - birthDateObj.getMonth();
+        
+        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDateObj.getDate())) {
+            age--;
+        }
+    
+        return (
+            age >= global.verify_min_age && 
+            followers >= global.verify_min_followers && 
+            sessions >= global.verify_min_sessions
+        );
+    } catch(err) {
+        console.error("Database error in requestPresent:", err);
+        throw err;
+    }
+}
+
 async function newRequest(req, res) {
     let active_transaction = false;
     try {
@@ -438,6 +486,14 @@ async function newRequest(req, res) {
             return res.status(200).json({
                 requested: false,
                 message: "A request already exists"
+            });
+        }
+
+        const satisfies = await satisfiesConditions(profileId);
+        if (!satisfies) {
+            return res.status(403).json({
+                requested: false,
+                message: "You don't satisfy the requirements"
             });
         }
 

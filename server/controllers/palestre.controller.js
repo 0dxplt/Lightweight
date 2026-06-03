@@ -15,12 +15,12 @@ async function addGym(req, res) {
     try {
         const { name, address, lat, lng } = req.body;
         
-        await dbutils.run(
-            "INSERT INTO Palestre (nome, indirizzo, lat, lng) VALUES (?, ?, ?, ?)",
+        const row = await dbutils.get(
+            "INSERT INTO Palestre (nome, indirizzo, lat, lng) VALUES (?, ?, ?, ?) RETURNING id",
             [name, address, lat, lng]
         );
 
-        res.status(201).json({ success: true, message: "Gym created succesfully" });
+        res.status(201).json({ success: true, message: "Gym created succesfully", gymId: row.id});
     } catch(error) {
         res.status(500).json({
             success: false,
