@@ -16,6 +16,7 @@ import { FollowingModalPage } from '../../pages/following-modal/following-modal.
 import { FollowersModalPage } from '../../pages/followers-modal/followers-modal.page';
 import { IonRefresherCustomEvent } from '@ionic/core';
 import { ToIntPipe } from "../../../../shared/pipes/to-int-pipe";
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-profile-page-body',
@@ -93,6 +94,9 @@ export class ProfilePageBodyComponent  implements OnInit {
     if (user.gxp >= GLOBAL_RANK_UP) return 1;
     return user.gxp / GLOBAL_RANK_UP;
   });
+  globalIconUrl = computed(() => {
+    return `${environment.apiUrl}/api/imgs/global-icon/${this.user()?.gLevel}`;
+  })
 
   sessions = signal<Session[]>([]);
   onRefresh = output<void>();

@@ -259,4 +259,9 @@ export class CurrentSessionPage implements OnInit {
     }
     return sum;
   }
+
+  async openAddExerciseSession() {
+    await this.exercisesModal.present()
+  }
 }
+

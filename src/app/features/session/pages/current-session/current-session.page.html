@@ -107,7 +107,7 @@
       <ion-icon name="settings-outline"></ion-icon>
     </ion-fab-button>
     <ion-fab-list side="end">
-      <ion-fab-button color="secondary" id="open-add-exercise-session">
+      <ion-fab-button color="secondary" (click)="openAddExerciseSession()">
         <ion-icon name="add-outline"></ion-icon>
       </ion-fab-button>
     </ion-fab-list>
@@ -123,12 +123,12 @@
     </ion-fab-list>
     }
     @else {
-      <ion-fab-button color="secondary" id="open-add-exercise-session">
+      <ion-fab-button color="secondary" (click)="openAddExerciseSession()">
         <ion-icon name="add-outline"></ion-icon>
       </ion-fab-button>
     }
   </ion-fab>
-  <ion-modal #modal trigger="open-add-exercise-session" [initialBreakpoint]="0.5" [breakpoints]="[0, 0.25, 0.5, 0.75]"
+  <ion-modal #modal [initialBreakpoint]="0.5" [breakpoints]="[0, 0.25, 0.5, 0.75]"
     [expandToScroll]="false" (ionModalWillDismiss)="resetFilter()">
     <ng-template>
       <ion-content>

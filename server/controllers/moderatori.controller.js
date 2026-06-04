@@ -62,7 +62,7 @@ async function updateUserRank(userId, deltaXp) {
         UPDATE Atleti
         SET livello_stagionale = livello_stagionale + ?, livello_globale = livello_globale + ?
         WHERE id = ?`,
-        [deltaXp, Math.floor(deltaXp) % global.global_level_step, userId]
+        [deltaXp, Math.floor(deltaXp) / global.global_level_step, userId]
     );
 }
 
