@@ -48,19 +48,19 @@
          </ion-item>
 
       <!-- Città -->
-         <ion-item class="input-item" lines="none">
+         <!-- <ion-item class="input-item" lines="none">
            <ion-select label="City" labelPlacement="floating" formControlName="city" interface="modal" errorText="Insert a valid City">
              @for (item of this.cities(); track item.id) {
                <ion-select-option [value]="item">{{ item.name }} ({{ item.nation.name }})</ion-select-option>
              }
            </ion-select>
-         </ion-item>
+         </ion-item> -->
 
       <ion-button 
         type="submit" 
         class="submit-button"
         expand="block" 
-        [disabled]="ptFormGroup.invalid">
+        [disabled]="ptFormGroup.invalid && this.isCitySelected()">
         Confirm
       </ion-button>
 

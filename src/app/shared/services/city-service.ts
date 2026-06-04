@@ -34,4 +34,15 @@ export class CityService {
       })
     )
   }
+
+  getOrInsert(cityName: string, country: Nation): Observable<City> {
+    return this.http.post<City>(
+      `${environment.apiUrl}/api/cities/get-or-insert`,
+      {cityName: cityName, country: country}
+    );
+  }
+
+  getByName(cityName: string): Observable<City> {
+    return this.http.get<City>(`${environment.apiUrl}/api/cities/by-name/${cityName}`);
+  }
 }

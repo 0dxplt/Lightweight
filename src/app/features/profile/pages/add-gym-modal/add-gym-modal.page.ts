@@ -6,6 +6,8 @@ import * as L from 'leaflet';
 import { Gym } from 'src/app/models/gym.model';
 import { addIcons } from 'ionicons';
 import { locationOutline } from 'ionicons/icons';
+import { NationService } from 'src/app/shared/services/nation-service';
+import { ToastController } from '@ionic/angular/standalone';
 
 // Icone Leaflet (usa CDN)
 const iconDefault = L.icon({
@@ -29,14 +31,19 @@ export class AddGymModalPage implements AfterViewInit, OnDestroy {
   gymName: string = '';
   addressQuery: string = '';
   addressFound: string = '';
-  
+  cityFound: string = '';
+  countryFound: string = '';
+
   lat: number | null = null;
   lng: number | null = null;
 
   private map!: L.Map;
   private marker!: L.Marker;
 
-  constructor(private modalCtrl: ModalController) {
+  constructor(
+    private modalCtrl: ModalController,
+    private nationService: NationService,
+    private toastController: ToastController) {
     addIcons({locationOutline});
   }
 
@@ -108,7 +115,14 @@ export class AddGymModalPage implements AfterViewInit, OnDestroy {
       const data = await resp.json();
       
       if (data && data.display_name) {
-        // Aggiorniamo l'indirizzo con quello trovato nel punto del click
+        const city =
+          data.address.city ||
+          data.address.town ||
+          data.address.county;
+        
+        this.cityFound = city;
+        this.countryFound = data.address.country;
+
         this.addressFound = data.display_name;
       } else {
         this.addressFound = `Coordinate: ${lat.toFixed(5)}, ${lng.toFixed(5)}`;
@@ -130,7 +144,29 @@ export class AddGymModalPage implements AfterViewInit, OnDestroy {
       lng: this.lng || 0,
     };
 
-    this.modalCtrl.dismiss(newGym, 'confirm');
+    this.nationService.getByName(this.countryFound).subscribe({
+      next: (nation) => {
+        console.log(nation);
+        this.modalCtrl.dismiss({
+          gym: newGym,
+          city: this.cityFound,
+          nation: nation
+        }, 'confirm');
+      },
+      error: (_) => {
+        this._showToast("You can't choose this nation", 'danger');
+      }
+    });
+  }
+
+  private async _showToast(message: string, color: string) {
+    const toast = await this.toastController.create({
+      message: message,
+      color: color,
+      duration: 2000
+    });
+
+    await toast.present();
   }
 
   cancel() {

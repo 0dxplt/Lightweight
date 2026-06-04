@@ -23,7 +23,43 @@ async function getNationFromID(req, res) {
     }
 }
 
+async function getNationByName(req, res) {
+    const name = req.params.countryName;
+
+    if (!name || name.trim() === '') {
+        return res.status(400).json({
+            success: false,
+            message: "Invalid country name"
+        });
+    }
+
+    try {
+        const nationRow = await dbutils.get("\
+            SELECT\
+                Nazioni.id, Nazioni.nome as name, Nazioni.bandiera as flag, Nazioni.country_code as shortform\
+            FROM Nazioni\
+            WHERE nome = ?",
+            [name]
+        );
+
+        if (!nationRow) {
+            return res.status(404).json({
+                success: false,
+                message: "Nation not found"
+            });
+        }
+
+        res.status(200).json(nationRow);
+    } catch(err) {
+        res.status(500).json({
+            success: false,
+            message: "Could not retrieve nation"
+        });
+    }
+}
+
 module.exports = {
     getAllNations,
     getNationFromID,
+    getNationByName
 }
