@@ -2,7 +2,7 @@ const dbutils = require('../db/database.utils');
 
 async function getAllCities(req, res) {
     try {
-        const rows = await dbutils.all("SELECT * FROM Citta");
+        const rows = await dbutils.all("SELECT * FROM Citta ORDER BY nome ASC");
         res.json(rows);
     } catch(error) {
         res.status(500).json({
