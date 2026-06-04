@@ -7,7 +7,7 @@ const path = require('path');
 
 async function update(req, res) {
     const user = req.body.user ? JSON.parse(req.body.user) : null;
-    const profileId = req.body.profileId;
+    const profileId = req.user.userId;
     const file = req.file;
 
     let active_transaction = false;
@@ -20,11 +20,14 @@ async function update(req, res) {
 
     try {
 
-        const tmp = await dbutils.get("SELECT verificato FROM Atleti WHERE id = ?", [profileId]);
+        const tmp = await dbutils.get("SELECT nome, cognome, data_nascita, id_nazione, verificato FROM Atleti WHERE id = ?", [profileId]);
         const verified = tmp.verificato === 1 ? true : false;
         
         if (verified && (
-            !user.name || !user.surname || !user.birthdate || user.nationality
+            (!user.name && !tmp.nome) ||
+            (!user.surname && !tmp.cognome) ||
+            (!user.birthdate && !tmp.data_nascita) ||
+            (!user.nationality && !tmp.id_nazione)
         )) {
             return res.status(400).json({
                 success: false,
@@ -250,7 +253,8 @@ async function changePassword(req, res) {
 
 async function follows(req, res) {
     try {
-        const { profileId, otherId } = req.body;
+        const profileId = req.user.userId;
+        const { otherId } = req.body;
 
         const row = await dbutils.get(
             "SELECT * FROM Follow WHERE id_follower = ? AND id_followed = ?",
