@@ -83,11 +83,11 @@ export class PtsPage implements OnInit {
       const posizione = await Geolocation.getCurrentPosition(opzioni);
       const lat = posizione.coords.latitude;
       const lng = posizione.coords.longitude;
-      const urlApi = `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}&localityLanguage=it`;
+      const urlApi = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`;
 
       this.http.get<any>(urlApi).subscribe({
-        next: (risposta) => {
-          this.selectedCity.set(risposta.city || risposta.locality || '');
+        next: (data) => {
+          this.selectedCity.set(data.address.city || data.address.town || data.address.county || '');
           this.filterPts(this.selectedCity());
         },
         error: (err) => {

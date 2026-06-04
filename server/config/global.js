@@ -14,5 +14,6 @@ module.exports = {
     verify_min_sessions: 30,
     verify_min_followers: 500,
     verify_min_age: 18,
+    global_level_step: 1000,
     rounds: 10
 }

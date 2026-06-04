@@ -22,4 +22,8 @@ export class NationService {
         }))
       ));
   }
+
+  getByName(name: string): Observable<Nation> {
+    return this.http.get<Nation>(environment.apiUrl + "/api/nations/by-name/" + name);
+  }
 }

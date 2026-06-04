@@ -234,7 +234,7 @@ export class ProfilePage implements OnInit {
       });
       await loading.present();
 
-      this._updatePTInfos(data.proemail, data.gym, data.city, loading);
+      this._updatePTInfos(data.formValue.proemail, data.formValue.gym, data.city, loading);
     }
   }
 
