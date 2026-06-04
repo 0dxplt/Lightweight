@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonContent, IonHeader, IonToolbar, IonSearchbar, IonList, IonItem, IonLabel, IonButton, IonModal, IonIcon } from '@ionic/angular/standalone';
@@ -8,6 +8,9 @@ import { PtCardComponent } from "../../components/pt-card/pt-card.component";
 import { PersonalTrainerCard } from 'src/app/models/pt-card.model';
 import { Geolocation, PositionOptions } from '@capacitor/geolocation';
 import { HttpClient, provideHttpClient } from '@angular/common/http';
+import { CityMinimal } from 'src/app/models/city.model';
+import { CityService } from 'src/app/shared/services/city-service';
+import { PtsService } from 'src/app/shared/services/pts-service';
 @Component({
   selector: 'app-pts',
   templateUrl: './pts.page.html',
@@ -19,86 +22,53 @@ import { HttpClient, provideHttpClient } from '@angular/common/http';
 export class PtsPage implements OnInit {
   private http = inject(HttpClient);
 
-  selectedCity = '';
+  private cityService = inject(CityService);
 
-  public filtered_pts: PersonalTrainerCard[] = [];
-  public personal_trainers: PersonalTrainerCard[] = [
-    {
-      username: 'pippoesp',
-      nome: 'Pippo Esposito',
-      palestra: 'ASD GYM4U',
-      eta: 24,
-      fotoUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRuCFcnFU-TPgls_fB_Jw1lCXlhgIcdFZPAd9Yd3c5ByMfs3x1CsT1F1YDvUQn5Uqc1eJkqtfulYApjOeOe5IM__iLozHusE6wKe9j2OGI&s=10",
-      citta: "Erice"
-    },
-    {
-      username: 'pippoesp',
-      nome: 'Pippo Esposito',
-      palestra: 'ASD GYM4U',
-      eta: 19,
-      fotoUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRuCFcnFU-TPgls_fB_Jw1lCXlhgIcdFZPAd9Yd3c5ByMfs3x1CsT1F1YDvUQn5Uqc1eJkqtfulYApjOeOe5IM__iLozHusE6wKe9j2OGI&s=10",
-      citta: "Erice"
-    },
-    {
-      username: 'pippoesp',
-      nome: 'Pippo Esposito',
-      palestra: 'ASD GYM4U',
-      eta: 19,
-      fotoUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRuCFcnFU-TPgls_fB_Jw1lCXlhgIcdFZPAd9Yd3c5ByMfs3x1CsT1F1YDvUQn5Uqc1eJkqtfulYApjOeOe5IM__iLozHusE6wKe9j2OGI&s=10",
-      citta: "Erice"
-    },
-    {
-      username: 'pippoesp',
-      nome: 'Pippo Esposito',
-      palestra: 'ASD GYM4U',
-      eta: 19,
-      fotoUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRuCFcnFU-TPgls_fB_Jw1lCXlhgIcdFZPAd9Yd3c5ByMfs3x1CsT1F1YDvUQn5Uqc1eJkqtfulYApjOeOe5IM__iLozHusE6wKe9j2OGI&s=10",
-      citta: "Trapani"
-    },
-    {
-      username: 'pippoesp',
-      nome: 'Pippo Esposito',
-      palestra: 'ASD GYM4U',
-      eta: 19,
-      fotoUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRuCFcnFU-TPgls_fB_Jw1lCXlhgIcdFZPAd9Yd3c5ByMfs3x1CsT1F1YDvUQn5Uqc1eJkqtfulYApjOeOe5IM__iLozHusE6wKe9j2OGI&s=10",
-      citta: "Trapani"
-    }
-  ]
+  private ptsService = inject(PtsService);
 
-  public data = [
-    'Amsterdam',
-    'Buenos Aires',
-    'Cairo',
-    'Geneva',
-    'Hong Kong',
-    'Istanbul',
-    'London',
-    'Madrid',
-    'New York',
-    'Panama city',
-    'Erice'
-  ];
-  public results = [...this.data];
+  public selectedCity = signal<string>("");
+
+  public personal_trainers = signal<PersonalTrainerCard[]>([]);
+
+  public cities = signal<CityMinimal[]>([])
+
+  public results: string[] = [];
 
   constructor() {
     addIcons({ navigateOutline });
   }
 
   ngOnInit() {
+    this.cityService.allMinimal().subscribe({
+      next: (data) => {
+        this.cities.set(data);
+        this.results = (this.cities()) ? [...this.cities().map(city => city.nome)] : [];
+      },
+      error: (err) => {
+        console.log("Errore nel caricare le città");
+      }
+    })
   }
 
   handleInput(event: Event) {
     const target = event.target as HTMLIonSearchbarElement;
     const query = target.value?.toLowerCase() || '';
-    this.results = this.data.filter((d) => d.toLowerCase().includes(query));
+    this.results = this.cities().filter((d) => d.nome.toLowerCase().includes(query)).map((city) => city.nome);
   }
 
   filterPts(city: string) {
-    this.filtered_pts = this.personal_trainers.filter(pt => pt.citta === city);
+    this.ptsService.ptsCity(city).subscribe({
+      next: (data) => {
+        this.personal_trainers.set(data);
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    });
   }
 
   selectCity(city: string, modal: any) {
-    this.selectedCity = city;
+    this.selectedCity.set(city);
     modal.dismiss();
     this.filterPts(city);
   }
@@ -117,12 +87,12 @@ export class PtsPage implements OnInit {
 
       this.http.get<any>(urlApi).subscribe({
         next: (risposta) => {
-          this.selectedCity = risposta.city || risposta.locality || 'Città sconosciuta';
-          this.filterPts(this.selectedCity);
+          this.selectedCity.set(risposta.city || risposta.locality || '');
+          this.filterPts(this.selectedCity());
         },
         error: (err) => {
           console.error('Errore durante il recupero della città:', err);
-          this.selectedCity = 'Errore nel recupero';
+          this.selectedCity.set("");
         }
       });
     } catch (error) {

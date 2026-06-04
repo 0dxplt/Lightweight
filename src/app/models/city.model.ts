@@ -5,3 +5,8 @@ export type City = {
     name: string,
     nation: Nation;
 }
+
+export type CityMinimal = {
+    id: number;
+    nome: string;
+}
