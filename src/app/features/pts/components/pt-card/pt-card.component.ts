@@ -12,9 +12,9 @@ export class PtCardComponent  implements OnInit {
 
   @Input({ required: true }) fotoUrl!: string;
   @Input({ required: true }) username!: string;
-  @Input({ required: true }) nome!: string;
+  @Input({ required: false }) nome!: string;
   @Input({ required: true }) palestra!: string;
-  @Input({ required: true }) eta!: number;
+  @Input({ required: false }) eta!: number;
 
   constructor() { }
 
