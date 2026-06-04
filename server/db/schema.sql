@@ -55,7 +55,7 @@ CREATE TABLE IF NOT EXISTS Atleti (
     weight REAL NOT NULL CHECK(weight BETWEEN 30 AND 500),
     height REAL NOT NULL CHECK(height BETWEEN 40 AND 240),
     xp_stagionali REAL NOT NULL DEFAULT 0.0,
-    livello_stagionale REAL NOT NULL DEFAULT 0.0,
+    livello_stagionale INT DEFAULT 1,
     xp_globali REAL NOT NULL DEFAULT 0.0,
     livello_globale REAL NOT NULL DEFAULT 0.0,
     numero_followers INTEGER NOT NULL DEFAULT 0,
@@ -63,7 +63,8 @@ CREATE TABLE IF NOT EXISTS Atleti (
     numero_sessioni INTEGER NOT NULL DEFAULT 0,
     verificato BOOLEAN NOT NULL DEFAULT 0 CHECK(verificato IN (0, 1)),
     id_nazione INTEGER DEFAULT NULL,
-    FOREIGN KEY (id_nazione) REFERENCES Nazioni(id) ON DELETE SET NULL
+    FOREIGN KEY (id_nazione) REFERENCES Nazioni(id) ON DELETE SET NULL,
+    FOREIGN KEY (livello_stagionale) REFERENCES SeasonalRankInfo(id) ON DELETE SET NULL
 );
 
 CREATE TABLE IF NOT EXISTS PersonalTrainers (
@@ -158,4 +159,12 @@ CREATE TABLE IF NOT EXISTS SessioniEsercizi (
     valida BOOLEAN DEFAULT 1 NOT NULL,
     FOREIGN KEY (id_sessione) REFERENCES Sessioni(id) ON DELETE CASCADE,
     FOREIGN KEY (id_esercizio) REFERENCES Esercizi(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS SeasonalRankInfo (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    start INTEGER NOT NULL,
+    end INTEGER,
+    img_url TEXT NOT NULL,
+    rank_name TEXT NOT NULL
 );

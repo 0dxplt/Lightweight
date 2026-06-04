@@ -68,7 +68,7 @@
     <ion-card class="progress-card">
       <ion-card-content>
         <div class="progress-row">
-          <ion-avatar><img src="assets/icon/favicon.png"></ion-avatar>
+          <ion-avatar><img [src]="this.globalIconUrl()"></ion-avatar>
           <div class="progress-info">
             <ion-progress-bar [value]="this.globalPerc()" color="primary"></ion-progress-bar>
             <p>Global level: {{(user()?.sLevel ?? 0) | toInt}}</p>
