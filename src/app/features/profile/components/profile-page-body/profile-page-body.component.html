@@ -71,14 +71,14 @@
           <ion-avatar><img [src]="this.globalIconUrl()"></ion-avatar>
           <div class="progress-info">
             <ion-progress-bar [value]="this.globalPerc()" color="primary"></ion-progress-bar>
-            <p>Global level: {{(user()?.sLevel ?? 0) | toInt}}</p>
+            <p>Level: {{(user()?.gLevel ?? 0) | toInt}}</p>
           </div>
         </div>
         <div class="progress-row">
-          <ion-avatar><img src="assets/icon/favicon.png"></ion-avatar>
+          <ion-avatar><img [src]="this.seasonalInfos().url"></ion-avatar>
           <div class="progress-info">
             <ion-progress-bar [value]="this.seasonalPerc()" color="tertiary"></ion-progress-bar>
-            <p>Seasonal rank: {{(user()?.gLevel ?? 0) | toInt}}</p>
+            <p>{{this.seasonalInfos().rankName}}</p>
           </div>
         </div>
       </ion-card-content>

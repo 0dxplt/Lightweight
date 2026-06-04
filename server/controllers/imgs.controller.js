@@ -78,8 +78,8 @@ async function getSeasonalLevelIcon(req, res) {
         const profileId = req.params.profileId;
 
         const rows = await dbutils.get(`
-            SELECT img_url,
-            rank_name
+            SELECT img_url as url,
+            rank_name as rankName
             FROM SeasonalRankInfo
             JOIN Atleti ON SeasonalRankInfo.id = Atleti.livello_stagionale
             WHERE Atleti.id = ?

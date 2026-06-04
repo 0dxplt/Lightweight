@@ -17,6 +17,7 @@ import { FollowersModalPage } from '../../pages/followers-modal/followers-modal.
 import { IonRefresherCustomEvent } from '@ionic/core';
 import { ToIntPipe } from "../../../../shared/pipes/to-int-pipe";
 import { environment } from 'src/environments/environment';
+import { UserService } from 'src/app/shared/services/user-service';
 
 @Component({
   selector: 'app-profile-page-body',
@@ -95,8 +96,12 @@ export class ProfilePageBodyComponent  implements OnInit {
     return user.gxp / GLOBAL_RANK_UP;
   });
   globalIconUrl = computed(() => {
-    return `${environment.apiUrl}/api/imgs/global-icon/${this.user()?.gLevel}`;
+    return `${environment.apiUrl}/api/imgs/global-icon/${this.user()?.gLevel}?timestamp=${Date.now()}`;
   })
+  seasonalInfos = signal<{url: string, rankName: string}>({
+    url: "/assets/icon/favicon.png",
+    rankName: "Unranked"
+  });
 
   sessions = signal<Session[]>([]);
   onRefresh = output<void>();
@@ -104,6 +109,7 @@ export class ProfilePageBodyComponent  implements OnInit {
   constructor(
     private router: Router,
     private authService: AuthService,
+    private userService: UserService,
     private sessionService: SessionService,
     private modalController: ModalController,
     private loadingController: LoadingController,
@@ -114,7 +120,31 @@ export class ProfilePageBodyComponent  implements OnInit {
       const user = this.user();
       if (!!user)
         this._loadData();
-    })
+
+      if (!user) return;
+
+      const userId = user.id;
+
+      if (!userId) return;
+      this.userService.getSeasonalRankInfos(userId).subscribe({
+        next: (value) => {
+          if (!!value) {
+            this.seasonalInfos.set(value);
+          } else {
+            this.seasonalInfos.set({
+              url: "/assets/icon/favicon.png",
+              rankName: "Unranked"
+            });
+          }
+        },
+        error: (err) => {
+          this.seasonalInfos.set({
+            url: "/assets/icon/favicon.png",
+            rankName: "Unranked"
+          });
+        }
+      });
+    });
   }
 
   ngOnInit() {
