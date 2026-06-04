@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
-import { City } from 'src/app/models/city.model';
+import { City, CityMinimal } from 'src/app/models/city.model';
 import { Nation } from 'src/app/models/nation.model';
 import { environment } from 'src/environments/environment';
 
@@ -20,5 +20,18 @@ export class CityService {
         nation: city.nation
       })))
     );
+  }
+
+  allMinimal():Observable<CityMinimal[]> {
+    return this.http.get<{id: number, nome: string, id_nazione: number}[]>(`${environment.apiUrl}/api/cities/`).pipe(
+      map(rows => {
+        return rows.map(row => {
+          return {
+            id: row.id,
+            nome: row.nome
+          };
+        });
+      })
+    )
   }
 }

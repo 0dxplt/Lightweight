@@ -1,6 +1,6 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-button fill="outline" id="open-city-modal">{{ selectedCity ? selectedCity : 'Seleziona una città'}}</ion-button>
+    <ion-button fill="outline" id="open-city-modal">{{ selectedCity() ? selectedCity() : 'Seleziona una città'}}</ion-button>
     <ion-modal #cityModal trigger="open-city-modal" [initialBreakpoint]="0.25" [breakpoints]="[0, 0.25, 0.5, 0.75]" [expandToScroll]="false">
       <ng-template>
         <ion-content>
@@ -25,11 +25,11 @@
 
 <ion-content class="ion-padding">
   <div class="pt-cards">
-    @for (pt of filtered_pts; track pt) {
+    @for (pt of personal_trainers(); track pt) {
       <app-pt-card
-      [fotoUrl]="pt.fotoUrl"
+      [fotoUrl]="pt.fotoUrl ? pt.fotoUrl : 'https://ionicframework.com/docs/img/demos/avatar.svg'"
       [username]="pt.username"
-      [nome]="pt.nome"
+      [nome]="`${pt.nome ? pt.nome : ''} ${pt.cognome ? pt.cognome : ''}`.trim()"
       [palestra]="pt.palestra"
       [eta]="pt.eta"
       ></app-pt-card>
