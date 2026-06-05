@@ -22,7 +22,7 @@ const calcolaXP = async (userId, series) => {
     const difficulty = {};
 
     esercizi.forEach((esercizio) => {
-        difficulty[esercizio.id] = esercizio.difficolta;
+        difficulty[esercizio.id] = (esercizio.difficolta) / 2;
     });
 
     for (const serie of series) {
