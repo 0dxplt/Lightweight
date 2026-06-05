@@ -55,7 +55,7 @@ CREATE TABLE IF NOT EXISTS Atleti (
     weight REAL NOT NULL CHECK(weight BETWEEN 30 AND 500),
     height REAL NOT NULL CHECK(height BETWEEN 40 AND 240),
     xp_stagionali REAL NOT NULL DEFAULT 0.0,
-    livello_stagionale INT DEFAULT 1,
+    livello_stagionale INT DEFAULT 3,
     xp_globali REAL NOT NULL DEFAULT 0.0,
     livello_globale REAL NOT NULL DEFAULT 0.0,
     numero_followers INTEGER NOT NULL DEFAULT 0,

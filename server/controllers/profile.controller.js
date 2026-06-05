@@ -272,33 +272,61 @@ async function follows(req, res) {
 }
 
 async function updateUserRank(userId, deltaXp) {
-    await dbutils.run(`
-        UPDATE Atleti
-        SET xp_stagionali = xp_stagionali + ?,
-            xp_globali = xp_globali + ?
-        WHERE id = ?`,
-        [deltaXp, deltaXp, userId]
-    );
+    try {
+        await dbutils.run(`
+            UPDATE Atleti
+            SET xp_stagionali = xp_stagionali + ?,
+                xp_globali = xp_globali + ?
+            WHERE id = ?`,
+            [deltaXp, deltaXp, userId]
+        );
 
-    const xp = await dbutils.get(`
-        SELECT xp_stagionali, xp_globali
-        FROM Atleti WHERE id = ?`,
-        [userId]
-    );
+        const xp = await dbutils.get(`
+            SELECT xp_stagionali
+            FROM Atleti WHERE id = ?`,
+            [userId]
+        );
+        const xp_stagionali = xp.xp_stagionali < 0 ? 0 : (xp.xp_stagionali ?? 0);
+        
+        // Global Level
+        await dbutils.run(`
+            UPDATE Atleti
+            SET livello_globale = max(floor(xp_globali / ?), 0)
+            WHERE id = ?`,
+            [global.global_level_step, userId]
+        );
+        
+        // Seasonal Rank
+        const seasonInfoRow = await dbutils.get(
+            `SELECT id
+            FROM SeasonalRankInfo
+            WHERE (? BETWEEN start AND end) OR (? >= start AND end IS NULL)`,
+            [xp_stagionali, xp_stagionali]
+        );
+        
+        if (!seasonInfoRow)
+            throw new Error('Error during profile update');
 
-    await dbutils.run(`
-        UPDATE Atleti
-        SET livello_stagionale = livello_stagionale + ?, livello_globale = livello_globale + ?
-        WHERE id = ?`,
-        [deltaXp, Math.floor(deltaXp) / global.global_level_step, userId]
-    );
+        const id = seasonInfoRow.id;
+
+        await dbutils.run(
+            "UPDATE Atleti SET livello_stagionale = ? WHERE id = ?",
+            [id, userId]
+        );
+
+    } catch(err) {
+        throw err;
+    }
 }
 
 async function saveSession(req, res) {
+    let active_transaction = false;
     try {
         const {session, xp} = req.body;
         const profileId = req.user.userId;
         await dbutils.run('BEGIN TRANSACTION');
+        active_transaction = true;
+
         await dbutils.run(
             "INSERT INTO Sessioni (id_creatore, nome, data_svolgimento, xp) VALUES (?, ?, ?, ?)",
             [profileId, session.nome, session.dataSvolgimento, xp]
@@ -317,13 +345,15 @@ async function saveSession(req, res) {
         await updateUserRank(profileId, xp);
 
         await dbutils.run('COMMIT');
+        active_transaction = false;
         res.json({
             success: true,
             message: "Saved Session!"
         });
     } catch (err) {
         console.log(err);
-        await dbutils.run('ROLLBACK');
+        if (active_transaction)
+            await dbutils.run('ROLLBACK');
         res.status(500).json({
             success: false,
             message: "Couldn't save session"
@@ -369,10 +399,13 @@ async function updateSessionVisibility(req, res) {
         await dbutils.run("BEGIN TRANSACTION");
         active_transaction = true;
 
-        await dbutils.run(
-            "UPDATE Sessioni SET pubblica = ? WHERE id = ? AND id_creatore = ?",
+        const sessionXpRow = await dbutils.get(
+            "UPDATE Sessioni SET pubblica = ? WHERE id = ? AND id_creatore = ? RETURNING xp",
             [visibility ? 1 : 0, sessionId, userId]
         );
+        const sessionXps = sessionXpRow.xp;
+
+        await updateUserRank(userId, (visibility) ? sessionXps : -sessionXps);
 
         await dbutils.run("COMMIT");
         active_transaction = false;

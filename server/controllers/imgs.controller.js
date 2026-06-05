@@ -23,8 +23,9 @@ async function getAvatar(req, res) {
     } catch (err) {
         res.status(500).json({
             success: false,
-            message: "Error: " + err.message
+            message: "Error retrieving avatar"
         });
+        console.log(err);
     }
 }
 
@@ -84,7 +85,6 @@ async function getSeasonalLevelIcon(req, res) {
             JOIN Atleti ON SeasonalRankInfo.id = Atleti.livello_stagionale
             WHERE Atleti.id = ?
             `, [profileId]);
-        console.log(rows);
         res.json(rows);
     } catch (error) {
         res.status(500).json({message: "Errore nel trovare il livello stagionale"});

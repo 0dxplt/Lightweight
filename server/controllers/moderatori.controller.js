@@ -44,26 +44,51 @@ const calcolaXP = async (userId, series) => {
 }
 
 async function updateUserRank(userId, deltaXp) {
-    await dbutils.run(`
-        UPDATE Atleti
-        SET xp_stagionali = xp_stagionali + ?,
-            xp_globali = xp_globali + ?
-        WHERE id = ?`,
-        [deltaXp, deltaXp, userId]
-    );
+    try {
+        await dbutils.run(`
+            UPDATE Atleti
+            SET xp_stagionali = xp_stagionali + ?,
+                xp_globali = xp_globali + ?
+            WHERE id = ?`,
+            [deltaXp, deltaXp, userId]
+        );
 
-    const xp = await dbutils.get(`
-        SELECT xp_stagionali, xp_globali
-        FROM Atleti WHERE id = ?`,
-        [userId]
-    );
+        const xp = await dbutils.get(`
+            SELECT xp_stagionali
+            FROM Atleti WHERE id = ?`,
+            [userId]
+        );
+        const xp_stagionali = xp.xp_stagionali < 0 ? 0 : (xp.xp_stagionali ?? 0);
+        
+        // Global Level
+        await dbutils.run(`
+            UPDATE Atleti
+            SET livello_globale = max(floor(xp_globali / ?), 0)
+            WHERE id = ?`,
+            [global.global_level_step, userId]
+        );
+        
+        // Seasonal Rank
+        const seasonInfoRow = await dbutils.get(
+            `SELECT id
+            FROM SeasonalRankInfo
+            WHERE (? BETWEEN start AND end) OR (? >= start AND end IS NULL)`,
+            [xp_stagionali, xp_stagionali]
+        );
+        
+        if (!seasonInfoRow)
+            throw new Error('Error during profile update');
 
-    await dbutils.run(`
-        UPDATE Atleti
-        SET livello_stagionale = livello_stagionale + ?, livello_globale = livello_globale + ?
-        WHERE id = ?`,
-        [deltaXp, Math.floor(deltaXp) / global.global_level_step, userId]
-    );
+        const id = seasonInfoRow.id;
+
+        await dbutils.run(
+            "UPDATE Atleti SET livello_stagionale = ? WHERE id = ?",
+            [id, userId]
+        );
+
+    } catch(err) {
+        throw err;
+    }
 }
 
 async function updateSessionValidity(req, res) {

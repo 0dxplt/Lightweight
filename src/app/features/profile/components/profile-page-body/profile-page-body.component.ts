@@ -5,7 +5,7 @@ import { addIcons } from 'ionicons';
 import { barbellOutline, checkmarkCircle } from 'ionicons/icons';
 import { AuthService } from 'src/app/features/auth/services/auth-service';
 import { User } from 'src/app/models/user.model';
-import { GLOBAL_RANK_UP, PROPIC_PATH, SEASONAL_RANK_UP, XP_LIMIT } from 'src/app/shared/global';
+import { GLOBAL_RANK_UP, SEASONAL_RANK_UP } from 'src/app/shared/global';
 import { SessionCardComponent } from "src/app/features/mod/components/session-card/session-card.component";
 import { Session } from 'src/app/models/session.model';
 import { SessionService } from 'src/app/shared/services/session-service';
@@ -86,14 +86,12 @@ export class ProfilePageBodyComponent  implements OnInit {
   seasonalPerc = computed(() => {
     const user = this.user();
     if (!user) return 0;
-    if (user.sxp >= SEASONAL_RANK_UP) return 1;
-    return user.sxp / SEASONAL_RANK_UP;
+    return (Math.floor(user.sxp) % SEASONAL_RANK_UP) / SEASONAL_RANK_UP;
   });
   globalPerc = computed(() => {
     const user = this.user();
     if (!user) return 0;
-    if (user.gxp >= GLOBAL_RANK_UP) return 1;
-    return user.gxp / GLOBAL_RANK_UP;
+    return (Math.floor(user.gxp) % GLOBAL_RANK_UP) / GLOBAL_RANK_UP;
   });
   globalIconUrl = computed(() => {
     return `${environment.apiUrl}/api/imgs/global-icon/${this.user()?.gLevel}?timestamp=${Date.now()}`;
@@ -137,7 +135,7 @@ export class ProfilePageBodyComponent  implements OnInit {
             });
           }
         },
-        error: (err) => {
+        error: (_) => {
           this.seasonalInfos.set({
             url: "/assets/icon/favicon.png",
             rankName: "Unranked"
