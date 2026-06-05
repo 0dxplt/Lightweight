@@ -100,24 +100,22 @@
     }
   </div>
 
-  <ion-card id="sessions-card">
+  <ion-card id="sessions-card"
+    [style]="sessions().length <= 3
+      ? `min-height:${200 * sessions().length}px;flex-basis:${200 * sessions().length}px;flex-grow:0.15;`
+      : 'min-height:600px;flex-basis:600px;flex-grow:1;'">
     <ion-card-header>
       <ion-card-title>
         {{sameAsProfile() ? 'Your sessions' : user()?.username + '\'s sessions'}} ({{sessions().length}})
       </ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      <ion-list lines="none">
-        @for (item of sessions(); track item.id) {
-          <app-session-card [session]="item" (onClick)="openSessionModal(item)"></app-session-card>
-        } @empty {
-          <div class="empty-div">
-            <p>
-              No sessions found.
-            </p>
-          </div>
-        }
-      </ion-list>
-    </ion-card-content>
+        <ion-list lines="none">
+          @for (item of sessions(); track item.id) {
+            <app-session-card [session]="item" (onClick)="openSessionModal(item)"></app-session-card>
+          }
+        </ion-list>
+      </ion-card-content>
   </ion-card>
+
 </div>

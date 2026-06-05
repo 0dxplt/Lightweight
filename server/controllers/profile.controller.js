@@ -556,7 +556,7 @@ async function newRequest(req, res) {
         if (!satisfies) {
             return res.status(403).json({
                 requested: false,
-                message: "You don't satisfy the requirements"
+                message: `You must have at least ${global.verify_min_age} years, ${global.verify_min_followers} followers and ${global.verify_min_sessions} sessions`
             });
         }
 

@@ -5,8 +5,6 @@ import { input } from '@angular/core';
 import { addIcons } from 'ionicons';
 import { calendarOutline, flashOutline, lockClosedOutline, shareSocialOutline } from 'ionicons/icons';
 import { DatefyPipe } from "../../../../shared/pipes/datefy-pipe";
-import { ModalController } from '@ionic/angular/standalone';
-import { SessionViewModalPage } from '../../pages/session-view-modal/session-view-modal.page';
 
 @Component({
   selector: 'app-session-card',

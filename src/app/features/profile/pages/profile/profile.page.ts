@@ -40,7 +40,7 @@ export class ProfilePage implements OnInit {
       }},
     ];
 
-    if (u && !u.verified && this._canBeVerified()) {
+    if (u && !u.verified /*&& this._canBeVerified()*/) {
       buttons.push({ text: "Verify Account", handler: () => {
         this.actionSheetController.dismiss();
         this.openVerifyModal();
@@ -85,31 +85,32 @@ export class ProfilePage implements OnInit {
     this.router.navigate(['login']);
   }
 
-  private _canBeVerified() {
-    const u = this.user();
+  // Migrato sul backend
+  // private _canBeVerified() {
+  //   const u = this.user();
     
-    if (!u) return false;
-      const sessionsCount = u.sessions;
-      const followersCount = u.followers;
+  //   if (!u) return false;
+  //     const sessionsCount = u.sessions;
+  //     const followersCount = u.followers;
   
-      if (!u.birthdate) return false;
+  //     if (!u.birthdate) return false;
       
-      const birthDateObj = new Date(u.birthdate);
-      const today = new Date();
+  //     const birthDateObj = new Date(u.birthdate);
+  //     const today = new Date();
       
-      let age = today.getFullYear() - birthDateObj.getFullYear();
-      const monthDiff = today.getMonth() - birthDateObj.getMonth();
+  //     let age = today.getFullYear() - birthDateObj.getFullYear();
+  //     const monthDiff = today.getMonth() - birthDateObj.getMonth();
       
-      if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDateObj.getDate())) {
-        age--;
-      }
+  //     if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDateObj.getDate())) {
+  //       age--;
+  //     }
   
-      return (
-        age >= VERIFY_MIN_AGE && 
-        followersCount >= VERIFY_MIN_FOLLOWERS && 
-        sessionsCount >= VERIFY_MIN_SESSIONS
-      );
-  }
+  //     return (
+  //       age >= VERIFY_MIN_AGE && 
+  //       followersCount >= VERIFY_MIN_FOLLOWERS && 
+  //       sessionsCount >= VERIFY_MIN_SESSIONS
+  //     );
+  // }
 
   async openChangePasswordModal() {
     const modal = await this.modalController.create({
