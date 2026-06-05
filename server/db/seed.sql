@@ -692,43 +692,43 @@ INSERT OR IGNORE INTO Moderatori (id, username, email, password) VALUES
 INSERT OR IGNORE INTO SeasonalRankInfo (id, start, end, img_url, rank_name) VALUES
 -- Ferro (0 - 299)
 (3, 0, 99, 'https://media.valorant-api.com/competitivetiers/564d8e28-c226-3180-6285-e48a390db8b1/3/largeicon.png', 'Ferro 1'),
-(4, 100, 199, 'https://media.valorant-api.com/competitivetiers/564d8e28-c226-3180-6285-e19a3117ceac/4/largeicon.png', 'Ferro 2'),
-(5, 200, 299, 'https://media.valorant-api.com/competitivetiers/564d8e28-c226-3180-6285-e19a3117ceac/5/largeicon.png', 'Ferro 3'),
+(4, 100, 199, 'https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/4/largeicon.png', 'Ferro 2'),
+(5, 200, 299, 'https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/5/largeicon.png', 'Ferro 3'),
 
 -- Bronzo (300 - 599)
-(6, 300, 399, 'https://media.valorant-api.com/competitivetiers/564d8e28-c226-3180-6285-e19a3117ceac/6/largeicon.png', 'Bronzo 1'),
-(7, 400, 499, 'https://media.valorant-api.com/competitivetiers/564d8e28-c226-3180-6285-e19a3117ceac/7/largeicon.png', 'Bronzo 2'),
-(8, 500, 599, 'https://media.valorant-api.com/competitivetiers/564d8e28-c226-3180-6285-e19a3117ceac/8/largeicon.png', 'Bronzo 3'),
+(6, 300, 399, 'https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/6/largeicon.png', 'Bronzo 1'),
+(7, 400, 499, 'https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/7/largeicon.png', 'Bronzo 2'),
+(8, 500, 599, 'https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/8/largeicon.png', 'Bronzo 3'),
 
 -- Argento (600 - 899)
-(9, 600, 699, 'https://media.valorant-api.com/competitivetiers/564d8e28-c226-3180-6285-e19a3117ceac/9/largeicon.png', 'Argento 1'),
-(10, 700, 799, 'https://media.valorant-api.com/competitivetiers/564d8e28-c226-3180-6285-e19a3117ceac/10/largeicon.png', 'Argento 2'),
-(11, 800, 899, 'https://media.valorant-api.com/competitivetiers/564d8e28-c226-3180-6285-e19a3117ceac/11/largeicon.png', 'Argento 3'),
+(9, 600, 699, 'https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/9/largeicon.png', 'Argento 1'),
+(10, 700, 799, 'https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/10/largeicon.png', 'Argento 2'),
+(11, 800, 899, 'https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/11/largeicon.png', 'Argento 3'),
 
 -- Oro (900 - 1199)
-(12, 900, 999, 'https://media.valorant-api.com/competitivetiers/564d8e28-c226-3180-6285-e19a3117ceac/12/largeicon.png', 'Oro 1'),
-(13, 1000, 1099, 'https://media.valorant-api.com/competitivetiers/564d8e28-c226-3180-6285-e19a3117ceac/13/largeicon.png', 'Oro 2'),
-(14, 1100, 1199, 'https://media.valorant-api.com/competitivetiers/564d8e28-c226-3180-6285-e19a3117ceac/14/largeicon.png', 'Oro 3'),
+(12, 900, 999, 'https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/12/largeicon.png', 'Oro 1'),
+(13, 1000, 1099, 'https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/13/largeicon.png', 'Oro 2'),
+(14, 1100, 1199, 'https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/14/largeicon.png', 'Oro 3'),
 
 -- Platino (1200 - 1499)
-(15, 1200, 1299, 'https://media.valorant-api.com/competitivetiers/564d8e28-c226-3180-6285-e19a3117ceac/15/largeicon.png', 'Platino 1'),
-(16, 1300, 1399, 'https://media.valorant-api.com/competitivetiers/564d8e28-c226-3180-6285-e19a3117ceac/16/largeicon.png', 'Platino 2'),
-(17, 1400, 1499, 'https://media.valorant-api.com/competitivetiers/564d8e28-c226-3180-6285-e19a3117ceac/17/largeicon.png', 'Platino 3'),
+(15, 1200, 1299, 'https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/15/largeicon.png', 'Platino 1'),
+(16, 1300, 1399, 'https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/16/largeicon.png', 'Platino 2'),
+(17, 1400, 1499, 'https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/17/largeicon.png', 'Platino 3'),
 
 -- Diamante (1500 - 1799)
-(18, 1500, 1599, 'https://media.valorant-api.com/competitivetiers/564d8e28-c226-3180-6285-e19a3117ceac/18/largeicon.png', 'Diamante 1'),
-(19, 1600, 1699, 'https://media.valorant-api.com/competitivetiers/564d8e28-c226-3180-6285-e19a3117ceac/19/largeicon.png', 'Diamante 2'),
-(20, 1700, 1799, 'https://media.valorant-api.com/competitivetiers/564d8e28-c226-3180-6285-e19a3117ceac/20/largeicon.png', 'Diamante 3'),
+(18, 1500, 1599, 'https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/18/largeicon.png', 'Diamante 1'),
+(19, 1600, 1699, 'https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/19/largeicon.png', 'Diamante 2'),
+(20, 1700, 1799, 'https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/20/largeicon.png', 'Diamante 3'),
 
 -- Ascendente (1800 - 2099)
-(21, 1800, 1899, 'https://media.valorant-api.com/competitivetiers/564d8e28-c226-3180-6285-e19a3117ceac/21/largeicon.png', 'Ascendente 1'),
-(22, 1900, 1999, 'https://media.valorant-api.com/competitivetiers/564d8e28-c226-3180-6285-e19a3117ceac/22/largeicon.png', 'Ascendente 2'),
-(23, 2000, 2099, 'https://media.valorant-api.com/competitivetiers/564d8e28-c226-3180-6285-e19a3117ceac/23/largeicon.png', 'Ascendente 3'),
+(21, 1800, 1899, 'https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/21/largeicon.png', 'Ascendente 1'),
+(22, 1900, 1999, 'https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/22/largeicon.png', 'Ascendente 2'),
+(23, 2000, 2099, 'https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/23/largeicon.png', 'Ascendente 3'),
 
 -- Immortale (2100 - 2399)
-(24, 2100, 2199, 'https://media.valorant-api.com/competitivetiers/564d8e28-c226-3180-6285-e19a3117ceac/24/largeicon.png', 'Immortale 1'),
-(25, 2200, 2299, 'https://media.valorant-api.com/competitivetiers/564d8e28-c226-3180-6285-e19a3117ceac/25/largeicon.png', 'Immortale 2'),
-(26, 2300, 2399, 'https://media.valorant-api.com/competitivetiers/564d8e28-c226-3180-6285-e19a3117ceac/26/largeicon.png', 'Immortale 3'),
+(24, 2100, 2199, 'https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/24/largeicon.png', 'Immortale 1'),
+(25, 2200, 2299, 'https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/25/largeicon.png', 'Immortale 2'),
+(26, 2300, 2399, 'https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/26/largeicon.png', 'Immortale 3'),
 
 -- Radiante (2400+)
-(27, 2400, 9999, 'https://media.valorant-api.com/competitivetiers/564d8e28-c226-3180-6285-e19a3117ceac/27/largeicon.png', 'Radiante');
+(27, 2400, 9999, 'https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/27/largeicon.png', 'Radiante');

@@ -23,8 +23,9 @@ async function getAvatar(req, res) {
     } catch (err) {
         res.status(500).json({
             success: false,
-            message: "Error: " + err.message
+            message: "Error retrieving avatar"
         });
+        console.log(err);
     }
 }
 
@@ -78,13 +79,12 @@ async function getSeasonalLevelIcon(req, res) {
         const profileId = req.params.profileId;
 
         const rows = await dbutils.get(`
-            SELECT img_url,
-            rank_name
+            SELECT img_url as url,
+            rank_name as rankName
             FROM SeasonalRankInfo
             JOIN Atleti ON SeasonalRankInfo.id = Atleti.livello_stagionale
             WHERE Atleti.id = ?
             `, [profileId]);
-        console.log(rows);
         res.json(rows);
     } catch (error) {
         res.status(500).json({message: "Errore nel trovare il livello stagionale"});

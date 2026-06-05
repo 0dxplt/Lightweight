@@ -81,4 +81,8 @@ export class UserService {
       })
     )
   }
+
+  getSeasonalRankInfos(userId: number): Observable<{rankName: string, url: string}> {
+    return this.http.get<{rankName: string, url: string}>(`${environment.apiUrl}/api/imgs/seasonal-icon/${userId}?timestamp=${Date.now()}`);
+  }
 }
