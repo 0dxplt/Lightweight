@@ -5,7 +5,9 @@ async function getPtsCity(req, res) {
         const cityName = req.body.city;
 
         const rows = await dbutils.all(`
-            SELECT Atleti.username,
+            SELECT
+            Atleti.id,
+            Atleti.username,
             Atleti.nome,
             Atleti.cognome,
             Palestre.nome AS palestra,

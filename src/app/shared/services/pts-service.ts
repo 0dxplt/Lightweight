@@ -11,13 +11,19 @@ export class PtsService {
   private http = inject(HttpClient);
 
   ptsCity(city: string): Observable<PersonalTrainerCard[]> {
-    return this.http.post<PersonalTrainerCard[]>(
+    return this.http.post<any[]>(
       `${environment.apiUrl}/api/pts/from-city`,
       {city: city}
     ).pipe(
-      map(rows => {
-        return rows
-      })
+      map(rows => rows.map(row => ({
+        username: row.username,
+        nome: row.nome,
+        cognome: row.cognome,
+        palestra: row.palestra,
+        eta: row.eta,
+        citta: row.citta,
+        fotoUrl: !!row.fotoUrl ? `${environment.apiUrl}/api/imgs/users?id=${row.id}&timestamp=${Date.now()}` : '/assets/icon/favicon.png'
+      })))
     );
   }
 }
