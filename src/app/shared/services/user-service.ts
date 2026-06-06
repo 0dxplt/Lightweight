@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { map, Observable } from 'rxjs';
+import { map, Observable, tap } from 'rxjs';
 import { SearchUserInfo } from 'src/app/models/search-user-info.model';
 import { User } from 'src/app/models/user.model';
 import { environment } from 'src/environments/environment';
@@ -74,11 +74,14 @@ export class UserService {
         return rows.map(row => {
           return {
             username: row.username,
-            name: row.nome,
-            surname: row.cognome,
+            name: row.nome || undefined,
+            surname: row.cognome || undefined,
             avatarUrl: !!row.img ? `${environment.apiUrl}/api/imgs/users?id=${row.id}&timestamp=${Date.now()}` : PROPIC_PATH
           }
         })
+      }),
+      tap(data => {
+        console.log(data);
       })
     )
   }
