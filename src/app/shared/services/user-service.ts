@@ -4,6 +4,7 @@ import { map, Observable } from 'rxjs';
 import { SearchUserInfo } from 'src/app/models/search-user-info.model';
 import { User } from 'src/app/models/user.model';
 import { environment } from 'src/environments/environment';
+import { PROPIC_PATH } from '../global';
 
 @Injectable({
   providedIn: 'root',
@@ -75,7 +76,7 @@ export class UserService {
             username: row.username,
             name: row.nome,
             surname: row.cognome,
-            avatarUrl: row.img
+            avatarUrl: !!row.img ? `${environment.apiUrl}/api/imgs/users?id=${row.id}&timestamp=${Date.now()}` : PROPIC_PATH
           }
         })
       })

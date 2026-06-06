@@ -112,6 +112,15 @@ export class ProfilePage implements OnInit {
   //     );
   // }
 
+  async openActionSheet() {
+    const sheet = await this.actionSheetController.create({
+      header: "Settings",
+      buttons: this.actionSheetButtons()
+    });
+
+    await sheet.present();
+  }
+
   async openChangePasswordModal() {
     const modal = await this.modalController.create({
       component: ChangePasswordModalPage,

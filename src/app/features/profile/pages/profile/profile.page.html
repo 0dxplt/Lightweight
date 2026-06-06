@@ -1,7 +1,7 @@
 <ion-header style="border: none; box-shadow: none;">
   <ion-toolbar style="--background: transparent; border: none; box-shadow: none; width: 100%;">
     <ion-item style="--background: transparent;" lines="none">
-      <ion-button fill="clear" id="settings-button" slot="end">
+      <ion-button fill="clear" id="settings-button" slot="end" (click)="this.openActionSheet()">
         <ion-icon name="settings" style="width: 30px; height: 30px;"></ion-icon>
       </ion-button>
     </ion-item>
@@ -10,9 +10,4 @@
 
 <ion-content [fullscreen]="true">
   <app-profile-page-body [user]="this.user()" (onRefresh)="this.refreshProfile()"></app-profile-page-body>
-  <ion-action-sheet
-    trigger="settings-button"
-    [buttons]="this.actionSheetButtons()"
-    header="Settings"
-    ></ion-action-sheet>
 </ion-content>

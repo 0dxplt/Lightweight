@@ -468,7 +468,7 @@ async function unfollow(req, res) {
 async function getAllUsersMinimal(req, res) {
     const userId = req.user.userId;
     try {
-        const rows = await dbutils.all(`SELECT username, nome, cognome, img FROM Atleti WHERE id != ?`, [userId]);
+        const rows = await dbutils.all(`SELECT id, username, nome, cognome, img FROM Atleti WHERE id != ?`, [userId]);
         res.json(rows);
     } catch (error) {
         res.status(500).json({
