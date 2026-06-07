@@ -1,20 +1,47 @@
-import { Component, effect, input, OnInit, signal } from '@angular/core';
+import { Component, computed, effect, input, OnInit, signal } from '@angular/core';
 import { IonAvatar, IonItem, IonBadge, IonLabel } from "@ionic/angular/standalone";
 import { Router } from '@angular/router';
 import { RankUser } from 'src/app/models/rank-user.model';
+import { LevelIconComponent } from "src/app/shared/components/level-icon/level-icon.component";
+import { PROPIC_PATH } from 'src/app/shared/global';
+import { environment } from 'src/environments/environment';
+import { UserService } from 'src/app/shared/services/user-service';
 
 @Component({
   selector: 'app-ranking-entry',
   templateUrl: './ranking-entry.component.html',
   styleUrls: ['./ranking-entry.component.scss'],
-  imports: [IonLabel, IonItem, IonAvatar, IonBadge],
+  imports: [IonLabel, IonItem, IonAvatar, IonBadge, LevelIconComponent],
 })
 export class RankingEntryComponent  implements OnInit {
 
   readonly DEFAULT_AVATAR_ICON: string = 'assets/icon/favicon.png';
   rankUser = input.required<RankUser>();
+  type = input.required<"global" | "seasonal">();
 
-  constructor(private router: Router) {}
+  seasonalUrl = signal<string>(PROPIC_PATH);
+
+  globalUrl = computed(() => {
+    const user = this.rankUser();
+    if (!user) return PROPIC_PATH;
+    return `${environment.apiUrl}/api/imgs/global-icon/${user.level}`;
+  });
+
+  constructor(private router: Router, private userService: UserService) {
+    effect(() => {
+      const user = this.rankUser();
+      if (!user) return;
+
+      this.userService.getSeasonalIcon(user.username).subscribe({
+        next: (value) => {
+          this.seasonalUrl.set(value);
+        },
+        error: (err) => {
+          console.error(err);
+        }
+      });
+    });
+  }
 
   ngOnInit() {}
 

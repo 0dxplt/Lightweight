@@ -44,16 +44,12 @@ async function getGlobalLevelIcon(req, res) {
             fileName: `100.png`
         },
         {
-            floor: 250,
-            fileName: `250.png`
+            floor: 150,
+            fileName: `150.png`
         },
         {
-            floor: 500,
-            fileName: `500.png`
-        },
-        {
-            floor: 1000,
-            fileName: `1000.png`
+            floor: 200,
+            fileName: `200.png`
         }
     ];
 
@@ -92,8 +88,26 @@ async function getSeasonalLevelIcon(req, res) {
     }
 }
 
+async function getSeasonalLevelIconFromUsername(req, res) {
+    try {
+        const profileUsername = req.params.profileUsername;
+
+        const row = await dbutils.get(`
+            SELECT img_url as url
+            FROM SeasonalRankInfo
+            JOIN Atleti ON SeasonalRankInfo.id = Atleti.livello_stagionale
+            WHERE Atleti.username = ?
+            `, [profileUsername]);
+        res.json(row.url);
+    } catch (error) {
+        res.status(500).json({message: "Errore nel trovare il livello stagionale"});
+        console.log(error);
+    }
+}
+
 module.exports = {
     getAvatar,
     getGlobalLevelIcon,
-    getSeasonalLevelIcon
+    getSeasonalLevelIcon,
+    getSeasonalLevelIconFromUsername
 }

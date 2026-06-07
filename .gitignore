@@ -64,8 +64,6 @@ yarn-error.log
 /libpeerconnection.log
 testem.log
 /typings
-/server/imgs
-/server/imgs/*.png
 
 # System files
 .DS_Store
@@ -82,6 +80,8 @@ server/.env
 # DB
 server/data
 server/data/*.db
+
+/server/imgs/users
 
 # Log di errore
 npm-debug.log*

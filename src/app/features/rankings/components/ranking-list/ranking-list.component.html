@@ -6,7 +6,7 @@
 
   <ion-list>
     @for (item of users(); track item.username) {
-      <app-ranking-entry [rankUser]="item"></app-ranking-entry>
+      <app-ranking-entry [rankUser]="item" [type]="filter()"></app-ranking-entry>
     } @empty {
       <div style="text-align: center; margin-top: 20px;">
         No user found.
