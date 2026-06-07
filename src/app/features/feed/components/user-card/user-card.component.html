@@ -6,22 +6,17 @@
       </ion-avatar>
       <div class="username">
         <p>{{username}}</p>
-        <ion-icon name="logo-ionic" color="primary"></ion-icon>
-        <ion-icon name="logo-ionic" color="primary"></ion-icon>
+        <ion-icon name="logo-ionic" color="white"></ion-icon>
+        <ion-icon name="logo-ionic" color="white"></ion-icon>
       </div>
     </div>
   </div>
   <div class="session">
     <h1>{{sessionName}}</h1>
   </div>
-  <div class="xp-container">
-    <ion-chip color="primary" class="xp">
-      {{gainedXP.toFixed(0) + ' XP'}}
-    </ion-chip>
-  </div>
   <div class="tags">
     @for (tag of tags; track tags) {
-    <ion-chip color="primary">
+    <ion-chip color="secondary">
       <ion-icon name="barbell-outline">
       </ion-icon>
       <ion-label>{{tag}}</ion-label>
