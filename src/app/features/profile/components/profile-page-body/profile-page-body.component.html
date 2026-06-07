@@ -68,14 +68,16 @@
     <ion-card class="progress-card">
       <ion-card-content>
         <div class="progress-row">
-          <ion-avatar><img [src]="this.globalIconUrl()"></ion-avatar>
+          <app-level-icon [url]="this.globalIconUrl()" [level]="user()?.gLevel ?? 0"></app-level-icon>
           <div class="progress-info">
             <ion-progress-bar [value]="this.globalPerc()" color="primary"></ion-progress-bar>
             <p>Level: {{(user()?.gLevel ?? 0) | toInt}}</p>
           </div>
         </div>
         <div class="progress-row">
-          <ion-avatar><img [src]="this.seasonalInfos().url"></ion-avatar>
+          <div class="level-avatar">
+            <img [src]="this.seasonalInfos().url">
+          </div>
           <div class="progress-info">
             <ion-progress-bar [value]="this.seasonalPerc()" color="tertiary"></ion-progress-bar>
             <p>{{this.seasonalInfos().rankName}}</p>

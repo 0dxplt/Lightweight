@@ -18,12 +18,13 @@ import { IonRefresherCustomEvent } from '@ionic/core';
 import { ToIntPipe } from "../../../../shared/pipes/to-int-pipe";
 import { environment } from 'src/environments/environment';
 import { UserService } from 'src/app/shared/services/user-service';
+import { LevelIconComponent } from 'src/app/shared/components/level-icon/level-icon.component';
 
 @Component({
   selector: 'app-profile-page-body',
   templateUrl: './profile-page-body.component.html',
   styleUrls: ['./profile-page-body.component.scss'],
-  imports: [IonicModule, SessionCardComponent, ToIntPipe]
+  imports: [IonicModule, SessionCardComponent, ToIntPipe, LevelIconComponent]
 })
 export class ProfilePageBodyComponent  implements OnInit {
 

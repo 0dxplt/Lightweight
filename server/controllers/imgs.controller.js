@@ -44,16 +44,12 @@ async function getGlobalLevelIcon(req, res) {
             fileName: `100.png`
         },
         {
-            floor: 250,
-            fileName: `250.png`
+            floor: 150,
+            fileName: `150.png`
         },
         {
-            floor: 500,
-            fileName: `500.png`
-        },
-        {
-            floor: 1000,
-            fileName: `1000.png`
+            floor: 200,
+            fileName: `200.png`
         }
     ];
 
