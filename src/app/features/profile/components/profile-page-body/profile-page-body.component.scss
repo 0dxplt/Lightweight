@@ -1,9 +1,30 @@
 #main-container {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  overflow: hidden;
-  overflow-y: auto;
+  @media (max-width: 748px) {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+    overflow-y: auto;
+  }
+  
+  @media (min-width: 748px) {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding-left: 20px;
+    padding-right: 20px;
+    height: 80vh;
+    margin-left: 10vw;
+    margin-right: 10vw;
+  }
+}
+
+ion-card {
+  border-radius: 10px;
+  background-color: var(--ion-color-secondary);
+}
+
+ion-list {
+  background-color: var(--ion-color-secondary);
 }
 
 #header-cards {
