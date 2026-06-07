@@ -4,6 +4,7 @@ import { map, Observable } from 'rxjs';
 import { SearchUserInfo } from 'src/app/models/search-user-info.model';
 import { SessionCard } from 'src/app/models/session-card.model';
 import { environment } from 'src/environments/environment';
+import { PROPIC_PATH } from '../global';
 
 @Injectable({
   providedIn: 'root',
@@ -13,6 +14,7 @@ export class FeedService {
 
   getFeed(): Observable<SessionCard[]> {
     return this.http.get<{
+      id: number,
       username: string,
       avatarUrl: string | null,
       verified: number,
@@ -33,7 +35,7 @@ export class FeedService {
             sessionId: row.sessionId,
             gainedXP: row.gainedXP,
             tags: [...tagsSet],
-            avatarUrl: row.avatarUrl,
+            avatarUrl: !!row.avatarUrl ? `${environment.apiUrl}/api/imgs/users?id=${row.id}&timestamp=${Date.now()}` : PROPIC_PATH,
             verified: row.verified === 1,
             pt: row.pt === 1,
           }

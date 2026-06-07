@@ -5,6 +5,7 @@ async function getUserFeed(req, res) {
         const profileId = req.user.userId;
         const rows = await dbutils.all(`
             SELECT Atleti.username,
+            Atleti.id,
             Atleti.img AS avatarUrl,
             Atleti.verificato AS verified,
             Sessioni.nome AS sessionName,
