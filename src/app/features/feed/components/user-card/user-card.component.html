@@ -10,12 +10,14 @@
         <ion-icon name="logo-ionic" color="primary"></ion-icon>
       </div>
     </div>
-    <ion-chip color="primary" class="xp">
-      {{gainedXP.toFixed(0) + ' XP'}}
-    </ion-chip>
   </div>
   <div class="session">
     <h1>{{sessionName}}</h1>
+  </div>
+  <div class="xp-container">
+    <ion-chip color="primary" class="xp">
+      {{gainedXP.toFixed(0) + ' XP'}}
+    </ion-chip>
   </div>
   <div class="tags">
     @for (tag of tags; track tags) {
