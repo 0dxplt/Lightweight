@@ -1,7 +1,19 @@
+ion-header {
+    background-color: transparent;
+}
+
 .toolbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    background-color: var(--ion-color-secondary);
+    padding: 10px;
+    border-radius: 25px;
+    border: 1px solid white;
+}
+
+ion-title {
+    font-size: 1.7rem;
 }
 
 .sessions {
@@ -15,4 +27,45 @@
     .sessions {
         grid-template-columns: repeat(2, 1fr);
     }
+}
+
+ion-button {
+    --background: var(--ion-color-secondary);
+    --border-width: 1px;
+    --border-style: solid;
+    --border-color: white;
+    --border-radius: 50%;
+    --color: white;
+}
+
+ion-button ion-icon {
+    color: white;
+}
+
+ion-list {
+    background-color: transparent;
+}
+
+.pt-item {
+    background-color: var(--ion-color-secondary);
+    color: white;
+    display: flex;
+    align-items: center;
+    height: fit-content;
+    padding: 10px;
+    border-radius: 15px;
+    cursor: pointer;
+}
+.pt-item ion-label {
+    margin-left: 20px;
+    font-size: 1.5rem;
+}
+
+.pt-item ion-avatar {
+    border: 1px solid white;
+}
+
+.avatar-profilo {
+  width: 45px;
+  height: 45px;
 }

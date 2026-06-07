@@ -1,7 +1,7 @@
-import { Component, effect, inject, OnInit, signal } from '@angular/core';
+import { Component, effect, inject, OnInit, signal, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonModal, IonSearchbar, IonList, IonItem, IonAvatar, IonImg, IonLabel, IonButton, IonIcon, IonRefresher, IonRefresherContent } from '@ionic/angular/standalone';
+import { IonContent, IonHeader, IonTitle, IonToolbar, IonModal, IonSearchbar, IonList, IonItem, IonAvatar, IonImg, IonLabel, IonButton, IonIcon, IonRefresher, IonRefresherContent, IonCard } from '@ionic/angular/standalone';
 import { UserCardComponent } from "../../components/user-card/user-card.component";
 import { addIcons } from 'ionicons';
 import { searchOutline } from 'ionicons/icons';
@@ -18,7 +18,7 @@ import { AuthService } from 'src/app/features/auth/services/auth-service';
   templateUrl: './feed.page.html',
   styleUrls: ['./feed.page.scss'],
   standalone: true,
-  imports: [IonRefresherContent, IonRefresher, IonIcon, IonButton, IonLabel, IonAvatar, IonItem, IonList, IonSearchbar, IonModal, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, UserCardComponent]
+  imports: [IonCard, IonRefresherContent, IonRefresher, IonIcon, IonButton, IonLabel, IonAvatar, IonList, IonSearchbar, IonModal, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, UserCardComponent]
 })
 export class FeedPage implements OnInit {
 
@@ -34,6 +34,8 @@ export class FeedPage implements OnInit {
   private feedService = inject(FeedService);
 
   private userService = inject(UserService);
+
+  @ViewChild('ptSearchModal') ptSearchModal!: IonModal;
 
   constructor(private authService: AuthService) {
     addIcons({ searchOutline });
@@ -107,5 +109,9 @@ export class FeedPage implements OnInit {
 
   handleRefresh(event: IonRefresherCustomEvent<RefresherEventDetail>) {
     this._loadData(event);
+  }
+
+  async openPtSearchModal() {
+    await this.ptSearchModal.present();
   }
 }
