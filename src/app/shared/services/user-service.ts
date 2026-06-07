@@ -90,7 +90,7 @@ export class UserService {
     return this.http.get<{rankName: string, url: string}>(`${environment.apiUrl}/api/imgs/seasonal-icon/${userId}?timestamp=${Date.now()}`);
   }
 
-  getIdFromUsername(username: string): Observable<number> {
-    return this.http.get<number>(`${environment.apiUrl}/api/users/get-id-from-name/${username}`);
+  getSeasonalIcon(username: string): Observable<string> {
+    return this.http.get<string>(`${environment.apiUrl}/api/imgs/seasonal-icon/by-username/${username}`);
   }
 }

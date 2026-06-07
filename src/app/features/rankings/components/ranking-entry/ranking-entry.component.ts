@@ -32,21 +32,14 @@ export class RankingEntryComponent  implements OnInit {
       const user = this.rankUser();
       if (!user) return;
 
-      this.userService.getIdFromUsername(user.username).subscribe({
-        next: (id) =>{
-          this.userService.getSeasonalRankInfos(id).subscribe({
+      this.userService.getSeasonalIcon(user.username).subscribe({
             next: (value) => {
-              this.seasonalUrl.set(value.url);
+              this.seasonalUrl.set(value);
             },
             error: (err) => {
               console.error(err);
             }
           });
-        },
-        error: (err) => {
-          console.error(err);
-        }
-      })
     });
   }
 
