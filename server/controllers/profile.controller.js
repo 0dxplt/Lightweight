@@ -367,6 +367,22 @@ async function removeSession(req, res) {
     let active_transaction = false;
 
     try {
+
+        const xpsRow = await dbutils.get(
+            "SELECT xp, pubblica FROM Sessioni WHERE id = ? AND id_creatore = ?",
+            [id, userId]
+        );
+
+        if (!xpsRow) {
+            return res.status(404).json({
+                success: false,
+                message: "Could not find session"
+            });
+        }
+
+        const public = xpsRow.pubblica;
+        const xps = (public) ? xpsRow.xp : 0;
+
         await dbutils.run("BEGIN TRANSACTION");
         active_transaction = true;
 
@@ -374,6 +390,9 @@ async function removeSession(req, res) {
             "DELETE FROM Sessioni WHERE id = ? AND id_creatore = ?",
             [id, userId]
         );
+
+        if (xps != 0)
+            await updateUserRank(userId, -xps);
 
         await dbutils.run("COMMIT");
         active_transaction = false;

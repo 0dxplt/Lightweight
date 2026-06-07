@@ -317,4 +317,8 @@ export class ProfilePageBodyComponent  implements OnInit {
     this._loadData(event);
     this.onRefresh.emit();
   }
+
+  goToWorkouts() {
+    this.router.navigate(["/tabs/workouts"]);
+  }
 }
