@@ -82,7 +82,7 @@ server/data
 server/data/*.db
 
 # Images
-/server/imgs/users
+server/imgs/users
 
 # Log di errore
 npm-debug.log*
