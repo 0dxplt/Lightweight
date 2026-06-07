@@ -104,6 +104,8 @@ export class ProfilePageBodyComponent  implements OnInit {
 
   sessions = signal<Session[]>([]);
   onRefresh = output<void>();
+  GLOBAL_RANKUP: number = GLOBAL_RANK_UP;
+  SEASONAL_RANKUP: number = SEASONAL_RANK_UP;
 
   constructor(
     private router: Router,

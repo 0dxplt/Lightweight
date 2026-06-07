@@ -23,7 +23,7 @@
   <!-- 4. LIVELLO (Tutto allineato alla fine a destra) -->
   <div slot="end" class="level-container">
     @if (type() == 'seasonal') {
-      <img [src]="rankUser().avatar" class="level-icon">
+      <img [src]="seasonalUrl()" class="level-icon">
     } @else {
       <app-level-icon [url]="globalUrl()" [level]="rankUser().level"></app-level-icon>
     }

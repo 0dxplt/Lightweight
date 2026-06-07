@@ -84,6 +84,7 @@
   ion-card-content {
     display: flex;
     justify-content: space-around;
+    text-align: center;
 
     .progress-row {
       display: flex;
@@ -100,6 +101,11 @@
         margin: 5px 0 0 0;
         font-size: 1.2rem;
         font-weight: 600;
+      }
+
+      small {
+        margin: 5px 0 0 0;
+        font-size: 0.9rem;
       }
     }
   }
@@ -165,8 +171,8 @@
 
 .level-avatar {
   position: relative;
-  width: 80px;
-  height: 80px;
+  width: 40px;
+  height: 40px;
 
   img {
     width: 100%;

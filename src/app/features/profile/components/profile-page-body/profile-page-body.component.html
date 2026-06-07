@@ -72,6 +72,7 @@
           <div class="progress-info">
             <ion-progress-bar [value]="this.globalPerc()" color="primary"></ion-progress-bar>
             <p>Level: {{(user()?.gLevel ?? 0) | toInt}}</p>
+            <small>{{this.globalPerc() * GLOBAL_RANKUP}} / {{GLOBAL_RANKUP}}</small>
           </div>
         </div>
         <div class="progress-row">
@@ -81,6 +82,7 @@
           <div class="progress-info">
             <ion-progress-bar [value]="this.seasonalPerc()" color="tertiary"></ion-progress-bar>
             <p>{{this.seasonalInfos().rankName}}</p>
+            <small>{{this.seasonalPerc() * SEASONAL_RANKUP}} / {{SEASONAL_RANKUP}}</small>
           </div>
         </div>
       </ion-card-content>

@@ -33,13 +33,13 @@ export class RankingEntryComponent  implements OnInit {
       if (!user) return;
 
       this.userService.getSeasonalIcon(user.username).subscribe({
-            next: (value) => {
-              this.seasonalUrl.set(value);
-            },
-            error: (err) => {
-              console.error(err);
-            }
-          });
+        next: (value) => {
+          this.seasonalUrl.set(value);
+        },
+        error: (err) => {
+          console.error(err);
+        }
+      });
     });
   }
 
