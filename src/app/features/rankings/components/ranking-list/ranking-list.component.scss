@@ -1,3 +1,15 @@
+ion-list {
+    @media (min-width: 748px) {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    --background: transparent;
+    background: transparent;
+}
+
 ion-refresher-content {
     color: var(--ion-color-tertiary);
 }
