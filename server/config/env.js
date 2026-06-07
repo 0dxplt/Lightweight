@@ -8,5 +8,7 @@ module.exports = {
     jwtSecret: process.env.JWT_SECRET,
     avatarDir: process.env.USERS_AVATAR_DIR,
     globalIconDir: process.env.GLOBAL_ICON_DIR,
-    seasonalIconDir: process.env.SEASONAL_ICON_DIR
+    seasonalIconDir: process.env.SEASONAL_ICON_DIR,
+    seasonalMonthOffset: process.env.SEASONAL_MONTH_DURATION,
+    seasonalDir: process.env.SEASONAL_DIR
 }

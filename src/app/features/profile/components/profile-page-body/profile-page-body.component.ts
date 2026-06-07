@@ -170,7 +170,7 @@ export class ProfilePageBodyComponent  implements OnInit {
           this.sessions.set(this.sessions().filter(s => s.shared));
         }
         if (event) event.target.complete();
-        this._showToast('Sessions loaded correctly', 'success', 1000);
+        // this._showToast('Sessions loaded correctly', 'success', 1000);
       },
       error: (err) => {
         if (event) event.target.complete();
