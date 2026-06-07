@@ -2,6 +2,9 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 const db = require('./db/database');
+const seasonChrono = require('./season-chrono-checker/season.js');
+
+seasonChrono.init();
 
 const config = require('./config/env');
 const PORT = config.port;
@@ -9,11 +12,6 @@ const PORT = config.port;
 // Middleware
 app.use(cors());
 app.use(express.json());
-
-// Rotte di test
-app.get("/", (req, res) => {
-    res.json({testo: "Hello, World!"});
-});
 
 // Middlewares
 const authMiddleware = require('./middlewares/auth.middleware.js');
@@ -61,6 +59,6 @@ app.use("/api/auth", routeAuth);
 app.use("/api/feed", authMiddleware, routeFeed);
 app.use("/api/pts", authMiddleware, routePts);
 
-app.listen(PORT, () => {
-    console.log(`Server backend avviato sulla porta ${PORT}`);
-});
+// app.listen(PORT, () => {
+//     console.log(`Server backend avviato sulla porta ${PORT}`);
+// });

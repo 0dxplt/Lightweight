@@ -81,7 +81,9 @@ server/.env
 server/data
 server/data/*.db
 
+# Images
 /server/imgs/users
+/server/imgs/users/*.png
 
 # Log di errore
 npm-debug.log*

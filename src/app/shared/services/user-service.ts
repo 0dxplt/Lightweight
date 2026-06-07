@@ -27,7 +27,7 @@ export class UserService {
       following: data.numero_followed,
       sessions: data.numero_sessioni,
       verified: data.verificato === 0 ? false : true,
-      propic: !!data.propic ? `${environment.apiUrl}/api/imgs/users?id=${data.id}` : undefined,
+      propic: !!data.propic ? `${environment.apiUrl}/api/imgs/users?id=${data.id}&timestamp=${Date.now()}` : undefined,
       birthdate: !data.data_nascita ? undefined : data.data_nascita,
       name: !data.nome ? undefined : data.nome,
       surname: !data.cognome ? undefined : data.cognome,
