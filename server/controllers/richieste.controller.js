@@ -124,10 +124,16 @@ async function approveRequest(req, res) {
             [moderatorId, 'APPROVED', Date.now(), request.id]
         );
 
+        const requester = request.user.id;
+        await dbutils.run(
+            "UPDATE Atleti SET verificato = ? WHERE id = ?",
+            [1, requester]
+        );
+
         await dbutils.run("COMMIT");
         active_transaction = false;
 
-        res.status(201).json({rejected: true});
+        res.status(201).json({approved: true});
     } catch (err) {
         if (active_transaction)
             await dbutils.run("ROLLBACK");
@@ -161,19 +167,19 @@ async function rejectRequest(req, res) {
         const requester = request.user.id;
         await dbutils.run(
             "UPDATE Atleti SET verificato = ? WHERE id = ?",
-            [1, requester]
+            [0, requester]
         );
 
         await dbutils.run("COMMIT");
         active_transaction = false;
 
-        res.status(201).json({approved: true});
+        res.status(201).json({rejected: true});
     } catch (err) {
         if (active_transaction)
             await dbutils.run("ROLLBACK");
         res.status(500).json({
             success: false,
-            message: "Error approving request"
+            message: "Error rejecting request"
         });
     }
 }
