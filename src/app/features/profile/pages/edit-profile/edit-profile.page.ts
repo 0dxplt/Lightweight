@@ -16,6 +16,7 @@ import { Router } from '@angular/router';
 import { IonSelectCustomEvent } from '@ionic/core';
 import { AddGymModalPage } from '../add-gym-modal/add-gym-modal.page';
 import { HttpClient } from '@angular/common/http';
+import { GeoLocalizationService } from 'src/app/shared/services/geo-localization-service';
 
 @Component({
   selector: 'app-edit-profile',
@@ -74,6 +75,7 @@ export class EditProfilePage implements OnInit {
     private nationService: NationService,
     private cityService: CityService,
     private gymService: GymService,
+    private geoService: GeoLocalizationService,
     private modalController: ModalController,
     private loadingController: LoadingController,
     private toastController: ToastController,
@@ -263,9 +265,9 @@ export class EditProfilePage implements OnInit {
 
       const lat: number = event.detail.value.lat;
       const lng: number = event.detail.value.lng;
-      this.http.get<any>(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`).subscribe({
-        next: (data) => {
-          const cityName: string = data.address.city || data.address.town || data.address.county;
+
+      this.geoService.getCityName(lat, lng).subscribe({
+        next: (cityName) => {
           this.cityService.getByName(cityName).subscribe({
             next: (city) => {
               loading.dismiss();
@@ -295,9 +297,11 @@ export class EditProfilePage implements OnInit {
 
     await modal.present();
 
-    const { data } = await modal.onWillDismiss();
+    const { data, role } = await modal.onWillDismiss();
 
-    if (data) {
+    if (role === 'cancel') {
+      this.userForm.get('gym')?.setValue(this.user()?.pt?.gym || null);
+    } else if (data) {
       const nation: Nation = data.nation;
       const city = data.city;
       if (!city) {
