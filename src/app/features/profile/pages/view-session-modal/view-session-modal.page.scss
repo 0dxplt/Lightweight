@@ -1,5 +1,13 @@
+:host {
+  --desktop-max-width: 60vw;
+}
+
 .main-content {
   padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .session-header {
@@ -17,6 +25,11 @@
   flex-direction: column;
   gap: 20px;
   padding-bottom: 80px;
+
+  @media (min-width: 748px) {
+    max-width: var(--desktop-max-width);
+    width: var(--desktop-max-width);
+  }
 }
 
 .exercise-card {

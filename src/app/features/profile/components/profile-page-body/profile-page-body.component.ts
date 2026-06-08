@@ -200,7 +200,7 @@ export class ProfilePageBodyComponent  implements OnInit {
   async openSessionModal(session: Session) {
     const modal = await this.modalController.create({
       component: ViewSessionModalPage,
-      cssClass: "view-session-modal",
+      cssClass: "desktop-fullscreen",
       componentProps: {
         session: session,
         isProfile: this.sameAsProfile()

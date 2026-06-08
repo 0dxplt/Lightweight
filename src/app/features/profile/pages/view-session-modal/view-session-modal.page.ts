@@ -107,7 +107,7 @@ export class ViewSessionModalPage implements OnInit {
     const exercises: Exercise[] = this._preprocessExercises();
     const modal = await this.modalController.create({
       component: ChartModalComponent,
-      cssClass: 'chart-modal',
+      cssClass: 'desktop-fullscreen',
       initialBreakpoint: 0.4,
       breakpoints: [0, 0.4, 0.8, 1.0],
       handle: true,
