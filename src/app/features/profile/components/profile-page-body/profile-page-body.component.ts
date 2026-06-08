@@ -185,7 +185,7 @@ export class ProfilePageBodyComponent  implements OnInit {
 
     const ptModal = await this.modalController.create({
       component: PtInfoModalPage,
-      cssClass: "pt-info-modal",
+      cssClass: "desktop-fullscreen",
       handle: false,
       initialBreakpoint: 0.8,
       backdropDismiss: true,
