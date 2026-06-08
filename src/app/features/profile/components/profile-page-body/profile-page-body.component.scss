@@ -12,7 +12,7 @@
     grid-template-columns: 1fr 1fr;
     align-items: stretch;
 
-    height: 80vh;
+    height: 605px;
     padding-left: 20px;
     padding-right: 20px;
 
@@ -51,6 +51,10 @@ ion-list {
     overflow-y: scroll !important;
     scrollbar-width: none;
     padding: 0;
+  }
+
+  @media (max-width: 748px) {
+    min-height: 600px;
   }
 }
 
