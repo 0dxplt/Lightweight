@@ -1,11 +1,11 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
+  <ion-toolbar class="toolbar">
     @if (editMode) {
     <ion-input (ionBlur)="updateWokoutName($event)" value="{{workoutName}}"></ion-input>
     } @else {
     <ion-title>{{workoutName}}</ion-title>
     }
-    <ion-buttons slot="end">
+    <ion-buttons slot="end" class="back">
       <ion-back-button defaultHref="/workouts"></ion-back-button>
     </ion-buttons>
   </ion-toolbar>

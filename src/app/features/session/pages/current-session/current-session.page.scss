@@ -1,5 +1,20 @@
-* {
-    font-family: 'Montserrat', sans-serif;
+ion-header {
+    background-color: transparent;
+}
+
+.toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    --background: var(--ion-color-secondary);
+    padding: 10px;
+    border-radius: 25px;
+    border: 1px solid white;
+}
+
+.title {
+    font-size: 1.7rem;
+    margin-left: 10px;
 }
 
 h1, p, h2 {
@@ -144,12 +159,6 @@ h1, p, h2 {
   color: var(--ion-color-secondary);
   cursor: pointer;
 }
-.exercise-item {
-    background-color: var(--ion-color-secondary);
-    color: white;
-    font-size: 1.2em;
-    padding: 10px;
-}
 
 .exercise-middle {
     background-color: white;
@@ -163,4 +172,96 @@ h1, p, h2 {
 
 ion-content {
   --padding-bottom: 80px;
+}
+
+.search-exercises {
+  --background: var(--ion-color-secondary);
+  --color: #fff;
+  --placeholder-color: #ffffff;
+  --icon-color: #fff;
+  --border-radius: 15px;
+  --placeholder-opacity: 1;
+}
+
+ion-modal {
+    --background: var(--ion-color-secondary);
+    --border-radius: 25px;
+}
+
+.modal-content {
+    --background: var(--ion-color-secondary);
+}
+
+ion-list {
+    background-color: transparent;
+}
+
+.tag-filter {
+    margin: 10px;
+    padding: 10px;
+}
+
+ion-select {
+  width: 100%;
+  justify-content: center;
+  background-color: var(--ion-color-secondary);
+  --border-radius: 25px;
+  text-align: center;
+  --border-color: white;
+}
+
+ion-select-option {
+    --background: white;
+}
+
+
+ion-select::part(icon) {
+  color: white;
+  opacity: 1;
+}
+
+.no-exercise {
+    text-align: center;
+    margin: 20px;
+}
+
+.no-serie {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.exercise-item {
+    background-color: white;
+    color: var(--ion-color-secondary);
+    display: flex;
+    align-items: center;
+    height: fit-content;
+    padding: 10px;
+    border-radius: 15px;
+    cursor: pointer;
+    margin: 10px;
+    border: 1px solid white;
+    font-weight: 500;
+}
+
+.exercise-item ion-label {
+    margin-left: 20px;
+    font-size: 1.5rem;
+}
+
+.exercise-item ion-avatar {
+    border: 2px solid var(--ion-color-secondary);
+}
+
+.avatar-exercise {
+  width: 45px;
+  height: 45px;
+}
+
+ion-alert {
+    --background: var(--ion-color-secondary);
 }

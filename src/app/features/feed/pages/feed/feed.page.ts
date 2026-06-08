@@ -18,7 +18,7 @@ import { AuthService } from 'src/app/features/auth/services/auth-service';
   templateUrl: './feed.page.html',
   styleUrls: ['./feed.page.scss'],
   standalone: true,
-  imports: [IonCard, IonRefresherContent, IonRefresher, IonIcon, IonButton, IonLabel, IonAvatar, IonList, IonSearchbar, IonModal, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, UserCardComponent]
+  imports: [IonRefresherContent, IonRefresher, IonIcon, IonButton, IonLabel, IonAvatar, IonList, IonSearchbar, IonModal, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, UserCardComponent]
 })
 export class FeedPage implements OnInit {
 

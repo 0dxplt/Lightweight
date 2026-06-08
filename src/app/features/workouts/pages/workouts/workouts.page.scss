@@ -1,5 +1,19 @@
-* {
-    font-family: 'Montserrat', 'sans-serif';
+ion-header {
+    background-color: transparent;
+}
+
+.toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    --background: var(--ion-color-secondary);
+    padding: 10px;
+    border-radius: 25px;
+    border: 1px solid white;
+}
+
+ion-title {
+    font-size: 1.7rem;
 }
 
 .active-session {
@@ -11,7 +25,7 @@
 }
 
 .workout-card {
-    background-color: white;
+    --background: white;
     border-radius: 25px;
 }
 

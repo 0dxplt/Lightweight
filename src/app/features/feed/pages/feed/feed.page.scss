@@ -47,14 +47,17 @@ ion-list {
 }
 
 .pt-item {
-    background-color: var(--ion-color-secondary);
-    color: white;
+    background-color: white;
+    color: var(--ion-color-secondary);
     display: flex;
     align-items: center;
     height: fit-content;
     padding: 10px;
     border-radius: 15px;
     cursor: pointer;
+    margin: 10px;
+    border: 1px solid white;
+    font-weight: 500;
 }
 .pt-item ion-label {
     margin-left: 20px;
@@ -62,10 +65,28 @@ ion-list {
 }
 
 .pt-item ion-avatar {
-    border: 1px solid white;
+    border: 2px solid var(--ion-color-secondary);
 }
 
 .avatar-profilo {
   width: 45px;
   height: 45px;
+}
+
+.search-users {
+  --background: var(--ion-color-secondary);
+  --color: #fff;
+  --placeholder-color: #ffffff;
+  --icon-color: #fff;
+  --border-radius: 15px;
+  --placeholder-opacity: 1;
+}
+
+ion-modal {
+    --background: var(--ion-color-secondary);
+    --border-radius: 25px;
+}
+
+.modal-content {
+    --background: var(--ion-color-secondary);
 }

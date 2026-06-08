@@ -1,21 +1,21 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>workouts</ion-title>
+  <ion-toolbar class="toolbar">
+    <ion-title>Workouts</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">workouts</ion-title>
+      <ion-title size="large">Workouts</ion-title>
     </ion-toolbar>
   </ion-header>
-  @if (authService.currentSession()) {
-  <ion-card class="active-session" [button]="true" routerLink="/session">
-    Sessione Corrente - {{authService.currentSession()?.nome}}
-  </ion-card>
-  }
   <div class="exercises">
+    @if (authService.currentSession()) {
+    <ion-card class="active-session" [button]="true" routerLink="/session">
+      Sessione Corrente - {{authService.currentSession()?.nome}}
+    </ion-card>
+    }
     @for (workout of workouts(); track workout) {
     <ion-card class="workout-card" [button]="true" (click)="goToWorkout(workout.id)">
       <div class="title">

@@ -31,7 +31,6 @@ export class SessionModalComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log("Modale aperto con Session ID:", this.sessionId);
     this.sessionService.get(this.sessionId).subscribe({
       next: (data) => {
         this.sessionInfo.set(data);

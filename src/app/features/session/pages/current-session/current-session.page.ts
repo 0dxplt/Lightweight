@@ -1,7 +1,7 @@
 import { Component, computed, effect, ElementRef, inject, OnInit, signal, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonIcon, IonButtons, IonInput, IonBackButton, IonCard, IonImg, IonChip, IonButton, IonSearchbar, IonFabButton, IonFab, IonFabList, IonModal, IonList, IonItem, IonSelect, IonSelectOption } from '@ionic/angular/standalone';
+import { IonContent, IonHeader, IonTitle, IonToolbar, IonIcon, IonButtons, IonInput, IonBackButton, IonCard, IonImg, IonChip, IonButton, IonSearchbar, IonFabButton, IonFab, IonFabList, IonModal, IonList, IonItem, IonSelect, IonSelectOption, IonLabel, IonAvatar } from '@ionic/angular/standalone';
 import { Serie, SessionExercise } from 'src/app/models/session-modal-component-info';
 import { BetterMsViewerPipe } from "../../../../shared/pipes/better-ms-viewer-pipe";
 import { Exercise } from 'src/app/models/exercise.model';
@@ -13,14 +13,13 @@ import { WorkoutVisualization } from 'src/app/models/workout.model';
 import { AuthService } from 'src/app/features/auth/services/auth-service';
 import { Router } from '@angular/router';
 import { MuscolarGroupsService } from 'src/app/shared/services/muscolar-groups-service';
-import { SaveSession } from 'src/app/models/session.model';
 
 @Component({
   selector: 'app-current-session',
   templateUrl: './current-session.page.html',
   styleUrls: ['./current-session.page.scss'],
   standalone: true,
-  imports: [IonItem, IonList, IonModal, IonFabList, IonFab, IonFabButton, IonSearchbar, IonButton, IonChip, IonImg, IonCard, IonBackButton, IonInput, IonButtons, IonIcon, IonContent, IonHeader, IonToolbar, CommonModule, FormsModule, BetterMsViewerPipe, IonSelect, IonSelectOption]
+  imports: [IonAvatar, IonLabel, IonList, IonModal, IonFabList, IonFab, IonFabButton, IonSearchbar, IonButton, IonChip, IonImg, IonCard, IonBackButton, IonInput, IonButtons, IonIcon, IonContent, IonHeader, IonToolbar, CommonModule, FormsModule, BetterMsViewerPipe, IonSelect, IonSelectOption]
 })
 export class CurrentSessionPage implements OnInit {
 
@@ -73,6 +72,10 @@ export class CurrentSessionPage implements OnInit {
       return true;
     })
   })
+
+  public customAlertMuscleFilter = {
+    cssClass: 'alert-tag-custom'
+  };
 
   @ViewChild('modal') exercisesModal!: IonModal;
 

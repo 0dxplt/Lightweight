@@ -65,3 +65,10 @@
 
 /* Leaflet */
 @import "leaflet/dist/leaflet.css";
+
+.alert-tag-custom {
+  --background: var(--ion-color-secondary);
+  --color: white;
+  --ion-color-primary: white;
+  --border-radius: 20px;
+}
