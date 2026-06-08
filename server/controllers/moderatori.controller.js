@@ -5,9 +5,10 @@ async function getAllModerators(req, res) {
     try {
         const rows = await dbutils.all("SELECT * FROM Moderatori");
         res.json(rows);
-    } catch(error) {
+    } catch(err) {
+        console.error(err)
         res.status(500).json({
-            err: error.message
+            err: "Could not retrieve all moderators"
         });
     }
 }
@@ -160,7 +161,7 @@ async function updateSessionValidity(req, res) {
         res.status(201).json({updated: true});
 
     } catch(err) {
-        console.log(err);
+        console.error(err);
         if (active_transaction)
             await dbutils.run("ROLLBACK");
 
@@ -187,6 +188,7 @@ async function updateVerify(req, res) {
 
         res.status(200).json({status_changed: true});
     } catch(err) {
+        console.error(err);
         if (active_transaction)
             await dbutils.run("ROLLBACK");
         res.status(500).json({

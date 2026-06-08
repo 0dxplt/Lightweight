@@ -33,19 +33,23 @@ async function getFullWorkout(req, res) {
             GROUP BY WorkoutEsercizi.id
             `, [id]);
         res.json(rows);
-    } catch (error) {
+    } catch (err) {
+        console.error(err);
         res.status(500).json({
-            err: error.message
+            err: "Could not get all workouts (full)"
         });
     }
 
 }
 
 async function saveWorkout(req, res) {
+    let active_transaction = false;
     try {
         const creatore = req.user.userId;
         const { id, nome, data, exercises } = req.body;
         await dbutils.run('BEGIN TRANSACTION');
+        active_transaction = true;
+
         await dbutils.run(
             "UPDATE Workout SET nome = ?, data_creazione = ?, id_creatore = ? WHERE id = ?",
             [nome, data, creatore, id]
@@ -64,42 +68,59 @@ async function saveWorkout(req, res) {
         }
 
         await dbutils.run('COMMIT');
+        active_transaction = false;
+
         res.json({
             success: true,
             message: "Saved Workout!"
         });
 
-    } catch (error) {
-        await dbutils.run('ROLLBACK');
+    } catch (err) {
+        if (active_transaction)
+            await dbutils.run('ROLLBACK');
+        console.error(err);
         res.status(500).json({
             success: false,
-            message: "Couldn't save workout: " + error.message
+            message: "Couldn't save workout"
         })
     }
 }
 
 async function deleteWorkout(req, res) {
+    let active_transaction = false;
     try {
         const id = req.body.id;
+        await dbutils.run("BEGIN TRANSACTION");
+        active_transaction = true;
+
         await dbutils.run(`DELETE FROM Workout WHERE id = ?`, [id]);
+        
+        await dbutils.run("COMMIT");
+        active_transaction = false;
+
         res.json({
             success: true,
             message: "Workout Eliminato!"
         });
-    } catch (error) {
-        await dbutils.run('ROLLBACK');
+    } catch (err) {
+        if (active_transaction)
+            await dbutils.run('ROLLBACK');
+        console.error(err);
         res.status(500).json({
             success: false,
-            message: "Errore nell'eliminazione del workout!: " + error.message
+            message: "Errore nell'eliminazione del workout!"
         })
     }
 }
 
 async function createWorkout(req, res) {
+    let active_transaction = false;
     try {
         const {nome, data, exercises } = req.body;
         const creatore = req.user.userId;
         await dbutils.run('BEGIN TRANSACTION');
+        active_transaction = true;
+
         await dbutils.run(
             "INSERT INTO Workout (nome, data_creazione, id_creatore) VALUES (?, ?, ?)",
             [nome, data, creatore]
@@ -113,15 +134,19 @@ async function createWorkout(req, res) {
             );
         }
         await dbutils.run('COMMIT');
+        active_transaction = false;
+
         res.json({
             success: true,
             message: "Created Workout!"
         });
-    } catch (error) {
-        await dbutils.run('ROLLBACK');
+    } catch (err) {
+        if (active_transaction)
+            await dbutils.run('ROLLBACK');
+        console.error(err);
         res.status(500).json({
             success: false,
-            message: "Errore nella creazione del workout!: " + error.message
+            message: "Errore nella creazione del workout!"
         })
     }
 }

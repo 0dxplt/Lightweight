@@ -21,11 +21,11 @@ async function getAvatar(req, res) {
 
         res.json(null);
     } catch (err) {
+        console.error(err);
         res.status(500).json({
             success: false,
             message: "Error retrieving avatar"
         });
-        console.log(err);
     }
 }
 
@@ -82,9 +82,9 @@ async function getSeasonalLevelIcon(req, res) {
             WHERE Atleti.id = ?
             `, [profileId]);
         res.json(rows);
-    } catch (error) {
+    } catch (err) {
+        console.error(err);
         res.status(500).json({message: "Errore nel trovare il livello stagionale"});
-        console.log(error);
     }
 }
 
@@ -99,9 +99,9 @@ async function getSeasonalLevelIconFromUsername(req, res) {
             WHERE Atleti.username = ?
             `, [profileUsername]);
         res.json(row.url);
-    } catch (error) {
+    } catch (err) {
+        console.error(err);
         res.status(500).json({message: "Errore nel trovare il livello stagionale"});
-        console.log(error);
     }
 }
 

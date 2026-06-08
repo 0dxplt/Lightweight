@@ -244,9 +244,10 @@ async function changePassword(req, res) {
             message: "Password changed!"
         });
     } catch (err) {
+        console.error(err);
         res.status(500).json({
             success: false,
-            message: "Error: " + err.message
+            message: "Could not change password"
         });
     }
 }
@@ -264,9 +265,10 @@ async function follows(req, res) {
         res.json(row ? true : false);
 
     } catch (err) {
+        console.error(err);
         res.status(500).json({
             success: false,
-            message: "Could not retrieve information"
+            message: "Could not retrieve follow information"
         })
     }
 }
@@ -351,7 +353,7 @@ async function saveSession(req, res) {
             message: "Saved Session!"
         });
     } catch (err) {
-        console.log(err);
+        console.error(err);
         if (active_transaction)
             await dbutils.run('ROLLBACK');
         res.status(500).json({
@@ -402,6 +404,7 @@ async function removeSession(req, res) {
         if (active_transaction)
             await dbutils.run("ROLLBACK");
 
+        console.error(err);
         res.status(500).json({
             success: false,
             message: "Error deleting session"
@@ -431,7 +434,7 @@ async function updateSessionVisibility(req, res) {
 
         res.status(201).json({updated: true});
     } catch(err) {
-        console.log(err);
+        console.error(err);
         
         if (active_transaction)
             await dbutils.run("ROLLBACK");
@@ -593,7 +596,7 @@ async function newRequest(req, res) {
         res.status(201).json({requested: true});
 
     } catch(err) {
-        console.log(err);
+        console.error(err);
         if (active_transaction)
             await dbutils.run("ROLLBACK");
         res.status(500).json({

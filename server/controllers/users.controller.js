@@ -111,7 +111,7 @@ async function getUser(req, res) {
         res.status(200).json(user);
 
     } catch (err) {
-        console.log(err);
+        console.error(err);
         res.status(500).json({
             success: false,
             message: "Could not retrieve user"
@@ -233,6 +233,7 @@ async function getFollowers(req, res) {
         res.status(200).json(users);
 
     } catch (err) {
+        console.error(err);
         res.status(500).json({
             success: false,
             message: "Could not retrieve followers"
@@ -354,6 +355,7 @@ async function getFollowings(req, res) {
         res.status(200).json(users);
 
     } catch (err) {
+        console.error(err);
         res.status(500).json({
             success: false,
             message: "Could not retrieve followers"
@@ -362,6 +364,7 @@ async function getFollowings(req, res) {
 }
 
 async function follow(req, res) {
+    let active_transaction = false;
     try {
         const follower = req.params.followerId;
         const other = req.params.otherId;
@@ -383,6 +386,7 @@ async function follow(req, res) {
         }
 
         await dbutils.run("BEGIN TRANSACTION");
+        active_transaction = true;
 
         await dbutils.run(
             "INSERT INTO Follow (id_follower, id_followed) VALUES (?, ?)",
@@ -400,12 +404,14 @@ async function follow(req, res) {
         );
 
         await dbutils.run("COMMIT");
+        active_transaction = false;
 
         res.status(200).json({ followed: true });
 
     } catch (err) {
-        await dbutils.run("ROLLBACK");
-        console.log(err);
+        if (active_transaction)
+            await dbutils.run("ROLLBACK");
+        console.error(err);
         res.status(500).json({
             success: false,
             message: "Could not follow user"
@@ -414,6 +420,7 @@ async function follow(req, res) {
 }
 
 async function unfollow(req, res) {
+    let active_transaction = false;
     try {
         const follower = req.params.followerId;
         const other = req.params.otherId;
@@ -435,6 +442,7 @@ async function unfollow(req, res) {
         }
 
         await dbutils.run("BEGIN TRANSACTION");
+        active_transaction = true;
 
         await dbutils.run(
             "DELETE FROM Follow WHERE id = ?",
@@ -452,12 +460,14 @@ async function unfollow(req, res) {
         );
 
         await dbutils.run("COMMIT");
+        active_transaction = false;
 
         res.status(200).json({ unfollowed: true });
 
     } catch (err) {
-        await dbutils.run("ROLLBACK");
-        console.log(err);
+        if (active_transaction)
+            await dbutils.run("ROLLBACK");
+        console.error(err);
         res.status(500).json({
             success: false,
             message: "Could not follow user"
@@ -470,9 +480,10 @@ async function getAllUsersMinimal(req, res) {
     try {
         const rows = await dbutils.all(`SELECT id, username, nome, cognome, img FROM Atleti WHERE id != ?`, [userId]);
         res.json(rows);
-    } catch (error) {
+    } catch (err) {
+        console.error(err)
         res.status(500).json({
-            err: error.message
+            err: "Could not retrieve all users (minimal)"
         });
     }
 }

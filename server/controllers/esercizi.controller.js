@@ -21,9 +21,10 @@ async function getAllExercises(req, res) {
             GROUP BY Esercizi.id
             `);
         res.json(rows);
-    } catch (error) {
+    } catch (err) {
+        console.error(err);
         res.status(500).json({
-            err: error.message
+            err: "Could not retrieve all exercises"
         });
     }
 }

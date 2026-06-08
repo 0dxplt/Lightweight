@@ -19,9 +19,11 @@ async function getWorkouts(req, res) {
             GROUP BY Workout.id
             `, [userId]);
             res.json(rows);
-    } catch (error) {
+    } catch (err) {
+        console.error(err);
         res.status(500).json({
-            err: error.message
+            success: false,
+            err: "Could not retrieve workouts"
         });
     }
 }

@@ -130,17 +130,6 @@ export class AuthService {
     );
   }
 
-  updateWithImage(user: User, propic: File | null) {
-    // const formData = new FormData();
-    // formData.append('user', JSON.stringify(user));
-    // if (propic) {
-    //   formData.append('propic', propic, propic.name);
-    // }
-    // query al db
-    this._user.set(user);
-    localStorage.setItem('loggedUser', JSON.stringify(this._user()));
-  }
-
   follows(other: number): Observable<boolean> {
     return this.http.post<any>(
       `${environment.apiUrl}/api/profile/follows`,

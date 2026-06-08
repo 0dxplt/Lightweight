@@ -97,6 +97,7 @@ async function getAllFullRequests(req, res) {
 
         res.status(200).json(requests);
     } catch (err) {
+        console.error(err);
         res.status(500).json({
             success: false,
             message: "Error retrieving requests"
@@ -137,6 +138,7 @@ async function approveRequest(req, res) {
     } catch (err) {
         if (active_transaction)
             await dbutils.run("ROLLBACK");
+        console.error(err);
         res.status(500).json({
             success: false,
             message: "Error approving request"
@@ -177,6 +179,7 @@ async function rejectRequest(req, res) {
     } catch (err) {
         if (active_transaction)
             await dbutils.run("ROLLBACK");
+        console.error(err);
         res.status(500).json({
             success: false,
             message: "Error rejecting request"
@@ -192,6 +195,7 @@ async function counter(req, res) {
 
         res.status(200).json(rows.length);
     } catch(err) {
+        console.error(err);
         res.status(500).json({
             success: false,
             message: "Could not retrieve the number of requests"

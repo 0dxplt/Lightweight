@@ -85,6 +85,7 @@ async function counter(req, res) {
 
         res.status(200).json(reports.length + requests.length);
     } catch(err) {
+        console.error(err);
         res.status(500).json({
             success: false,
             message: "Could not retrieve solveds' count"
@@ -128,6 +129,7 @@ async function getFullSolvedReports(req, res) {
 
         res.status(200).json(solvedReports);
     } catch(err) {
+        console.error(err);
         res.status(500).json({
             success: false,
             message: "Could not retrieve solved reports"
@@ -161,6 +163,7 @@ async function getFullSolvedRequests(req, res) {
 
         res.status(200).json(solvedRequests);
     } catch(err) {
+        console.error(err);
         res.status(500).json({
             success: false,
             message: "Could not retrieve solved requests"

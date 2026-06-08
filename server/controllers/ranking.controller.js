@@ -25,7 +25,7 @@ async function getGlobalRankings(req, res) {
 
         res.status(200).json(rankings);
     } catch(err) {
-        console.log(err);
+        console.error(err);
         res.status(500).json({
             success: false,
             message: "Could not retrieve global rankings"
@@ -58,7 +58,7 @@ async function getSeasonalRankings(req, res) {
 
         res.status(200).json(rankings);
     } catch(err) {
-        console.log(err);
+        console.error(err);
         res.status(500).json({
             success: false,
             message: "Could not retrieve seasonal rankings"

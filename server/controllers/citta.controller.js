@@ -5,8 +5,9 @@ async function getAllCities(req, res) {
         const rows = await dbutils.all("SELECT * FROM Citta ORDER BY nome ASC");
         res.json(rows);
     } catch(error) {
+        console.error(err);
         res.status(500).json({
-            err: error.message
+            err: "Could not retrieve all cities"
         });
     }
 }
@@ -28,8 +29,9 @@ async function getAllFullCities(req, res) {
         }
         res.json(fullCities);
     } catch(error) {
+        console.error(err);
         res.status(500).json({
-            err: error.message
+            err: "Could not retrieve full cities"
         });
     }
 }
@@ -83,7 +85,7 @@ async function getOrInsert(req, res) {
             nation: country
         });
     } catch(err) {
-        console.log(err);
+        console.err(err);
         if (active_transaction)
             await dbutils.run("ROLLBACK");
         res.status(500).json({

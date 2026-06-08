@@ -23,10 +23,11 @@ async function getPtsCity(req, res) {
 
         res.json(rows);
     } catch (error) {
+        console.error("Errore nel caricare i pts!: " + error.message);
         res.status(500).json({
-            success: false
+            success: false,
+            message: "Could not retrieve pts cities"
         });
-        console.log("Errore nel caricare i pts!: " + error.message);
     }
 }
 
