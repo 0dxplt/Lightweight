@@ -10,11 +10,12 @@
 <ion-content class="ion-padding">
   <ion-list>
     @for (item of this.following(); track item.id; ) {
-    <ion-item button (click)="visitProfile(item.username)">
+    <ion-item button (click)="visitProfile(item.username)" lines="none">
       <ion-avatar slot="start">
-        <img [src]="item.propic ? item.propic : '/assets/icon/favicon.png'" alt="avatar" />
+        <img [src]="item.propic ?? '/assets/icon/favicon.png'" alt="avatar" />
       </ion-avatar>
       <ion-label>{{ item.username }}</ion-label>
+      <app-level-icon [level]="item.gLevel" [url]="getGlobalIconUrl(item.gLevel)" slot="end"></app-level-icon>
     </ion-item>
     }
     </ion-list>

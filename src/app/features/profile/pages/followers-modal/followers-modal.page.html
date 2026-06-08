@@ -15,6 +15,7 @@
         <img [src]="item.propic ? item.propic : '/assets/icon/favicon.png'" alt="avatar" />
       </ion-avatar>
       <ion-label>{{ item.username }}</ion-label>
+      <app-level-icon [level]="item.gLevel" [url]="getGlobalIconUrl(item.gLevel)" slot="end"></app-level-icon>
     </ion-item>
     }
     </ion-list>

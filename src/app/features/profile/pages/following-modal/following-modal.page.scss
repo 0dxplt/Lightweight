@@ -1,0 +1,16 @@
+:host {
+    user-select: none;
+}
+
+ion-list {
+    background-color: transparent;
+}
+
+ion-item {
+    --border-width: 1px;
+    --border-style: solid;
+    --border-radius: 10px;
+    --border-color: var(--ion-color-secondary);
+    --background: var(--ion-color-secondary);
+    margin-bottom: 5px;
+}

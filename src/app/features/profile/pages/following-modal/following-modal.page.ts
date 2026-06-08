@@ -6,13 +6,15 @@ import { IonSearchbarCustomEvent } from '@ionic/core';
 import { User } from 'src/app/models/user.model';
 import { Router } from '@angular/router';
 import { UserService } from 'src/app/shared/services/user-service';
+import { LevelIconComponent } from "src/app/shared/components/level-icon/level-icon.component";
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-following-modal',
   templateUrl: './following-modal.page.html',
   styleUrls: ['./following-modal.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule]
+  imports: [IonicModule, CommonModule, FormsModule, LevelIconComponent]
 })
 export class FollowingModalPage implements OnInit {
   
@@ -49,8 +51,8 @@ export class FollowingModalPage implements OnInit {
       const surname = u.surname?.toLowerCase() || '';
 
       return username.includes(query) || 
-            name.includes(query) || 
-            surname.includes(query);
+        name.includes(query) || 
+        surname.includes(query);
     });
 
     this.following.set(filtered);
@@ -59,5 +61,9 @@ export class FollowingModalPage implements OnInit {
   visitProfile(username: string) {
     this.modalController.dismiss();
     this.router.navigate(['tabs/profile/', username]);
+  }
+
+  getGlobalIconUrl(level: number) {
+    return `${environment.apiUrl}/api/imgs/global-icon/${level}`;
   }
 }

@@ -119,7 +119,9 @@
           } @empty {
             <div class="no-sessions">
               <h3>There are no sessions here.</h3>
-              <p>Start a new <span (click)="goToWorkouts()">one!</span></p>
+              @if (sameAsProfile()) {
+                <p>Start a new <span (click)="goToWorkouts()">one!</span></p>
+              }
             </div>
           }
         </ion-list>
