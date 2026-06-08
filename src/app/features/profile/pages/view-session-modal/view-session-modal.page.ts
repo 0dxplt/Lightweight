@@ -7,7 +7,7 @@ import { DatefyPipe } from "../../../../shared/pipes/datefy-pipe";
 import { BetterMsViewerPipe } from "../../../../shared/pipes/better-ms-viewer-pipe";
 import { SessionExercise } from 'src/app/models/session-exercise.model';
 import { addIcons } from 'ionicons';
-import { lockClosedOutline, settingsOutline, shareSocialOutline, statsChart, trashOutline } from 'ionicons/icons';
+import { checkmarkCircleOutline, closeCircleOutline, lockClosedOutline, settingsOutline, shareSocialOutline, statsChart, trashOutline } from 'ionicons/icons';
 import { Serie, Tag } from 'src/app/models/session-modal-component-info';
 import { SessionExercise as Exercise } from 'src/app/models/session-modal-component-info'; // compatibilità con gli altri .model.ts
 import { ChartModalComponent } from 'src/app/shared/components/chart-modal/chart-modal.component';
@@ -47,7 +47,15 @@ export class ViewSessionModalPage implements OnInit {
     private modalController: ModalController,
     private alertController: AlertController
   ) {
-    addIcons({statsChart, settingsOutline, trashOutline, lockClosedOutline, shareSocialOutline});
+    addIcons({
+      statsChart,
+      settingsOutline,
+      trashOutline,
+      lockClosedOutline,
+      shareSocialOutline,
+      closeCircleOutline,
+      checkmarkCircleOutline
+    });
   }
 
   ngOnInit() {}
