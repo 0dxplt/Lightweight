@@ -124,7 +124,7 @@ export class ProfilePage implements OnInit {
   async openChangePasswordModal() {
     const modal = await this.modalController.create({
       component: ChangePasswordModalPage,
-      cssClass: 'change-password-modal',
+      cssClass: 'desktop-fullscreen',
     });
 
     await modal.present();
