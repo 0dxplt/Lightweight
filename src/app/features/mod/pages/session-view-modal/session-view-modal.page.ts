@@ -36,13 +36,15 @@ export class SessionViewModalPage implements OnInit {
     return groups;
   });
 
-  constructor(private modalController: ModalController) {}
+  constructor(private modalController: ModalController) {
+    addIcons({
+      'checkmark-outline': checkmarkOutline,
+      'close-outline': closeOutline
+    });
+  }
 
   ngOnInit() {
-    addIcons({
-      closeOutline,
-      checkmarkOutline
-    })
+
   }
 
   cancel() {

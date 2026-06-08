@@ -39,10 +39,11 @@ export class SessionViewPage implements OnInit {
     private sessionService: SessionService,
     private modalController: ModalController,
     private toastController: ToastController
-  ) {}
+  ) {
+    addIcons({arrowBack});
+  }
 
   ngOnInit() {
-    addIcons({arrowBack});
     const tmp = this.route.snapshot.paramMap.get('username');
     if (!tmp) this.location.back();
 
@@ -78,8 +79,6 @@ export class SessionViewPage implements OnInit {
   }
 
   onIonInfinite(event: IonInfiniteScrollCustomEvent<void>) {
-    console.log(this.sessions.length);
-    console.log(this._sessions.length);
     if (this.sessions.length !== this._sessions.length) {
       if (this._isLoading) return;
 
@@ -106,7 +105,7 @@ export class SessionViewPage implements OnInit {
   async openSessionModal(session: Session) {
     const modal = await this.modalController.create({
       component: SessionViewModalPage,
-      cssClass: 'session-view-modal',
+      cssClass: 'desktop-fullscreen',
       componentProps: {
         session: structuredClone(session)
       }

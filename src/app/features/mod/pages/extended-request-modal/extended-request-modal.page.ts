@@ -22,11 +22,16 @@ export class ExtendedRequestModalPage implements OnInit {
   @Input() solvedRequest: SolvedRequest | null = null;
   @Input() solved: boolean = false;
 
-  constructor(private modalController: ModalController, private router: Router) {}
-
-  ngOnInit() {
-    addIcons({personOutline, timeOutline, shieldCheckmarkOutline, calendarOutline});
+  constructor(private modalController: ModalController, private router: Router) {
+    addIcons({
+      personOutline,
+      timeOutline,
+      shieldCheckmarkOutline,
+      calendarOutline
+    });
   }
+
+  ngOnInit() {}
 
   dismiss() {
     this.modalController.dismiss({

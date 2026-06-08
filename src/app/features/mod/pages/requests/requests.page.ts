@@ -33,7 +33,6 @@ export class RequestsPage implements OnInit {
   constructor(
     private modAuthService: ModAuthService,
     private requestService: RequestService,
-    private userService: UserService,
     private location: Location,
     private modalController: ModalController,
     private toastController: ToastController

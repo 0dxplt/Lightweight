@@ -38,7 +38,7 @@ export class ReportsPage implements OnInit {
     private alertController: AlertController,
     private toastController: ToastController
   ) {
-    addIcons({'arrow-back':arrowBack});
+    addIcons({arrowBack});
   }
 
   ngOnInit() {

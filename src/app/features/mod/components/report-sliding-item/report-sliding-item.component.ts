@@ -18,11 +18,11 @@ export class ReportSlidingItemComponent  implements OnInit {
   onConfirm = output<void>();
   onReview = output<void>();
 
-  constructor(private reportService: ReportService) { }
-
-  ngOnInit() {
+  constructor() {
     addIcons({'checkmark-done':checkmarkDone});
   }
+
+  ngOnInit() {}
 
   checkReport(slidingItem: IonItemSliding) {
     this.onConfirm.emit();
