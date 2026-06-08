@@ -34,6 +34,10 @@ export class PtRequestModalPage implements OnInit {
     // city: new FormControl('', [Validators.required])
   });
 
+  customSelectFilter = {
+    cssClass: 'modal-select-custom'
+  };
+
   constructor(
     private cityService: CityService,
     private gymService: GymService,

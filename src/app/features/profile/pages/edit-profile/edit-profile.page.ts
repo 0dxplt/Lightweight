@@ -1,4 +1,4 @@
-import { Component, computed, OnInit, signal } from '@angular/core';
+import { Component, computed, effect, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, FormsModule, Validators, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule, ModalController, ToastController } from '@ionic/angular';
@@ -15,6 +15,7 @@ import { LoadingController, SelectChangeEventDetail } from '@ionic/angular/stand
 import { Router } from '@angular/router';
 import { IonSelectCustomEvent } from '@ionic/core';
 import { AddGymModalPage } from '../add-gym-modal/add-gym-modal.page';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-edit-profile',
@@ -40,7 +41,7 @@ export class EditProfilePage implements OnInit {
     height: new FormControl(this.user()?.height, [Validators.required, Validators.min(MIN_HEIGHT_VALUE), Validators.max(MAX_HEIGHT_VALUE)]),
     nationality: new FormControl(this.user()?.nationality),
     proemail: new FormControl(this.user()?.pt?.proEmail, [Validators.required, Validators.email]),
-    city: new FormControl(this.user()?.pt?.city, [Validators.required]),
+    // city: new FormControl(this.user()?.pt?.city, [Validators.required]),
     gym: new FormControl(this.user()?.pt?.gym, [Validators.required])
   });
 
@@ -63,8 +64,10 @@ export class EditProfilePage implements OnInit {
   });
 
   nations = signal<Nation[]>([]);
-  cities = signal<City[]>([]);
+  // cities = signal<City[]>([]);
   gyms = signal<Gym[]>([]);
+  
+  private _city = signal<City | null>(null);
 
   constructor(
     private authService: AuthService,
@@ -75,16 +78,25 @@ export class EditProfilePage implements OnInit {
     private loadingController: LoadingController,
     private toastController: ToastController,
     private router: Router,
-  ) {}
+    private http: HttpClient
+  ) {
+    effect(async () => {
+      const user = this.user();
+      if (!user) return;
+
+      const city: City | null = user.pt?.city ?? null;
+      this._city.set(city);
+    });
+  }
 
   ngOnInit() {
       if (!this.isPT()) {
         this.userForm.get('proemail')?.clearValidators();
-        this.userForm.get('city')?.clearValidators();
+        // this.userForm.get('city')?.clearValidators();
         this.userForm.get('gym')?.clearValidators();
         
         this.userForm.get('proemail')?.updateValueAndValidity();
-        this.userForm.get('city')?.updateValueAndValidity();
+        // this.userForm.get('city')?.updateValueAndValidity();
         this.userForm.get('gym')?.updateValueAndValidity();
     }
 
@@ -92,9 +104,9 @@ export class EditProfilePage implements OnInit {
       this.nations.set([...nations]);
     });
 
-    this.cityService.all().subscribe(cities => {
-      this.cities.set([...cities]);
-    });
+    // this.cityService.all().subscribe(cities => {
+    //   this.cities.set([...cities]);
+    // });
 
     this.gymService.all().subscribe(gyms => {
       this.gyms.set([...gyms]);
@@ -107,11 +119,11 @@ export class EditProfilePage implements OnInit {
     ) : obj1 === obj2;
   }
 
-  compareCities(obj1: City | undefined | null, obj2: City | undefined | null): boolean {
-    return obj1 && obj2 ? (
-      obj1.id === obj2.id
-    ) : obj1 === obj2;
-  }
+  // compareCities(obj1: City | undefined | null, obj2: City | undefined | null): boolean {
+  //   return obj1 && obj2 ? (
+  //     obj1.id === obj2.id
+  //   ) : obj1 === obj2;
+  // }
 
   compareGyms(obj1: Gym | undefined | null, obj2: Gym | undefined | null): boolean {
     return obj1 && obj2 ? (
@@ -142,6 +154,11 @@ export class EditProfilePage implements OnInit {
       }
     }
 
+    if (this.isPT() && !this._city()) {
+      this._showToast("Gym's city is not available, please select another gym", 'danger', 2000);
+      return false;
+    }
+
     const normalize = (val: any) => (val === null || val === undefined ? '' : val);
 
     const hasChanged = 
@@ -157,8 +174,8 @@ export class EditProfilePage implements OnInit {
 
       (this.isPT() && (
         normalize(current.proemail) !== normalize(original?.pt?.proEmail) ||
-        !this.compareGyms(current.gym, original?.pt?.gym) ||
-        !this.compareCities(current.city, original?.pt?.city)
+        !this.compareGyms(current.gym, original?.pt?.gym)
+        // !this.compareCities(current.city, original?.pt?.city)
       ));
 
     if (!hasChanged) {
@@ -177,7 +194,9 @@ export class EditProfilePage implements OnInit {
     });
     await loading.present();
 
-    const updatedUser: User = this._prepareUserObject(this.userForm.value);
+    const data = this.userForm.value;
+    data.city = this._city();
+    const updatedUser: User = this._prepareUserObject(data);
     this.authService.update(updatedUser, this.selectedFile).subscribe({
       next: (_) => {
         loading.dismiss();
@@ -228,19 +247,50 @@ export class EditProfilePage implements OnInit {
         gym: data.gym
       }
     }
+
     return cpy;
   }
 
-  gymChanged(event: IonSelectCustomEvent<SelectChangeEventDetail<any>>) {
+  async gymChanged(event: IonSelectCustomEvent<SelectChangeEventDetail<any>>) {
     const item = event.detail.value;
     if (item === "ADD_NEW") {
       this._addNewGym();
+    } else {
+     const loading = await this.loadingController.create({
+        message: "Please wait..." 
+      });
+      await loading.present();
+
+      const lat: number = event.detail.value.lat;
+      const lng: number = event.detail.value.lng;
+      this.http.get<any>(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`).subscribe({
+        next: (data) => {
+          const cityName: string = data.address.city || data.address.town || data.address.county;
+          this.cityService.getByName(cityName).subscribe({
+            next: (city) => {
+              loading.dismiss();
+              this._city.set(city);
+            },
+            error: (err) => {
+              loading.dismiss();
+              this.userForm.get('gym')?.setValue(null);
+              this._city.set(null);
+              this._showToast("Error: " + (err.error?.message ?? 'Unknown'), 'danger', 2000);
+            }
+          });
+        },
+        error: (err) => {
+          loading.dismiss();
+          this._showToast("Error: " + (err.message), 'danger', 2000);
+        }
+      });
     }
   }
 
   private async _addNewGym() {
     const modal = await this.modalController.create({
       component: AddGymModalPage,
+      cssClass: 'desktop-fullscreen'
     });
 
     await modal.present();
@@ -248,24 +298,36 @@ export class EditProfilePage implements OnInit {
     const { data } = await modal.onWillDismiss();
 
     if (data) {
-      this.gymService.new(data.name, data.address, data.lat, data.lng).subscribe({
-        next: (res) => {
-          const newGym = {
-            ...data,
-            id: res.gymId
-          };
-          this.gyms.update(value => [...value, newGym]);
-          this.userForm.get('gym')?.setValue(newGym);
-          this._showToast(res.message, 'success', 2000);
+      const nation: Nation = data.nation;
+      const city = data.city;
+      if (!city) {
+        this._showToast("Couldn't retrieve gym's city", 'danger', 2000);
+        return;
+      }
+
+      this.cityService.getOrInsert(city, nation).subscribe({
+        next: (city) => {
+          this._city.set(city);
+          const newGym = data.gym;
+          this.gymService.new(newGym.name, newGym.address, newGym.lat, newGym.lng).subscribe({
+            next: (res) => {
+              const __newGym = {
+                ...newGym,
+                id: res.gymId
+              };
+              this.gyms.update(value => [...value, __newGym]);
+              this.userForm.get('gym')?.setValue(__newGym);
+              this._showToast(res.message, 'success', 2000);
+            },
+            error: (err) => {
+              this._showToast(err?.message ?? "Errore server", 'danger', 2000);
+            }
+          });
         },
         error: (err) => {
-          this._showToast(
-            err.error?.message ?? 'Errore server',
-            'danger',
-            2000
-          );
+          this._showToast("Error: " + (err.error?.message ?? 'Unknown'), 'danger', 2000);
         }
-      })
+      });
     }
   }
 
@@ -333,4 +395,8 @@ export class EditProfilePage implements OnInit {
   heightErrorText(): string {
     return `Height must be a number between ${MIN_HEIGHT_VALUE}cm and ${MAX_HEIGHT_VALUE}cm`;
   }
+
+  public customSelectFilter = {
+    cssClass: 'modal-select-custom'
+  };
 }
