@@ -21,7 +21,7 @@ import { MuscolarGroupsService } from 'src/app/shared/services/muscolar-groups-s
   templateUrl: './workout.page.html',
   styleUrls: ['./workout.page.scss'],
   standalone: true,
-  imports: [IonInput, IonCard, IonFabList, IonModal, IonSearchbar, IonList, IonItem, IonFabButton, IonIcon, IonFab, IonImg, IonChip, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, BetterMsViewerPipe, IonSelect, IonSelectOption, IonButton, IonButtons, IonBackButton]
+  imports: [IonInput, IonCard, IonFabList, IonModal, IonSearchbar, IonList, IonFabButton, IonIcon, IonFab, IonImg, IonChip, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, BetterMsViewerPipe, IonSelect, IonSelectOption, IonButton, IonButtons, IonBackButton, IonLabel, IonAvatar]
 })
 export class WorkoutPage implements OnInit {
 
@@ -86,6 +86,10 @@ export class WorkoutPage implements OnInit {
       return true;
     });
   });
+
+  public customAlertMuscleFilter = {
+    cssClass: 'alert-tag-custom'
+  };
 
   constructor() { addIcons({ closeOutline, removeCircleOutline, addCircleOutline, settingsOutline, saveOutline, trashOutline, checkmarkDoneOutline, pencilOutline, pieChartOutline, addOutline, playOutline }); }
 

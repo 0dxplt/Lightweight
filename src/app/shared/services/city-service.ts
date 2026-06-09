@@ -23,12 +23,13 @@ export class CityService {
   }
 
   allMinimal():Observable<CityMinimal[]> {
-    return this.http.get<{id: number, nome: string, id_nazione: number}[]>(`${environment.apiUrl}/api/cities/`).pipe(
+    return this.http.get<{id: number, nome: string, id_nazione: number, nation_icon: string}[]>(`${environment.apiUrl}/api/cities/pts`).pipe(
       map(rows => {
         return rows.map(row => {
           return {
             id: row.id,
-            nome: row.nome
+            nome: row.nome,
+            nationIcon: row.nation_icon
           };
         });
       })

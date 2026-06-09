@@ -144,9 +144,25 @@ async function getByName(req, res) {
     }
 }
 
+async function getAllCitiesPts(req, res) {
+    try {
+        const rows = await dbutils.all(`
+            SELECT Citta.id, Citta.nome, Citta.id_nazione, Nazioni.bandiera AS nation_icon
+            FROM Citta
+            JOIN Nazioni ON Citta.id_nazione = Nazioni.id
+            ORDER BY Citta.nome ASC`);
+        res.json(rows);
+    } catch(error) {
+        res.status(500).json({
+            err: error.message
+        });
+    }
+}
+
 module.exports = {
     getAllCities,
     getAllFullCities,
     getOrInsert,
-    getByName
+    getByName,
+    getAllCitiesPts
 }

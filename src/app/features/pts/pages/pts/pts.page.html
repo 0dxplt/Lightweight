@@ -1,16 +1,27 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
+  <ion-toolbar class="toolbar">
     <ion-button fill="outline" id="open-city-modal">{{ selectedCity() ? selectedCity() : 'Seleziona una città'}}</ion-button>
-    <ion-modal #cityModal trigger="open-city-modal" [initialBreakpoint]="0.5" [breakpoints]="[0, 0.25, 0.5, 0.75]" [expandToScroll]="false">
+    <ion-modal #cityModal trigger="open-city-modal" [initialBreakpoint]="0.5" [breakpoints]="[0, 0.25, 0.5, 0.75]"
+      [expandToScroll]="false">
       <ng-template>
-        <ion-content>
-          <ion-searchbar (ionInput)="handleInput($event)" placeholder="Search"
-            (click)="cityModal.setCurrentBreakpoint(0.75)"></ion-searchbar>
+        <ion-header class="ion-no-border">
+          <ion-toolbar color="secondary">
+            <ion-searchbar showCancelButton="focus" class="search-cities" #ricerca placeholder="Search"
+              (ionInput)="handleInput($event)"
+              (click)="cityModal.setCurrentBreakpoint(0.75)"></ion-searchbar>
+          </ion-toolbar>
+        </ion-header>
+        <ion-content class="modal-content">
           <ion-list>
             @for (city of results; track city) {
-            <ion-item button (click)="selectCity(city, cityModal)" class="result-item">
-              <ion-label>{{ city }}</ion-label>
-            </ion-item>
+            <div class="city-item" (click)="selectCity(city.nome, cityModal)">
+            <ion-avatar slot="start" class="avatar-city">
+              <img [src]="city.nationIcon ? city.nationIcon : '/assets/icon/favicon.png'" />
+              </ion-avatar>
+              <ion-label>
+                {{city.nome}}
+              </ion-label>
+            </div>
             }
           </ion-list>
         </ion-content>
@@ -26,13 +37,9 @@
 <ion-content class="ion-padding">
   <div class="pt-cards">
     @for (pt of personal_trainers(); track pt) {
-      <app-pt-card
-      [fotoUrl]="pt.fotoUrl ? pt.fotoUrl : 'https://ionicframework.com/docs/img/demos/avatar.svg'"
-      [username]="pt.username"
-      [nome]="`${pt.nome ? pt.nome : ''} ${pt.cognome ? pt.cognome : ''}`.trim()"
-      [palestra]="pt.palestra"
-      [eta]="pt.eta"
-      ></app-pt-card>
+    <app-pt-card [fotoUrl]="pt.fotoUrl ? pt.fotoUrl : 'https://ionicframework.com/docs/img/demos/avatar.svg'"
+      [username]="pt.username" [nome]="`${pt.nome ? pt.nome : ''} ${pt.cognome ? pt.cognome : ''}`.trim()"
+      [palestra]="pt.palestra" [eta]="pt.eta"></app-pt-card>
     }
   </div>
 </ion-content>

@@ -10,6 +10,8 @@ import { AuthService } from 'src/app/features/auth/services/auth-service';
 import { WorkoutsService } from 'src/app/shared/services/workouts-service';
 import { filter, Subscription } from 'rxjs';
 import { WorkoutService } from 'src/app/shared/services/workout-service';
+import { PopoverController } from '@ionic/angular/standalone';
+import { SessionModalComponent } from 'src/app/shared/components/session-modal/session-modal.component';
 
 @Component({
   selector: 'app-workouts',
@@ -27,6 +29,7 @@ export class WorkoutsPage implements OnInit, OnDestroy{
   public authService = inject(AuthService);
 
   private workoutsService = inject(WorkoutsService);
+
   private workoutService = inject(WorkoutService);
 
   private router = inject(Router);

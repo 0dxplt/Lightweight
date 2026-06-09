@@ -72,3 +72,8 @@
   --ion-color-primary: white;
   --border-radius: 20px;
 }
+
+ion-content::part(scroll) {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+}

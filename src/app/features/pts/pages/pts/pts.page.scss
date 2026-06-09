@@ -1,5 +1,84 @@
+ion-header {
+    background-color: transparent;
+}
+
+.toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--ion-color-secondary);
+    padding: 10px;
+    border-radius: 25px;
+    border: 1px solid white;
+}
+
+ion-title {
+    font-size: 1.7rem;
+}
+
 .pt-cards {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 5%;
+}
+
+ion-content {
+    --padding-bottom: 80px;
+}
+
+.search-cities {
+    --background: var(--ion-color-secondary);
+    --color: #fff;
+    --placeholder-color: #ffffff;
+    --icon-color: #fff;
+    --border-radius: 15px;
+    --placeholder-opacity: 1;
+}
+
+ion-modal {
+    --background: var(--ion-color-secondary);
+    --border-radius: 25px;
+}
+
+.modal-content {
+    --background: var(--ion-color-secondary);
+}
+
+ion-list {
+    background-color: transparent;
+}
+
+.city-item {
+    background-color: white;
+    color: var(--ion-color-secondary);
+    display: flex;
+    align-items: center;
+    height: fit-content;
+    padding: 10px;
+    border-radius: 15px;
+    cursor: pointer;
+    margin: 10px;
+    border: 1px solid white;
+    font-weight: 500;
+}
+
+.city-item ion-label {
+    margin-left: 20px;
+    font-size: 1.5rem;
+}
+
+.city-item ion-avatar {
+    border: 2px solid var(--ion-color-secondary);
+}
+
+.city-item ion-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover !important;
+}
+
+.avatar-city {
+    width: 45px;
+    height: 45px;
+    flex-shrink: 0;
 }

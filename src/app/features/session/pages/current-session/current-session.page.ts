@@ -1,14 +1,14 @@
 import { Component, computed, effect, ElementRef, inject, OnInit, signal, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonIcon, IonButtons, IonInput, IonBackButton, IonCard, IonImg, IonChip, IonButton, IonSearchbar, IonFabButton, IonFab, IonFabList, IonModal, IonList, IonItem, IonSelect, IonSelectOption, IonLabel, IonAvatar } from '@ionic/angular/standalone';
+import { IonContent, IonHeader, IonTitle, IonToolbar, IonIcon, IonButtons, IonInput, IonBackButton, IonCard, IonImg, IonChip, IonButton, IonSearchbar, IonFabButton, IonFab, IonFabList, IonModal, IonList, IonItem, IonSelect, IonSelectOption, IonLabel, IonAvatar, IonItemSliding, IonItemOption, IonItemOptions } from '@ionic/angular/standalone';
 import { Serie, SessionExercise } from 'src/app/models/session-modal-component-info';
 import { BetterMsViewerPipe } from "../../../../shared/pipes/better-ms-viewer-pipe";
 import { Exercise } from 'src/app/models/exercise.model';
 import { ModalController } from '@ionic/angular/standalone';
 import { SessionExerciseModalComponent } from '../../components/session-exercise-modal/session-exercise-modal.component';
 import { addIcons } from 'ionicons';
-import { addCircleOutline, addOutline, checkmarkDoneOutline, closeOutline, pencilOutline, pieChartOutline, removeCircleOutline, settingsOutline } from 'ionicons/icons';
+import { addCircleOutline, addOutline, checkmarkDoneOutline, closeOutline, pencilOutline, pieChartOutline, removeCircleOutline, settingsOutline, closeCircleOutline, archive } from 'ionicons/icons';
 import { WorkoutVisualization } from 'src/app/models/workout.model';
 import { AuthService } from 'src/app/features/auth/services/auth-service';
 import { Router } from '@angular/router';
@@ -19,7 +19,7 @@ import { MuscolarGroupsService } from 'src/app/shared/services/muscolar-groups-s
   templateUrl: './current-session.page.html',
   styleUrls: ['./current-session.page.scss'],
   standalone: true,
-  imports: [IonAvatar, IonLabel, IonList, IonModal, IonFabList, IonFab, IonFabButton, IonSearchbar, IonButton, IonChip, IonImg, IonCard, IonBackButton, IonInput, IonButtons, IonIcon, IonContent, IonHeader, IonToolbar, CommonModule, FormsModule, BetterMsViewerPipe, IonSelect, IonSelectOption]
+  imports: [IonItemOptions, IonItemOption, IonItemSliding, IonAvatar, IonLabel, IonList, IonModal, IonFabList, IonFab, IonFabButton, IonSearchbar, IonButton, IonChip, IonImg, IonCard, IonBackButton, IonInput, IonButtons, IonIcon, IonContent, IonHeader, IonToolbar, CommonModule, FormsModule, BetterMsViewerPipe, IonSelect, IonSelectOption, IonItem]
 })
 export class CurrentSessionPage implements OnInit {
 
@@ -80,7 +80,7 @@ export class CurrentSessionPage implements OnInit {
   @ViewChild('modal') exercisesModal!: IonModal;
 
   constructor() {
-    addIcons({ settingsOutline, addOutline, pieChartOutline, pencilOutline, closeOutline, removeCircleOutline, addCircleOutline, checkmarkDoneOutline });
+    addIcons({closeOutline,closeCircleOutline,removeCircleOutline,addCircleOutline,archive,settingsOutline,addOutline,checkmarkDoneOutline,pencilOutline,pieChartOutline});
 
     effect(() => {
       const wo = this.workout();

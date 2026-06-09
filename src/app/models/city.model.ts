@@ -9,4 +9,5 @@ export type City = {
 export type CityMinimal = {
     id: number;
     nome: string;
+    nationIcon: string;
 }
