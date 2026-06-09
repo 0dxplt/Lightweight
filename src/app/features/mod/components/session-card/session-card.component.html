@@ -21,7 +21,7 @@
       @if (session().xp) {
         <div class="meta-item">
           <ion-icon name="flash-outline" color="warning"></ion-icon>
-          <ion-label>{{ session().xp }} XP</ion-label>
+          <ion-label>{{ session().xp | number:'1.0-0' }} XP</ion-label>
         </div>
       }
     </div>
