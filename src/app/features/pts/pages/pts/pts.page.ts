@@ -1,7 +1,7 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonToolbar, IonSearchbar, IonList, IonItem, IonLabel, IonButton, IonModal, IonIcon } from '@ionic/angular/standalone';
+import { IonContent, IonHeader, IonToolbar, IonSearchbar, IonList, IonItem, IonLabel, IonButton, IonModal, IonIcon, IonAvatar } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { navigateOutline } from 'ionicons/icons';
 import { PtCardComponent } from "../../components/pt-card/pt-card.component";
@@ -16,7 +16,7 @@ import { PtsService } from 'src/app/shared/services/pts-service';
   templateUrl: './pts.page.html',
   styleUrls: ['./pts.page.scss'],
   standalone: true,
-  imports: [IonIcon, IonModal, IonButton, IonLabel, IonItem, IonList, IonSearchbar, IonContent, CommonModule, FormsModule, IonHeader, IonToolbar, PtCardComponent]
+  imports: [IonAvatar, IonIcon, IonModal, IonButton, IonLabel, IonList, IonSearchbar, IonContent, CommonModule, FormsModule, IonHeader, IonToolbar, PtCardComponent]
 
 })
 export class PtsPage implements OnInit {
@@ -32,7 +32,7 @@ export class PtsPage implements OnInit {
 
   public cities = signal<CityMinimal[]>([])
 
-  public results: string[] = [];
+  public results: CityMinimal[] = [];
 
   constructor() {
     addIcons({ navigateOutline });
@@ -42,7 +42,7 @@ export class PtsPage implements OnInit {
     this.cityService.allMinimal().subscribe({
       next: (data) => {
         this.cities.set(data);
-        this.results = (this.cities()) ? [...this.cities().map(city => city.nome)] : [];
+        this.results = (this.cities()) ? [...this.cities()] : [];
       },
       error: (err) => {
         console.log("Errore nel caricare le città");
@@ -53,7 +53,7 @@ export class PtsPage implements OnInit {
   handleInput(event: Event) {
     const target = event.target as HTMLIonSearchbarElement;
     const query = target.value?.toLowerCase() || '';
-    this.results = this.cities().filter((d) => d.nome.toLowerCase().includes(query)).map((city) => city.nome);
+    this.results = this.cities().filter((d) => d.nome.toLowerCase().includes(query));
   }
 
   filterPts(city: string) {

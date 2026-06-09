@@ -41,59 +41,63 @@
         }
       </div>
       @for (serie of sessionExercise.serie; track serie) {
-      <div class="exercise-bottom">
-        @if (editMode()) {
-        <div class="stat">
-          <ion-icon color="danger" name="close-outline" class="edit-value-button"
-            (click)="$event.stopPropagation();removeSerie(serie, sessionExercise)"></ion-icon>
-        </div>
-        }
-        <div class="stat">
-          <p>Peso</p>
-          <div class="edit-value">
-            @if (editMode()) {
-            <ion-icon name="remove-circle-outline" class="edit-value-button"
-              (click)="$event.stopPropagation();modificaValore(serie, 'peso', -0.5)"></ion-icon>
-            <h2>{{serie.peso}}</h2>
-            <ion-icon name="add-circle-outline" class="edit-value-button"
-              (click)="$event.stopPropagation();modificaValore(serie, 'peso', 0.5)"></ion-icon>
-            }
-            @else {
-            <h2>{{serie.peso}}</h2>
-            }
+      <ion-item-sliding>
+        <ion-item class="draggable-serie" lines="full">
+          <div class="exercise-bottom">
+            <div class="stat">
+              <p>Peso</p>
+              <div class="edit-value">
+                @if (editMode()) {
+                <ion-icon name="remove-circle-outline" class="edit-value-button"
+                  (click)="$event.stopPropagation();modificaValore(serie, 'peso', -0.5)"></ion-icon>
+                <h2>{{serie.peso}}</h2>
+                <ion-icon name="add-circle-outline" class="edit-value-button"
+                  (click)="$event.stopPropagation();modificaValore(serie, 'peso', 0.5)"></ion-icon>
+                }
+                @else {
+                <h2>{{serie.peso}}</h2>
+                }
+              </div>
+            </div>
+            <div class="stat">
+              <p>Ripetizioni</p>
+              <div class="edit-value">
+                @if (editMode()) {
+                <ion-icon name="remove-circle-outline" class="edit-value-button"
+                  (click)="$event.stopPropagation();modificaValore(serie, 'reps', -1)"></ion-icon>
+                <h2>{{serie.reps}}</h2>
+                <ion-icon name="add-circle-outline" class="edit-value-button"
+                  (click)="$event.stopPropagation();modificaValore(serie, 'reps', 1)"></ion-icon>
+                }
+                @else {
+                <h2>{{serie.reps}}</h2>
+                }
+              </div>
+            </div>
+            <div class="stat">
+              <p>Recupero</p>
+              <div class="edit-value">
+                @if (editMode()) {
+                <ion-icon name="remove-circle-outline" class="edit-value-button"
+                  (click)="$event.stopPropagation();modificaValore(serie, 'recuperoMs', -15000)"></ion-icon>
+                <h2>{{serie.recuperoMs | betterMsViewer}}</h2>
+                <ion-icon name="add-circle-outline" class="edit-value-button"
+                  (click)="$event.stopPropagation();modificaValore(serie, 'recuperoMs', 15000)"></ion-icon>
+                }
+                @else {
+                <h2>{{serie.recuperoMs | betterMsViewer}}</h2>
+                }
+              </div>
+            </div>
           </div>
-        </div>
-        <div class="stat">
-          <p>Ripetizioni</p>
-          <div class="edit-value">
-            @if (editMode()) {
-            <ion-icon name="remove-circle-outline" class="edit-value-button"
-              (click)="$event.stopPropagation();modificaValore(serie, 'reps', -1)"></ion-icon>
-            <h2>{{serie.reps}}</h2>
-            <ion-icon name="add-circle-outline" class="edit-value-button"
-              (click)="$event.stopPropagation();modificaValore(serie, 'reps', 1)"></ion-icon>
-            }
-            @else {
-            <h2>{{serie.reps}}</h2>
-            }
-          </div>
-        </div>
-        <div class="stat">
-          <p>Recupero</p>
-          <div class="edit-value">
-            @if (editMode()) {
-            <ion-icon name="remove-circle-outline" class="edit-value-button"
-              (click)="$event.stopPropagation();modificaValore(serie, 'recuperoMs', -15000)"></ion-icon>
-            <h2>{{serie.recuperoMs | betterMsViewer}}</h2>
-            <ion-icon name="add-circle-outline" class="edit-value-button"
-              (click)="$event.stopPropagation();modificaValore(serie, 'recuperoMs', 15000)"></ion-icon>
-            }
-            @else {
-            <h2>{{serie.recuperoMs | betterMsViewer}}</h2>
-            }
-          </div>
-        </div>
-      </div>
+        </ion-item>
+
+        <ion-item-options>
+          <ion-item-option color="danger"
+            (click)="$event.stopPropagation();removeSerie(serie, sessionExercise)"><ion-icon slot="icon-only"
+              name="close-outline"></ion-icon></ion-item-option>
+        </ion-item-options>
+      </ion-item-sliding>
       }
 
     </ion-card>
@@ -134,17 +138,23 @@
   <ion-modal #modal [initialBreakpoint]="0.5" [breakpoints]="[0, 0.25, 0.5, 0.75]" [expandToScroll]="false"
     (ionModalWillDismiss)="resetFilter()">
     <ng-template>
+
+      <ion-header class="ion-no-border">
+        <ion-toolbar color="secondary">
+          <ion-searchbar showCancelButton="focus" class="search-exercises" #ricerca placeholder="Search"
+            (ionInput)="handleInput($event)" (click)="modal.setCurrentBreakpoint(0.75)"></ion-searchbar>
+          <div class="tag-filter">
+            <ion-select label-placement="floating" fill="outline" color="dark" label="Seleziona i gruppi muscolari"
+              [multiple]="true" (ionChange)="filterExercises($event)" [interfaceOptions]="customAlertMuscleFilter">
+              @for (muscleGroup of muscleGroups(); track muscleGroup) {
+              <ion-select-option value="{{muscleGroup}}">{{muscleGroup}}</ion-select-option>
+              }
+            </ion-select>
+          </div>
+        </ion-toolbar>
+      </ion-header>
+
       <ion-content class="modal-content">
-        <ion-searchbar showCancelButton="focus" class="search-exercises" placeholder="Cerca un esercizio"
-          (ionInput)="handleInput($event)"></ion-searchbar>
-        <div class="tag-filter">
-          <ion-select label-placement="floating" fill="outline" color="dark" label="Seleziona i gruppi muscolari" [multiple]="true"
-            (ionChange)="filterExercises($event)" [interfaceOptions]="customAlertMuscleFilter">
-            @for (muscleGroup of muscleGroups(); track muscleGroup) {
-            <ion-select-option value="{{muscleGroup}}">{{muscleGroup}}</ion-select-option>
-            }
-          </ion-select>
-        </div>
         <ion-list class="exercises-list">
           @for (exercise of exercisesVisualizer(); track exercise.id) {
           <div class="exercise-item" (click)="inputModal(exercise)">
@@ -161,6 +171,7 @@
           }
         </ion-list>
       </ion-content>
+
     </ng-template>
   </ion-modal>
 </ion-content>

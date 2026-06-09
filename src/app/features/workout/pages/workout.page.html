@@ -17,6 +17,7 @@
       <ion-title size="large">{{workoutName}}</ion-title>
     </ion-toolbar>
   </ion-header>
+  @if (hasExercise()) {
   <div class="exercises">
     @for (exerciseWorkout of exercisesWorkout(); track exerciseWorkout) {
     <ion-card class="exercise" (click)="toggleExerciseDesc(exerciseWorkout)">
@@ -92,10 +93,12 @@
 
     </ion-card>
     }
-    @empty {
-    <h1>No exercises yet, click the button below to add one!</h1>
-    }
   </div>
+  } @else {
+  <div class="no-serie">
+    <h1>Nessun esercizio presente, premi il pulsante in basso per iniziarne uno!</h1>
+  </div>
+  }
   @if (hasExercise()) {
   <ion-fab slot="fixed" horizontal="center" vertical="bottom">
     <ion-fab-button color="secondary">
@@ -150,32 +153,40 @@
   <ion-modal #modal [initialBreakpoint]="0.5" [breakpoints]="[0, 0.25, 0.5, 0.75]" (ionModalWillDismiss)="resetFilter()"
     [expandToScroll]="false" (willPresent)="fetchExercises()">
     <ng-template>
-      <ion-content>
-        <ion-searchbar #ricerca placeholder="Search" (ionInput)="handleInput($event)"
-          (click)="modal.setCurrentBreakpoint(0.75)"></ion-searchbar>
-        <div class="tag">
-          <ion-list>
-            <ion-item>
-              <ion-select placeholder="Seleziona i gruppi muscolari" [multiple]="true"
-                (ionChange)="filterExercises($event)">
+
+      <ion-header class="ion-no-border">
+        <ion-toolbar color="secondary">
+            <ion-searchbar showCancelButton="focus" class="search-exercises" #ricerca placeholder="Search"
+              (ionInput)="handleInput($event)" (click)="modal.setCurrentBreakpoint(0.75)"></ion-searchbar>
+            <div class="tag-filter">
+              <ion-select label-placement="floating" fill="outline" color="dark" label="Seleziona i gruppi muscolari"
+                [multiple]="true" (ionChange)="filterExercises($event)" [interfaceOptions]="customAlertMuscleFilter">
                 @for (muscleGroup of muscleGroups(); track muscleGroup) {
                 <ion-select-option value="{{muscleGroup}}">{{muscleGroup}}</ion-select-option>
                 }
               </ion-select>
-            </ion-item>
-          </ion-list>
-        </div>
+            </div>
+        </ion-toolbar>
+      </ion-header>
+
+      <ion-content class="modal-content">
         <ion-list class="exercises-list">
           @for (exercise of exerciseVisualizer(); track exercise.id) {
-          <ion-card class="exercise-item" id="present-alert" [button]="true" (click)="inputModal(exercise)">
-            {{exercise.name}}
-          </ion-card>
+          <div class="exercise-item" (click)="inputModal(exercise)">
+            <ion-avatar slot="start" class="avatar-exercise">
+              <img [src]="exercise.imgpath ? exercise.imgpath : '/assets/icon/favicon.png'" />
+            </ion-avatar>
+            <ion-label>
+              {{exercise.name}}
+            </ion-label>
+          </div>
           }
           @empty {
-          <h1>Nessun esercizio presente, prova a cambiare i filtri.</h1>
+          <h1 class="no-exercise">Nessun esercizio presente, prova a cambiare i filtri.</h1>
           }
         </ion-list>
       </ion-content>
+
     </ng-template>
   </ion-modal>
 </ion-content>
