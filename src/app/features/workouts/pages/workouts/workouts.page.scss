@@ -12,6 +12,11 @@ ion-header {
     border: 1px solid white;
 }
 
+ion-toolbar::part(container) {
+    --background: transparent;
+    background-color: transparent;
+}
+
 ion-title {
     font-size: 1.7rem;
 }

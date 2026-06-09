@@ -16,7 +16,7 @@
       Sessione Corrente - {{authService.currentSession()?.nome}}
     </ion-card>
     }
-    @for (workout of workouts(); track workout) {
+    @for (workout of workouts(); track workout.id) {
     <ion-card class="workout-card" [button]="true" (click)="goToWorkout(workout.id)">
       <div class="title">
         <h1>{{workout.nome}}</h1>
