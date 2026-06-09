@@ -86,11 +86,12 @@
         <ion-select
         [required]="this.verified()"
         label="Nation" 
-          labelPlacement="floating" 
-          formControlName="nationality" 
-          interface="modal"
-          [compareWith]="compareNationalities"
-          errorText="Insert a valid Nation">
+        labelPlacement="floating" 
+        formControlName="nationality" 
+        interface="modal"
+        [interfaceOptions]="customSelectFilter"
+        [compareWith]="compareNationalities"
+        errorText="Insert a valid Nation">
           @for (item of this.nations(); track item.id) {
             <ion-select-option [value]="item">{{ item.name }}</ion-select-option>
           }
@@ -109,7 +110,7 @@
               errorText="Invalid email (es: try@again.please)">
             </ion-input>
           </ion-item>
-          <ion-item lines="none">
+          <!-- <ion-item lines="none">
             <ion-select
               [compareWith]="compareCities"
               label="City" 
@@ -121,7 +122,7 @@
                 <ion-select-option [value]="item">{{ item.name }} ({{item.nation.name}})</ion-select-option>
               }
             </ion-select>
-          </ion-item>
+          </ion-item> -->
           <ion-item lines="none">
             <ion-select 
               [compareWith]="compareGyms"
@@ -129,6 +130,7 @@
               labelPlacement="floating" 
               formControlName="gym" 
               interface="modal"
+              [interfaceOptions]="customSelectFilter"
               (ionChange)="gymChanged($event)"
               errorText="Insert a valid Gym">
               @for (item of this.gyms(); track item.id) {

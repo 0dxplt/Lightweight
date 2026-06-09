@@ -4,9 +4,10 @@ async function getAllMuscolarGroups(req, res) {
     try {
         const rows = await dbutils.all("SELECT nome FROM GruppiMuscolari");
         res.json(rows);
-    } catch(error) {
+    } catch(err) {
+        console.error(err);
         res.status(500).json({
-            err: error.message
+            err: "Could not retrieve all muscolar groups"
         })
     }
 } 

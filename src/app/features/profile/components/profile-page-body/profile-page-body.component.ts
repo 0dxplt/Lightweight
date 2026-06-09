@@ -185,7 +185,7 @@ export class ProfilePageBodyComponent  implements OnInit {
 
     const ptModal = await this.modalController.create({
       component: PtInfoModalPage,
-      cssClass: "pt-info-modal",
+      cssClass: "desktop-fullscreen",
       handle: false,
       initialBreakpoint: 0.8,
       backdropDismiss: true,
@@ -200,7 +200,7 @@ export class ProfilePageBodyComponent  implements OnInit {
   async openSessionModal(session: Session) {
     const modal = await this.modalController.create({
       component: ViewSessionModalPage,
-      cssClass: "view-session-modal",
+      cssClass: "desktop-fullscreen",
       componentProps: {
         session: session,
         isProfile: this.sameAsProfile()
@@ -316,5 +316,9 @@ export class ProfilePageBodyComponent  implements OnInit {
   handleRefresh(event: IonRefresherCustomEvent<RefresherEventDetail>) {
     this._loadData(event);
     this.onRefresh.emit();
+  }
+
+  goToWorkouts() {
+    this.router.navigate(["/tabs/workouts"]);
   }
 }

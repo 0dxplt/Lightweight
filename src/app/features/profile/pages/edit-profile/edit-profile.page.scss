@@ -78,8 +78,8 @@ ion-select::part(text) {
 }
 
 ion-button[type="submit"] {
-    --color: var(--ion-color-tertiary);
-    --background: var(--ion-color-tertiary-contrast);
+    --color: var(--ion-color-secondary);
+    --background: var(--ion-color-secondary-contrast);
     
     margin-top: 32px;
     margin-bottom: 32px;
@@ -93,6 +93,6 @@ ion-button[type="submit"] {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-size: 18px;
 
-    border: 2px solid var(--ion-color-tertiary);
+    border: 2px solid var(--ion-color-secondary);
     border-radius: 4px;
 }

@@ -38,6 +38,7 @@
              formControlName="gym" 
              placeholder="Select Gym"
              interface="modal"
+             [interfaceOptions]="customSelectFilter"
              (ionChange)="onGymChange($event)"
              errorText="Insert a valid Gym">
              @for (item of this.gyms(); track item.id) {

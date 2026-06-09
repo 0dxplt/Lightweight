@@ -1,17 +1,19 @@
 import { Component, computed, effect, input, OnInit, signal } from '@angular/core';
-import { IonAvatar, IonItem, IonBadge, IonLabel } from "@ionic/angular/standalone";
+import { IonAvatar, IonItem, IonLabel, IonIcon } from "@ionic/angular/standalone";
 import { Router } from '@angular/router';
 import { RankUser } from 'src/app/models/rank-user.model';
 import { LevelIconComponent } from "src/app/shared/components/level-icon/level-icon.component";
 import { PROPIC_PATH } from 'src/app/shared/global';
 import { environment } from 'src/environments/environment';
 import { UserService } from 'src/app/shared/services/user-service';
+import { addIcons } from 'ionicons';
+import { barbellOutline } from 'ionicons/icons';
 
 @Component({
   selector: 'app-ranking-entry',
   templateUrl: './ranking-entry.component.html',
   styleUrls: ['./ranking-entry.component.scss'],
-  imports: [IonLabel, IonItem, IonAvatar, IonBadge, LevelIconComponent],
+  imports: [IonIcon, IonLabel, IonItem, IonAvatar, LevelIconComponent],
 })
 export class RankingEntryComponent  implements OnInit {
 
@@ -28,6 +30,7 @@ export class RankingEntryComponent  implements OnInit {
   });
 
   constructor(private router: Router, private userService: UserService) {
+    addIcons({barbellOutline});
     effect(() => {
       const user = this.rankUser();
       if (!user) return;

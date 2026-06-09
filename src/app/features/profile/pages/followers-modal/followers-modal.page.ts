@@ -7,13 +7,15 @@ import { IonSearchbarCustomEvent } from '@ionic/core';
 import { UserService } from 'src/app/shared/services/user-service';
 import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular/standalone';
+import { environment } from 'src/environments/environment';
+import { LevelIconComponent } from 'src/app/shared/components/level-icon/level-icon.component';
 
 @Component({
   selector: 'app-followers-modal',
   templateUrl: './followers-modal.page.html',
   styleUrls: ['./followers-modal.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule]
+  imports: [IonicModule, CommonModule, FormsModule, LevelIconComponent]
 })
 export class FollowersModalPage implements OnInit {
 
@@ -62,5 +64,9 @@ export class FollowersModalPage implements OnInit {
   visitProfile(username: string) {
     this.modalController.dismiss();
     this.router.navigate(['tabs/profile/', username]);
+  }
+
+  getGlobalIconUrl(level: number) {
+    return `${environment.apiUrl}/api/imgs/global-icon/${level}`;
   }
 }

@@ -6,7 +6,7 @@ import { SolvedReport } from 'src/app/models/solved_report.model';
 import { IonicModule, ModalController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { addIcons } from 'ionicons';
-import { calendarOutline, megaphoneOutline, personCircleOutline, shieldCheckmarkOutline, timeOutline } from 'ionicons/icons';
+import { calendarOutline, fingerPrintOutline, megaphoneOutline, personCircleOutline, shieldCheckmarkOutline, timeOutline } from 'ionicons/icons';
 import { DatefyPipe } from "../../../../shared/pipes/datefy-pipe";
 
 @Component({
@@ -22,11 +22,18 @@ export class ExtendedReportModalPage implements OnInit {
   @Input() solvedReport: SolvedReport | null = null;
   @Input() solved: boolean = false;
 
-  constructor(private modalController: ModalController, private router: Router) {}
-
-  ngOnInit() {
-    addIcons({personCircleOutline, timeOutline, shieldCheckmarkOutline, calendarOutline, megaphoneOutline});
+  constructor(private modalController: ModalController, private router: Router) {
+    addIcons({
+      personCircleOutline,
+      timeOutline,
+      shieldCheckmarkOutline,
+      calendarOutline,
+      megaphoneOutline,
+      fingerPrintOutline
+    });
   }
+
+  ngOnInit() {}
 
   dismiss() {
     this.modalController.dismiss({

@@ -11,6 +11,7 @@ import { HttpClient, provideHttpClient } from '@angular/common/http';
 import { CityMinimal } from 'src/app/models/city.model';
 import { CityService } from 'src/app/shared/services/city-service';
 import { PtsService } from 'src/app/shared/services/pts-service';
+import { GeoLocalizationService } from 'src/app/shared/services/geo-localization-service';
 @Component({
   selector: 'app-pts',
   templateUrl: './pts.page.html',
@@ -20,11 +21,12 @@ import { PtsService } from 'src/app/shared/services/pts-service';
 
 })
 export class PtsPage implements OnInit {
-  private http = inject(HttpClient);
 
   private cityService = inject(CityService);
 
   private ptsService = inject(PtsService);
+
+  private geoService = inject(GeoLocalizationService);
 
   public selectedCity = signal<string>("");
 
@@ -83,11 +85,10 @@ export class PtsPage implements OnInit {
       const posizione = await Geolocation.getCurrentPosition(opzioni);
       const lat = posizione.coords.latitude;
       const lng = posizione.coords.longitude;
-      const urlApi = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`;
 
-      this.http.get<any>(urlApi).subscribe({
-        next: (data) => {
-          this.selectedCity.set(data.address.city || data.address.town || data.address.county || '');
+      this.geoService.getCityName(lat, lng).subscribe({
+        next: (city) => {
+          this.selectedCity.set(city);
           this.filterPts(this.selectedCity());
         },
         error: (err) => {

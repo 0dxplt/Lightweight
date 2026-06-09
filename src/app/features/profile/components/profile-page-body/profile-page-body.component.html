@@ -1,4 +1,4 @@
-<div id="main-container" [style]="this.sessions().length <= 3 ? 'height: 100%' : ''">
+<div id="main-container">
   <ion-refresher slot="fixed" [pullFactor]="0.5" [pullMin]="100" [pullMax]="200" (ionRefresh)="handleRefresh($event)">
     <ion-refresher-content refreshingSpinner="circles">
     </ion-refresher-content>
@@ -104,19 +104,25 @@
     }
   </div>
 
-  <ion-card id="sessions-card"
-    [style]="sessions().length <= 3
-      ? `min-height:${200 * sessions().length}px;flex-basis:${200 * sessions().length}px;flex-grow:0;`
-      : 'min-height:600px;flex-basis:600px;flex-grow:1;'">
+  <ion-card id="sessions-card">
     <ion-card-header>
-      <ion-card-title>
-        {{sameAsProfile() ? 'Your sessions' : user()?.username + '\'s sessions'}} ({{sessions().length}})
-      </ion-card-title>
+      @if (sessions().length > 0) {
+        <ion-card-title>
+          {{sameAsProfile() ? 'Your sessions' : user()?.username + '\'s sessions'}} ({{sessions().length}})
+        </ion-card-title>
+      }
     </ion-card-header>
     <ion-card-content>
         <ion-list lines="none">
           @for (item of sessions(); track item.id) {
             <app-session-card [session]="item" (onClick)="openSessionModal(item)"></app-session-card>
+          } @empty {
+            <div class="no-sessions">
+              <h3>There are no sessions here.</h3>
+              @if (sameAsProfile()) {
+                <p>Start a new <span (click)="goToWorkouts()">one!</span></p>
+              }
+            </div>
           }
         </ion-list>
       </ion-card-content>

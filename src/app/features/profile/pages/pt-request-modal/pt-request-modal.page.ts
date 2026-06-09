@@ -11,6 +11,7 @@ import { AddGymModalPage } from '../add-gym-modal/add-gym-modal.page';
 import { ToastController } from '@ionic/angular/standalone';
 import { Nation } from 'src/app/models/nation.model';
 import { HttpClient } from '@angular/common/http';
+import { GeoLocalizationService } from 'src/app/shared/services/geo-localization-service';
 
 @Component({
   selector: 'app-pt-request-modal',
@@ -34,13 +35,17 @@ export class PtRequestModalPage implements OnInit {
     // city: new FormControl('', [Validators.required])
   });
 
+  customSelectFilter = {
+    cssClass: 'modal-select-custom'
+  };
+
   constructor(
     private cityService: CityService,
     private gymService: GymService,
+    private geoService: GeoLocalizationService,
     private modalController: ModalController,
     private toastController: ToastController,
-    private loadingController: LoadingController,
-    private http: HttpClient
+    private loadingController: LoadingController
   ) { }
 
   ngOnInit() {
@@ -65,9 +70,8 @@ export class PtRequestModalPage implements OnInit {
 
       const lat: number = event.detail.value.lat;
       const lng: number = event.detail.value.lng;
-      this.http.get<any>(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`).subscribe({
-        next: (data) => {
-          const cityName: string = data.address.city || data.address.town || data.address.county;
+      this.geoService.getCityName(lat, lng).subscribe({
+        next: (cityName) => {
           this.cityService.getByName(cityName).subscribe({
             next: (city) => {
               loading.dismiss();

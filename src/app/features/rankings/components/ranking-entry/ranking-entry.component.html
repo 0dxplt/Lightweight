@@ -1,32 +1,34 @@
-<ion-item button (click)="onClick($event)" detail="false">
+<div class="list-item-container">
+  <ion-item button (click)="onClick($event)" lines="none">
+    
+    <!-- 1. RANGO (Allineato a sinistra, larghezza fissa) -->
+    <div slot="start" class="rank-container">
+      {{rankUser().rank}}
+    </div>
   
-  <!-- 1. RANGO (Allineato a sinistra, larghezza fissa) -->
-  <div slot="start" class="rank-container">
-    {{rankUser().rank}}
-  </div>
-
-  <!-- 2. AVATAR (Subito dopo il rango) -->
-  <ion-avatar slot="start" class="profile-pic">
-    <img [src]="rankUser().avatar || '/assets/icon/favicon.png'">
-  </ion-avatar>
-
-  <!-- 3. INFO UTENTE (Username + Badge) -->
-  <ion-label>
-    <div class="user-content">
-      <span class="username">{{rankUser().username}}</span>
-      @if (rankUser().pt) {
-        <ion-badge color="primary" class="pt-badge">PT</ion-badge>
+    <!-- 2. AVATAR (Subito dopo il rango) -->
+    <ion-avatar slot="start" class="profile-pic">
+      <img [src]="rankUser().avatar || '/assets/icon/favicon.png'">
+    </ion-avatar>
+  
+    <!-- 3. INFO UTENTE (Username + Badge) -->
+    <ion-label>
+      <div class="user-content">
+        <span class="username">{{rankUser().username}}</span>
+        @if (rankUser().pt) {
+          <ion-icon name="barbell-outline" class="pt-badge"></ion-icon>
+        }
+      </div>
+    </ion-label>
+  
+    <!-- 4. LIVELLO (Tutto allineato alla fine a destra) -->
+    <div slot="end" class="level-container">
+      @if (type() == 'seasonal') {
+        <img [src]="seasonalUrl()" class="level-icon">
+      } @else {
+        <app-level-icon [url]="globalUrl()" [level]="rankUser().level"></app-level-icon>
       }
     </div>
-  </ion-label>
-
-  <!-- 4. LIVELLO (Tutto allineato alla fine a destra) -->
-  <div slot="end" class="level-container">
-    @if (type() == 'seasonal') {
-      <img [src]="seasonalUrl()" class="level-icon">
-    } @else {
-      <app-level-icon [url]="globalUrl()" [level]="rankUser().level"></app-level-icon>
-    }
-  </div>
-
-</ion-item>
+  
+  </ion-item>
+</div>

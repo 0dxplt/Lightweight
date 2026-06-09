@@ -4,9 +4,10 @@ async function getAllNations(req, res) {
     try {
         const rows = await dbutils.all("SELECT * FROM Nazioni ORDER BY nome ASC");
         res.json(rows);
-    } catch(error) {
+    } catch(err) {
+        console.error(err)
         res.status(500).json({
-            err: error.message
+            err: "Could not retrieve all nations"
         });
     }
 }
@@ -16,9 +17,10 @@ async function getNationFromID(req, res) {
         const id = req.params.id;
         const nation = await dbutils.get(`SELECT * FROM Nazioni WHERE Nazioni.id = ${id};`);
         res.json(nation);
-    } catch(error) {
+    } catch(err) {
+        console.error(err);
         res.status(500).json({
-            err: error.message
+            err: "Could not get nation from id"
         });
     }
 }
@@ -51,6 +53,7 @@ async function getNationByName(req, res) {
 
         res.status(200).json(nationRow);
     } catch(err) {
+        console.error(err);
         res.status(500).json({
             success: false,
             message: "Could not retrieve nation"

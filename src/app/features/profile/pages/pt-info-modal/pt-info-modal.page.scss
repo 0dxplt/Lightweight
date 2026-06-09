@@ -1,3 +1,15 @@
+:host {
+    --desktop-max-width: 60vw;
+    user-select: none;
+}
+
+#wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
 #gym-info {
     display: flex;
     flex-direction: column;
@@ -11,7 +23,7 @@
         font-family: Verdana, Geneva, Tahoma, sans-serif;
         font-size: 24px;
         letter-spacing: 3px;
-        color: var(--ion-color-tertiary);
+        color: var(--ion-color-dark);
     }
 }
 
@@ -30,6 +42,11 @@
         width: 100%;
         z-index: 1;
     }
+
+    @media (min-width: 748px) {
+        max-width: var(--desktop-max-width);
+        width: var(--desktop-max-width);
+    }
 }
 
 .location-info {
@@ -38,9 +55,9 @@
     justify-content: center;
     gap: 10px;
     padding: 12px;
-    background: rgba(46, 204, 113, 0.1);
+    background: var(--ion-color-secondary);
     border-radius: 12px;
-    color: #2ecc71;
+    color: var(--ion-color-dark);
     animation: fadeIn 0.4s ease-out;
 
     ion-icon {

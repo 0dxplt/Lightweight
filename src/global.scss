@@ -63,6 +63,86 @@
   border-radius: 25px;
 }
 
+.modal-select-custom {
+  --width: 100%;
+  --height: 100%;
+  --max-width: 100%;
+  --min-height: 100%;
+  --background: transparent;
+}
+
+.modal-select-custom ion-toolbar::part(container) {
+  --background: var(--ion-color-secondary);
+  --background-color: var(--ion-color-secondary);
+  background-color: var(--ion-color-secondary);
+}
+
+.modal-select-custom ion-toolbar {
+  color: var(--ion-color-dark);
+}
+
+.modal-select-custom ion-list {
+  @media (min-width: 748px) {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+}
+
+.modal-select-custom ion-item {
+  margin-top: 10px;
+  --background: transparent;
+  --ripple-color: transparent;
+}
+
+.modal-select-custom ion-item::part(inner){
+  background-color: transparent;
+}
+
+.modal-select-custom ion-item::part(native)::after {
+  background-color: transparent !important;
+}
+
+.modal-select-custom .item-radio-checked.sc-ion-select-modal-md {
+  --background: transparent;
+  --background-focused: transparent;
+  --background-focused-opacity: 0;
+  --background-hover: transparent;
+  --background-hover-opacity: 0;
+}
+
+.modal-select-custom ion-radio-group {
+  @media (min-width: 748px) {
+    max-width: 580px;
+    min-width: 580px;
+    align-self: center;
+  }
+}
+
+.modal-select-custom ion-radio {
+  background-color: var(--ion-color-secondary);
+  color: var(--ion-color-dark);
+
+  padding: 5px;
+  padding-left: 10px;
+
+  border: 2px solid var(--ion-color-secondary);
+  border-radius: 10px;
+
+  transition: all 100ms linear;
+}
+
+.modal-select-custom ion-radio:hover {
+  background-color: rgba(var(--ion-color-secondary-rgb), 0.5);
+  border-color: rgba(var(--ion-color-secondary-rgb), 0.5);
+}
+
+.modal-select-custom ion-radio:active {
+  background-color: var(--ion-color-dark);
+  border-color: var(--ion-color-dark);
+  color: var(--ion-color-light);
+}
+
 /* Leaflet */
 @import "leaflet/dist/leaflet.css";
 

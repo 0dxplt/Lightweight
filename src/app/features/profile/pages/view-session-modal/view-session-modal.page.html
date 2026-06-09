@@ -1,8 +1,8 @@
 <ion-header class="ion-no-border">
-  <ion-toolbar color="light">
+  <ion-toolbar color="secondary">
     <ion-title>{{session.name}}</ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="close()" color="medium">Close</ion-button>
+      <ion-button (click)="close()" color="dark">Close</ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -40,6 +40,7 @@
             <span>WEIGHT</span>
             <span>REPS</span>
             <span>REST</span>
+            <span>VALID</span>
           </div>
           
           @for (serie of group.sets; track $index) {
@@ -48,6 +49,7 @@
               <span class="weight">{{serie.weight}} <small>kg</small></span>
               <span class="reps">{{serie.reps}}</span>
               <span class="rest">{{serie.recovery| betterMsViewer}}</span>
+              <span class="valid"><ion-icon [name]="serie.valid ? 'checkmark-circle-outline' : 'close-circle-outline'" [color]="serie.valid ? 'success' : 'danger'"></ion-icon></span>   
             </div>
           }
         </div>

@@ -26,8 +26,9 @@ async function getUserFeed(req, res) {
             ORDER BY Sessioni.data_svolgimento DESC
             `, [profileId, Date.now() - 86400000]);
         res.json(rows);
-    } catch (error) {
-        res.status(500).json(error.message);
+    } catch (err) {
+        console.error(err)
+        res.status(500).json("Could not retrieve feed");
     }
 }
 

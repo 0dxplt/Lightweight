@@ -120,9 +120,10 @@ async function login(req, res) {
             token: token
         });
     } catch(err) {
+        console.error(err);
         res.status(500).json({
             success: false,
-            message: err.message
+            message: "Could not authenticate the user"
         })
     }
 }
@@ -206,9 +207,10 @@ async function register(req, res) {
             message: "Signed In!"
         });
     } catch(err) {
+        console.error(err);
         res.status(500).json({
             success: false,
-            message: err.message
+            message: "Could not register user"
         })
     }
 }
@@ -275,7 +277,7 @@ async function modLogin(req, res) {
         });
 
     } catch(err) {
-        console.log(err);
+        console.error(err);
         res.status(500).json({
             success: false,
             message: "Could not login in as a Moderator"

@@ -8,6 +8,7 @@ import { addIcons } from 'ionicons';
 import { locationOutline } from 'ionicons/icons';
 import { NationService } from 'src/app/shared/services/nation-service';
 import { ToastController } from '@ionic/angular/standalone';
+import { GeoLocalizationService } from 'src/app/shared/services/geo-localization-service';
 
 // Icone Leaflet (usa CDN)
 const iconDefault = L.icon({
@@ -43,6 +44,7 @@ export class AddGymModalPage implements AfterViewInit, OnDestroy {
   constructor(
     private modalCtrl: ModalController,
     private nationService: NationService,
+    private geoService: GeoLocalizationService,
     private toastController: ToastController) {
     addIcons({locationOutline});
   }
@@ -74,26 +76,24 @@ export class AddGymModalPage implements AfterViewInit, OnDestroy {
   async searchLocation() {
     if (!this.addressQuery || this.addressQuery.length < 3) return;
 
-    try {
-      const resp = await fetch(
-        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(this.addressQuery)}`
-      );
-      const results = await resp.json();
+    this.geoService.search(this.addressQuery).subscribe({
+      next: (data) => {
+        const results = data;
 
-      if (results && results.length > 0) {
-        const topResult = results[0];
-        const lat = parseFloat(topResult.lat);
-        const lng = parseFloat(topResult.lon);
+        if (results && results.length > 0) {
+          const topResult = results[0];
+          const lat = parseFloat(topResult.lat);
+          const lng = parseFloat(topResult.lon);
 
-        // Spostiamo la visuale
-        this.map.setView([lat, lng], 16);
-        
-        // Chiamiamo updateMarker che penserà a mettere il pin e confermare l'indirizzo preciso
-        this.updateMarker(lat, lng);
+          this.map.setView([lat, lng], 16);
+          this.updateMarker(lat, lng);
+        }
+      },
+      error: (err) => {
+        console.error("Errore nella ricerca: ", err);
       }
-    } catch (error) {
-      console.error("Errore nella ricerca", error);
-    }
+    })
+    
   }
 
   // Aggiorna o crea il marker e recupera l'indirizzo
@@ -107,30 +107,26 @@ export class AddGymModalPage implements AfterViewInit, OnDestroy {
       this.marker = L.marker([lat, lng]).addTo(this.map);
     }
 
-    // Reverse GeoCoding
-    try {
-      const resp = await fetch(
-        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`
-      );
-      const data = await resp.json();
-      
-      if (data && data.display_name) {
-        const city =
-          data.address.city ||
-          data.address.town ||
-          data.address.county;
-        
-        this.cityFound = city;
-        this.countryFound = data.address.country;
+    this.geoService.reverse(lat, lng).subscribe({
+      next: (data) => {
+        if (data && data.display_name) {
+          const city =
+            data.address.city ||
+            data.address.town ||
+            data.address.county;
 
-        this.addressFound = data.display_name;
-      } else {
-        this.addressFound = `Coordinate: ${lat.toFixed(5)}, ${lng.toFixed(5)}`;
+          this.cityFound = city;
+          this.countryFound = data.address.country;
+
+          this.addressFound = data.display_name;
+        } else {
+          this.addressFound = `Coordinate: ${lat.toFixed(5)}, ${lng.toFixed(5)}`;
+        }
+      },
+      error: (err) => {
+        console.error("Error reverse geo: " + err);
       }
-    } catch (error) {
-      console.error("Errore nel recupero dell'indirizzo", error);
-      this.addressFound = `Coordinate: ${lat.toFixed(5)}, ${lng.toFixed(5)}`;
-    }
+    });
   }
 
   confirm() {

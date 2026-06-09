@@ -244,9 +244,10 @@ async function changePassword(req, res) {
             message: "Password changed!"
         });
     } catch (err) {
+        console.error(err);
         res.status(500).json({
             success: false,
-            message: "Error: " + err.message
+            message: "Could not change password"
         });
     }
 }
@@ -264,9 +265,10 @@ async function follows(req, res) {
         res.json(row ? true : false);
 
     } catch (err) {
+        console.error(err);
         res.status(500).json({
             success: false,
-            message: "Could not retrieve information"
+            message: "Could not retrieve follow information"
         })
     }
 }
@@ -351,7 +353,7 @@ async function saveSession(req, res) {
             message: "Saved Session!"
         });
     } catch (err) {
-        console.log(err);
+        console.error(err);
         if (active_transaction)
             await dbutils.run('ROLLBACK');
         res.status(500).json({
@@ -367,6 +369,22 @@ async function removeSession(req, res) {
     let active_transaction = false;
 
     try {
+
+        const xpsRow = await dbutils.get(
+            "SELECT xp, pubblica FROM Sessioni WHERE id = ? AND id_creatore = ?",
+            [id, userId]
+        );
+
+        if (!xpsRow) {
+            return res.status(404).json({
+                success: false,
+                message: "Could not find session"
+            });
+        }
+
+        const public = xpsRow.pubblica;
+        const xps = (public) ? xpsRow.xp : 0;
+
         await dbutils.run("BEGIN TRANSACTION");
         active_transaction = true;
 
@@ -374,6 +392,9 @@ async function removeSession(req, res) {
             "DELETE FROM Sessioni WHERE id = ? AND id_creatore = ?",
             [id, userId]
         );
+
+        if (xps != 0)
+            await updateUserRank(userId, -xps);
 
         await dbutils.run("COMMIT");
         active_transaction = false;
@@ -383,6 +404,7 @@ async function removeSession(req, res) {
         if (active_transaction)
             await dbutils.run("ROLLBACK");
 
+        console.error(err);
         res.status(500).json({
             success: false,
             message: "Error deleting session"
@@ -412,7 +434,7 @@ async function updateSessionVisibility(req, res) {
 
         res.status(201).json({updated: true});
     } catch(err) {
-        console.log(err);
+        console.error(err);
         
         if (active_transaction)
             await dbutils.run("ROLLBACK");
@@ -574,7 +596,7 @@ async function newRequest(req, res) {
         res.status(201).json({requested: true});
 
     } catch(err) {
-        console.log(err);
+        console.error(err);
         if (active_transaction)
             await dbutils.run("ROLLBACK");
         res.status(500).json({

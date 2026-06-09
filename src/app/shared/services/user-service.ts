@@ -12,7 +12,6 @@ import { PROPIC_PATH } from '../global';
 export class UserService {
 
   private _mapUserFromData(data: any): User {
-    console.log(data);
     return ({
       id: data.id,
       email: data.email,
@@ -42,7 +41,6 @@ export class UserService {
     return this.http.get<any>(`${environment.apiUrl}/api/users/${username}`).pipe(
       map(data => {
         const propic = this._mapUserFromData(data).propic;
-        console.log(propic);
         data.propic = propic;
         return data;
       })
@@ -79,9 +77,6 @@ export class UserService {
             avatarUrl: !!row.img ? `${environment.apiUrl}/api/imgs/users?id=${row.id}&timestamp=${Date.now()}` : PROPIC_PATH
           }
         })
-      }),
-      tap(data => {
-        console.log(data);
       })
     )
   }

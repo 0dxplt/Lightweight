@@ -49,12 +49,17 @@ export class DashboardPage implements OnInit {
     private router: Router
   ) {
     if (!this.modAuthService.isModLogged()) this.router.navigate(["mod/login"]);
+    addIcons({
+      'chevron-up':chevronUp,
+      'checkmark-circle':checkmarkCircle,
+      'alert-circle':alertCircle,
+      'folder':folder,
+      'log-out':logOut
+    });
     this._initCounters();
   }
 
-  ngOnInit() {
-    addIcons({'chevron-up':chevronUp, 'checkmark-circle':checkmarkCircle, 'alert-circle':alertCircle, 'folder':folder, 'log-out':logOut});
-  }
+  ngOnInit() {}
 
   reports() {
     this.router.navigate(['mod/reports']);

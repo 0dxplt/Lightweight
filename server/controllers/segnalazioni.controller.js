@@ -103,7 +103,7 @@ async function getAllFullReports(req, res) {
         res.status(200).json(reports);
 
     } catch(err) {
-        console.log(err);
+        console.error(err);
         res.status(500).json({
             success: false,
             message: "Error retrieving reports"
@@ -143,6 +143,7 @@ async function confirmReport(req, res) {
     } catch (err) {
         if (active_transactions)
             await dbutils.run("ROLLBACK");
+        console.error(err);
         res.status(500).json({
             success: false,
             message: "Could not confirm report"
@@ -158,6 +159,7 @@ async function counter(req, res) {
 
         res.status(200).json(rows.length);
     } catch(err) {
+        console.error(err);
         res.status(500).json({
             success: false,
             message: "Could not retrieve the number of reports"

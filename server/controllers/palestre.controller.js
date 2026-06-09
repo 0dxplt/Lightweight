@@ -4,9 +4,10 @@ async function getAllGyms(req, res) {
     try { 
         const rows = await dbutils.all("SELECT * FROM Palestre ORDER BY nome ASC");
         res.json(rows);
-    } catch(error) {
+    } catch(err) {
+        console.error(err);
         res.status(500).json({
-            err: error.message
+            err: "Could not get all gyms"
         });
     }
 }
@@ -21,7 +22,8 @@ async function addGym(req, res) {
         );
 
         res.status(201).json({ success: true, message: "Gym created succesfully", gymId: row.id});
-    } catch(error) {
+    } catch(err) {
+        console.error(err)
         res.status(500).json({
             success: false,
             message: "Couldn't create gym"
