@@ -9,14 +9,14 @@ This project uses the following third-party resources:
    - License: MIT License  
    - Description: Java library for accessing Valorant API data.
 
-2. **Flag icons from FlagCDN**  
-   - Source: [https://flagcdn.com](https://flagcdn.com)  
-   - License: CC BY 4.0 (Creative Commons Attribution 4.0)  
-   - Description: Flag icons used in the project. Attribution is required.
+2. **Flag icons from FlagCDN / Flagpedia**  
+   - Source: [https://flagcdn.com](https://flagcdn.com) / [https://flagpedia.net](https://flagpedia.net)  
+   - License: Public Domain (per Flagpedia Terms of Use)  
+   - Description: Flag images used in the project. Free to use without restrictions.
 
 3. **Exercise data from free-exercise-db**  
    - Source: [https://github.com/yuhonas/free-exercise-db](https://github.com/yuhonas/free-exercise-db)  
-   - License: MIT License  
-   - Description: Free database of exercises used in the project.
+   - License: The Unlicense  
+   - Description: Free dataset of exercises used in the project.
 
-For full license texts and attributions, see [`ATTRIBUTIONS.md`](./ATTRIBUTIONS.md).
+For full license texts and attributions, see [`ATTRIBUTIONS.md`](./ATTRIBUTIONS.md)
