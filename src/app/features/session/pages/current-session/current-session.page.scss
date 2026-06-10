@@ -9,7 +9,8 @@ ion-header {
     --background: var(--ion-color-secondary);
     padding: 10px;
     border-radius: 25px;
-    border: 1px solid white;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
 }
 
 .title {
@@ -278,5 +279,5 @@ ion-alert {
 
 .draggable-serie {
     --background: white;
-    border-right: 3px solid var(--ion-color-danger);
+    border-right: 6px solid var(--ion-color-danger);
 }

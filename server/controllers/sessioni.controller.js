@@ -167,11 +167,13 @@ async function getSingleSession(req, res) {
                 'reps',
                 ripetizioni
             )
-        ) AS serie
+        ) AS serie,
+        xp
         FROM (
             SELECT
                 Sessioni.nome AS nome_sessione,
                 Sessioni.data_svolgimento,
+                Sessioni.xp,
                 peso,
                 ripetizioni,
                 recupero,

@@ -3,16 +3,17 @@ import { IonButton, IonModal, IonHeader, IonButtons, IonTitle, IonToolbar, IonCo
 import { SessionModalComponentInfo } from 'src/app/models/session-modal-component-info';
 import { BetterMsViewerPipe } from '../../pipes/better-ms-viewer-pipe';
 import { addIcons } from 'ionicons';
-import { statsChart } from 'ionicons/icons';
+import { flashOffOutline, flashOutline, statsChart } from 'ionicons/icons';
 import { ChartModalComponent } from '../chart-modal/chart-modal.component';
 import { SessionService } from '../../services/session-service';
 import { DatefyPipe } from "../../pipes/datefy-pipe";
+import { DecimalPipe } from "@angular/common";
 
 @Component({
   selector: 'app-session-modal',
   templateUrl: './session-modal.component.html',
   styleUrls: ['./session-modal.component.scss'],
-  imports: [IonIcon, IonFabButton, IonFab, IonImg, IonContent, IonToolbar, IonTitle, IonButtons, IonHeader, IonButton, IonChip, BetterMsViewerPipe, DatefyPipe],
+  imports: [IonIcon, IonFabButton, IonFab, IonImg, IonContent, IonToolbar, IonTitle, IonHeader, IonButton, IonChip, BetterMsViewerPipe, DatefyPipe, DecimalPipe],
 })
 export class SessionModalComponent implements OnInit {
 
@@ -22,12 +23,13 @@ export class SessionModalComponent implements OnInit {
   public sessionInfo = signal<SessionModalComponentInfo>({
     nome: "",
     timestamp: 0,
-    exercises: []
+    exercises: [],
+    xp: 0
   });
   private sessionService = inject(SessionService);
 
   constructor() {
-    addIcons({ statsChart });
+    addIcons({ statsChart, flashOutline });
   }
 
   ngOnInit() {

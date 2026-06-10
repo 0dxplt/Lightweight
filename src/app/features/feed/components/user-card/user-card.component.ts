@@ -1,7 +1,7 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
 import { IonChip, IonLabel, IonAvatar, IonIcon, IonCard, ModalController } from "@ionic/angular/standalone";
 import { addIcons } from 'ionicons';
-import { barbellOutline, logoIonic } from 'ionicons/icons';
+import { barbellOutline, checkmarkCircleOutline, logoIonic } from 'ionicons/icons';
 import { SessionModalComponent } from "src/app/shared/components/session-modal/session-modal.component";
 
 @Component({
@@ -24,7 +24,7 @@ export class UserCardComponent  implements OnInit {
   private modalCtrl = inject(ModalController);
 
   constructor() {
-    addIcons({ barbellOutline, logoIonic });
+    addIcons({ barbellOutline, logoIonic , checkmarkCircleOutline});
   }
 
   async openModal() {

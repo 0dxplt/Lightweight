@@ -1,35 +1,10 @@
 <ion-header [translucent]="true">
   <ion-toolbar class="toolbar">
-    <ion-button fill="outline" id="open-city-modal">{{ selectedCity() ? selectedCity() : 'Seleziona una città'}}</ion-button>
-    <ion-modal #cityModal trigger="open-city-modal" [initialBreakpoint]="0.5" [breakpoints]="[0, 0.25, 0.5, 0.75]"
-      [expandToScroll]="false">
-      <ng-template>
-        <ion-header class="ion-no-border">
-          <ion-toolbar color="secondary">
-            <ion-searchbar showCancelButton="focus" class="search-cities" #ricerca placeholder="Search"
-              (ionInput)="handleInput($event)"
-              (click)="cityModal.setCurrentBreakpoint(0.75)"></ion-searchbar>
-          </ion-toolbar>
-        </ion-header>
-        <ion-content class="modal-content">
-          <ion-list>
-            @for (city of results; track city) {
-            <div class="city-item" (click)="selectCity(city.nome, cityModal)">
-            <ion-avatar slot="start" class="avatar-city">
-              <img [src]="city.nationIcon ? city.nationIcon : '/assets/icon/favicon.png'" />
-              </ion-avatar>
-              <ion-label>
-                {{city.nome}}
-              </ion-label>
-            </div>
-            }
-          </ion-list>
-        </ion-content>
-      </ng-template>
-    </ion-modal>
-    <ion-button (click)="getCity()" fill="outline">
+    <ion-button class="head-button" color="dark" fill="outline" slot="start" (click)="openCityModal()">{{ selectedCity()
+      ? selectedCity() : 'Seleziona una città'}}</ion-button>
+    <ion-button class="head-button" color="dark" fill="outline" (click)="getCity()" slot="end">
       GPS
-      <ion-icon slot="end" name="navigate-outline"></ion-icon>
+      <ion-icon name="navigate-outline"></ion-icon>
     </ion-button>
   </ion-toolbar>
 </ion-header>
@@ -42,4 +17,29 @@
       [palestra]="pt.palestra" [eta]="pt.eta"></app-pt-card>
     }
   </div>
+
+  <ion-modal #cityModal [initialBreakpoint]="0.5" [breakpoints]="[0, 0.25, 0.5, 0.75]" [expandToScroll]="false">
+    <ng-template>
+      <ion-header class="ion-no-border">
+        <ion-toolbar color="secondary">
+          <ion-searchbar showCancelButton="focus" class="search-cities" #ricerca placeholder="Search"
+            (ionInput)="handleInput($event)" (click)="cityModal.setCurrentBreakpoint(0.75)"></ion-searchbar>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="modal-content">
+        <ion-list>
+          @for (city of results(); track city) {
+          <div class="city-item" (click)="selectCity(city.nome, cityModal)">
+            <ion-avatar slot="start" class="avatar-city">
+              <img [src]="city.nationIcon ? city.nationIcon : '/assets/icon/favicon.png'" />
+            </ion-avatar>
+            <ion-label>
+              {{city.nome}}
+            </ion-label>
+          </div>
+          }
+        </ion-list>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
 </ion-content>

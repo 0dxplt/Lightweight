@@ -6,8 +6,12 @@
       </ion-avatar>
       <div class="username">
         <p>{{username}}</p>
-        <ion-icon name="logo-ionic" color="white"></ion-icon>
-        <ion-icon name="logo-ionic" color="white"></ion-icon>
+        @if (verified) {
+          <ion-icon name="checkmark-circle-outline" color="white"></ion-icon>
+        }
+        @if (pt) {
+          <ion-icon name="barbell-outline" color="white"></ion-icon>
+        }
       </div>
     </div>
   </div>

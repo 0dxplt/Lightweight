@@ -3,17 +3,20 @@ ion-header {
 }
 
 .toolbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: var(--ion-color-secondary);
+    --background: var(--ion-color-secondary);
     padding: 10px;
     border-radius: 25px;
-    border: 1px solid white;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
 }
 
 ion-title {
     font-size: 1.7rem;
+}
+
+ion-toolbar::part(container) {
+    --background: transparent;
+    background-color: transparent;
 }
 
 .pt-cards {
@@ -81,4 +84,25 @@ ion-list {
     width: 45px;
     height: 45px;
     flex-shrink: 0;
+}
+
+ion-button {
+    --border-radius: 25px;
+    text-transform: none;
+    font-weight: 500;
+    font-size: 1.3rem;
+    letter-spacing: 0.5px;
+    --background: var(--ion-color-secondary);
+    color: white;
+    --border-color: white;
+    --border-width: 1.5px;
+    --padding-start: 24px;
+    --padding-end: 24px;
+    --padding-top: 10px;
+    --padding-bottom: 10px;
+}
+
+.toolbar ion-button ion-icon {
+    margin-left: 8px;
+    font-size: 1.1rem;
 }
