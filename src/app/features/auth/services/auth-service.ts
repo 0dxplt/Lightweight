@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { computed, Injectable, Signal, signal, WritableSignal } from '@angular/core';
-import { Observable, tap } from 'rxjs';
+import { map, Observable, tap } from 'rxjs';
 import { CurrentSession } from 'src/app/models/current-session.model';
 import { SessionExercise } from 'src/app/models/session-modal-component-info';
 import { SaveSession } from 'src/app/models/session.model';
@@ -83,7 +83,7 @@ export class AuthService {
     const username = this.user()?.username as string;
     return this.http.get<User>(`${environment.apiUrl}/api/users/${username}`).pipe(
       tap(user => {
-        const propic = !!user.propic ? `${environment.apiUrl}/api/imgs/users?id=${user.id}` : undefined;
+        const propic = !!user.propic ? `${environment.apiUrl}/api/imgs/users?id=${user.id}&timestamp=${Date.now()}` : undefined;
         user.propic = propic;
         this._user.set(user);
         localStorage.setItem('loggedUser', JSON.stringify(user));
@@ -119,11 +119,13 @@ export class AuthService {
       `${environment.apiUrl}/api/profile/update`,
       formData
     ).pipe(
-      tap(resUser => {
-        if (resUser.propic) {
-          resUser.propic = `${resUser.propic}&t=${new Date().getTime()}`;
+      map(resUser => {
+        if (!!resUser.propic) {
+          resUser.propic = `${environment.apiUrl}/api/imgs/users?id=${resUser.id}&timestamp=${new Date().getTime()}`;
         }
-        console.log(resUser);
+        return resUser;
+      }),
+      tap(resUser => {
         this._user.set(resUser);
         localStorage.setItem('loggedUser', JSON.stringify(this._user()));
       })
