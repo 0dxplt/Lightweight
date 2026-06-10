@@ -1,7 +1,7 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
-import { IonIcon, IonContent, IonImg, IonChip, IonFooter, IonButton, ModalController } from "@ionic/angular/standalone";
+import { IonIcon, IonContent, IonImg, IonChip, IonFooter, IonButton, ModalController, IonHeader, IonToolbar } from "@ionic/angular/standalone";
 import { addIcons } from 'ionicons';
-import { star, starOutline } from 'ionicons/icons';
+import { addCircleOutline, removeCircleOutline, star, starOutline } from 'ionicons/icons';
 import { Exercise } from 'src/app/models/exercise.model';
 import { BetterMsViewerPipe } from "../../../../shared/pipes/better-ms-viewer-pipe";
 
@@ -9,7 +9,7 @@ import { BetterMsViewerPipe } from "../../../../shared/pipes/better-ms-viewer-pi
   selector: 'app-session-exercise-modal',
   templateUrl: './session-exercise-modal.component.html',
   styleUrls: ['./session-exercise-modal.component.scss'],
-  imports: [IonButton, IonFooter, IonChip, IonImg, IonContent, IonIcon, BetterMsViewerPipe],
+  imports: [IonToolbar, IonHeader, IonButton, IonFooter, IonChip, IonImg, IonContent, IonIcon, BetterMsViewerPipe],
 })
 export class SessionExerciseModalComponent implements OnInit {
 
@@ -22,7 +22,7 @@ export class SessionExerciseModalComponent implements OnInit {
   public ripetizioni = 1;
   public recuperoMs = 1;
 
-  constructor() { addIcons({ starOutline, star }) }
+  constructor() { addIcons({ removeCircleOutline, addCircleOutline}) }
 
   ngOnInit() {
     this.peso = 15;
