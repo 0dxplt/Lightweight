@@ -3,6 +3,21 @@
     --small-width: 100%;
 }
 
+ion-header {
+    background-color: transparent;
+}
+
+.toolbar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    --background: var(--ion-color-secondary);
+    padding: 10px;
+    border-radius: 25px;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+}
+
 .form-wrapper {
     padding: 24px 20px;
     display: flex;

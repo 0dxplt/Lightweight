@@ -117,4 +117,7 @@ export class VerifyProfileModalPage implements OnInit {
       return `Surname must be ${MIN_NAME_LENGTH}-${MAX_NAME_LENGTH} characters long`;
   }
 
+  customSelectFilter = {
+    cssClass: 'modal-select-custom'
+  };
 }
