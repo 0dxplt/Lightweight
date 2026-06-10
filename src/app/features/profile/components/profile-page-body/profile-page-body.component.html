@@ -25,12 +25,12 @@
 
         <div class="user-details">
           <h2 class="username">
-            {{user()?.username}}
+            <span>{{user()?.username}}</span>
             @if (this.isPT()) {
-              <ion-badge color="tertiary"><ion-icon name="barbell"></ion-icon></ion-badge>
+              <ion-icon name="barbell" color="tertiary"></ion-icon>
             }
             @if (this.verified()) {
-              <ion-badge color="success"><ion-icon name="checkmark-circle"></ion-icon></ion-badge>
+              <ion-icon name="checkmark-circle" color="success"></ion-icon>
             }
           </h2>
           @if (this.hasName() || this.hasSurname()) {

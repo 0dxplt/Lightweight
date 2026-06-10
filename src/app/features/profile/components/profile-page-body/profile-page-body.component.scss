@@ -72,6 +72,7 @@ ion-list {
 .metric-item {
   display: flex;
   flex-direction: column;
+  color: var(--ion-color-dark);
 
   .val {
     font-weight: 700;
@@ -114,6 +115,7 @@ ion-list {
     display: flex;
     justify-content: space-around;
     text-align: center;
+    color: var(--ion-color-dark);
 
     .progress-row {
       display: flex;
@@ -154,8 +156,13 @@ ion-list {
 .user-details {
   text-align: center;
   margin-bottom: 20px;
+  color: var(--ion-color-dark);
 
   .username {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2px;
     margin: 0;
     font-weight: 800;
     font-size: 1.5rem;
@@ -163,7 +170,7 @@ ion-list {
 
   .full-name {
     margin: 5px 0;
-    color: var(--ion-color-medium);
+    color: var(--ion-color-dark);
   }
 
   .nationality {
