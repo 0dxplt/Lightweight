@@ -5,7 +5,8 @@ const config = require('../config/env');
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
 
-const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+// presa da https://github.com/angular/angular/blob/main/packages/forms/src/validators.ts
+const emailRegex = /^(?=.{1,254}$)(?=.{1,64}@)[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
 
 async function login(req, res) {
     try {
@@ -204,7 +205,7 @@ async function register(req, res) {
 
         res.status(201).json({
             success: true,
-            message: "Signed In!"
+            message: "Signed Up!"
         });
     } catch(err) {
         console.error(err);
