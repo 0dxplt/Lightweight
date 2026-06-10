@@ -94,6 +94,7 @@ export class PtRequestModalPage implements OnInit {
   private async _addNewGym() {
     const modal = await this.modalController.create({
       component: AddGymModalPage,
+      cssClass: 'desktop-fullscreen'
     });
 
     await modal.present();
