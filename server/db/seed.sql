@@ -3909,3 +3909,967 @@ INSERT OR IGNORE INTO SeasonalRankInfo (id, start, end, img_url, rank_name) VALU
 
 -- Radiante (2400+)
 (27, 2400, 9999, 'https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/27/largeicon.png', 'Radiante');
+
+-- ══════════════════════════════════════════════════════════════════
+-- ATLETI
+-- verificato=1 richiede: followers>=500, sessioni>=30, età>=18
+-- ══════════════════════════════════════════════════════════════════
+INSERT OR IGNORE INTO Atleti
+  (id, username, nome, cognome, email, password, data_nascita, weight, height,
+   xp_stagionali, livello_stagionale, xp_globali, livello_globale,
+   numero_followers, numero_followed, numero_sessioni, verificato, id_nazione)
+VALUES
+-- ─── VERIFICATI (followers≥500, sessioni≥30, età≥18) ─────────────
+(1,  'iron_marco',    'Marco',     'Ferretti',   'marco.ferretti@email.it',     '$2b$10$JAtXUNlwY5x4C1NIpvpXAOm/XYXaG2E/XusPtE/F67XNYCEBbwp/C', '1990-03-15', 85.0, 180.0, 1420.0, 14, 8200.0, 12.0, 1200, 180, 52, 1, 1),
+(2,  'queen_sofia',   'Sofia',     'Rinaldi',    'sofia.rinaldi@email.it',      '$2b$10$JAtXUNlwY5x4C1NIpvpXAOm/XYXaG2E/XusPtE/F67XNYCEBbwp/C', '1993-07-22', 62.0, 168.0, 1650.0, 16, 9500.0, 14.0, 2100, 95,  60, 1, 1),
+(3,  'beast_luigi',   'Luigi',     'Conti',      'luigi.conti@gmail.com',       '$2b$10$JAtXUNlwY5x4C1NIpvpXAOm/XYXaG2E/XusPtE/F67XNYCEBbwp/C', '1988-11-05', 97.0, 188.0, 1900.0, 19, 11000.0, 16.0, 3400, 60,  75, 1, 1),
+(4,  'flex_giulia',   'Giulia',    'Mancini',    'giulia.mancini@hotmail.com',  '$2b$10$JAtXUNlwY5x4C1NIpvpXAOm/XYXaG2E/XusPtE/F67XNYCEBbwp/C', '1995-01-30', 58.0, 165.0, 1280.0, 13, 7800.0, 11.0, 780, 120, 45, 1, 1),
+(5,  'power_toni',    'Antonio',   'Esposito',   'antonio.esposito@gmail.com',  '$2b$10$JAtXUNlwY5x4C1NIpvpXAOm/XYXaG2E/XusPtE/F67XNYCEBbwp/C', '1985-06-18', 92.0, 183.0, 2050.0, 21, 13000.0, 18.0, 5200, 45,  88, 1, 1),
+(6,  'lift_emma',     'Emma',      'Martini',    'emma.martini@email.it',       '$2b$10$JAtXUNlwY5x4C1NIpvpXAOm/XYXaG2E/XusPtE/F67XNYCEBbwp/C', '1991-09-12', 65.0, 170.0, 1750.0, 17, 10200.0, 15.0, 1600, 200, 55, 1, 1),
+(7,  'grind_alex',    'Alessandro','Fontana',    'alex.fontana@libero.it',      '$2b$10$JAtXUNlwY5x4C1NIpvpXAOm/XYXaG2E/XusPtE/F67XNYCEBbwp/C', '1987-04-25', 88.0, 185.0, 1530.0, 15, 9000.0, 13.0, 900, 75,  42, 1, 1),
+(8,  'run_chiara',    'Chiara',    'Rossetti',   'chiara.rossetti@gmail.com',   '$2b$10$JAtXUNlwY5x4C1NIpvpXAOm/XYXaG2E/XusPtE/F67XNYCEBbwp/C', '1994-12-08', 56.0, 163.0, 1320.0, 13, 8100.0, 11.5, 720, 155, 38, 1, 1),
+(9,  'push_davide',   'Davide',    'Colombo',    'davide.colombo@email.it',     '$2b$10$JAtXUNlwY5x4C1NIpvpXAOm/XYXaG2E/XusPtE/F67XNYCEBbwp/C', '1992-08-14', 83.0, 179.0, 1180.0, 12, 7200.0, 10.5, 610, 90,  35, 1, 1),
+(10, 'strong_carla',  'Carla',     'Ferrara',    'carla.ferrara@yahoo.it',      '$2b$10$JAtXUNlwY5x4C1NIpvpXAOm/XYXaG2E/XusPtE/F67XNYCEBbwp/C', '1989-02-28', 70.0, 172.0, 1430.0, 14, 8700.0, 12.5, 850, 130, 40, 1, 1),
+(11, 'bulk_stefan',   'Stefan',    'Müller',     'stefan.muller@gmail.de',      '$2b$10$JAtXUNlwY5x4C1NIpvpXAOm/XYXaG2E/XusPtE/F67XNYCEBbwp/C', '1986-10-03', 100.0,190.0, 2200.0, 22, 14000.0, 19.0, 4100, 50,  92, 1, 5),
+(12, 'fit_pierre',    'Pierre',    'Dubois',     'pierre.dubois@laposte.fr',    '$2b$10$JAtXUNlwY5x4C1NIpvpXAOm/XYXaG2E/XusPtE/F67XNYCEBbwp/C', '1990-05-17', 78.0, 176.0, 1600.0, 16, 9800.0, 14.5, 1100, 85,  48, 1, 4),
+(13, 'pump_ana',      'Ana',       'García',     'ana.garcia@email.es',         '$2b$10$JAtXUNlwY5x4C1NIpvpXAOm/XYXaG2E/XusPtE/F67XNYCEBbwp/C', '1993-03-21', 60.0, 166.0, 1500.0, 15, 9200.0, 13.5, 1300, 110, 50, 1, 3),
+(14, 'shred_james',   'James',     'Wilson',     'james.wilson@gmail.com',      '$2b$10$JAtXUNlwY5x4C1NIpvpXAOm/XYXaG2E/XusPtE/F67XNYCEBbwp/C', '1988-07-09', 90.0, 184.0, 1850.0, 18, 11500.0, 16.5, 2800, 70,  65, 1, 2),
+(15, 'reps_sarah',    'Sarah',     'Thompson',   'sarah.thompson@hotmail.com',  '$2b$10$JAtXUNlwY5x4C1NIpvpXAOm/XYXaG2E/XusPtE/F67XNYCEBbwp/C', '1992-11-27', 63.0, 169.0, 1700.0, 17, 10500.0, 15.5, 1900, 160, 58, 1, 2),
+(16, 'titan_nikolaj', 'Nikolaj',   'Hansen',     'nikolaj.hansen@mail.dk',      '$2b$10$JAtXUNlwY5x4C1NIpvpXAOm/XYXaG2E/XusPtE/F67XNYCEBbwp/C', '1987-01-14', 95.0, 192.0, 2100.0, 21, 12800.0, 17.5, 3600, 40,  80, 1, 18),
+(17, 'core_yuki',     'Yuki',      'Tanaka',     'yuki.tanaka@gmail.jp',        '$2b$10$JAtXUNlwY5x4C1NIpvpXAOm/XYXaG2E/XusPtE/F67XNYCEBbwp/C', '1994-06-30', 72.0, 175.0, 1380.0, 13, 8400.0, 12.0, 560, 95,  33, 1, 7),
+(18, 'gains_mike',    'Michael',   'Brown',      'mike.brown@email.us',         '$2b$10$JAtXUNlwY5x4C1NIpvpXAOm/XYXaG2E/XusPtE/F67XNYCEBbwp/C', '1991-04-05', 88.0, 181.0, 1460.0, 14, 8900.0, 13.0, 700, 115, 36, 1, 2),
+(19, 'lean_lena',     'Lena',      'Schmidt',    'lena.schmidt@web.de',         '$2b$10$JAtXUNlwY5x4C1NIpvpXAOm/XYXaG2E/XusPtE/F67XNYCEBbwp/C', '1995-09-19', 59.0, 167.0, 1240.0, 12, 7600.0, 11.0, 620, 140, 32, 1, 5),
+(20, 'swole_pedro',   'Pedro',     'Alves',      'pedro.alves@email.pt',        '$2b$10$JAtXUNlwY5x4C1NIpvpXAOm/XYXaG2E/XusPtE/F67XNYCEBbwp/C', '1989-12-10', 82.0, 178.0, 1550.0, 15, 9400.0, 13.5, 810, 100, 44, 1, 11),
+-- ─── PERSONAL TRAINERS verificati ────────────────────────────────
+(21, 'pt_lorenzo',    'Lorenzo',   'Vitale',     'lorenzo.vitale.pt@gmail.com', '$2b$10$JAtXUNlwY5x4C1NIpvpXAOm/XYXaG2E/XusPtE/F67XNYCEBbwp/C', '1984-08-20', 87.0, 182.0, 2400.0, 24, 16000.0, 22.0, 6800, 30,  120, 1, 1),
+(22, 'pt_valentina',  'Valentina', 'Gallo',      'valentina.gallo.pt@email.it', '$2b$10$JAtXUNlwY5x4C1NIpvpXAOm/XYXaG2E/XusPtE/F67XNYCEBbwp/C', '1986-03-11', 64.0, 170.0, 2350.0, 23, 15200.0, 21.0, 5400, 55,  110, 1, 1),
+(23, 'pt_roberto',    'Roberto',   'Sanna',      'roberto.sanna.pt@libero.it',  '$2b$10$JAtXUNlwY5x4C1NIpvpXAOm/XYXaG2E/XusPtE/F67XNYCEBbwp/C', '1982-06-25', 93.0, 186.0, 2280.0, 22, 14800.0, 20.5, 4900, 42,  105, 1, 1),
+(24, 'pt_marina',     'Marina',    'Costa',      'marina.costa.pt@email.it',    '$2b$10$JAtXUNlwY5x4C1NIpvpXAOm/XYXaG2E/XusPtE/F67XNYCEBbwp/C', '1988-01-07', 61.0, 168.0, 2150.0, 21, 13600.0, 19.5, 3200, 65,  96, 1, 1),
+(25, 'pt_luca',       'Luca',      'Barbieri',   'luca.barbieri.pt@gmail.com',  '$2b$10$JAtXUNlwY5x4C1NIpvpXAOm/XYXaG2E/XusPtE/F67XNYCEBbwp/C', '1985-11-14', 91.0, 184.0, 2500.0, 25, 17000.0, 23.0, 7200, 28,  135, 1, 1),
+(26, 'pt_laura',      'Laura',     'Moretti',    'laura.moretti.pt@yahoo.it',   '$2b$10$JAtXUNlwY5x4C1NIpvpXAOm/XYXaG2E/XusPtE/F67XNYCEBbwp/C', '1987-04-22', 59.0, 165.0, 2320.0, 23, 15800.0, 21.5, 5100, 48,  115, 1, 1),
+(27, 'pt_fabio',      'Fabio',     'Russo',      'fabio.russo.pt@email.it',     '$2b$10$JAtXUNlwY5x4C1NIpvpXAOm/XYXaG2E/XusPtE/F67XNYCEBbwp/C', '1983-09-30', 89.0, 183.0, 2450.0, 24, 16500.0, 22.5, 6400, 35,  125, 1, 1),
+(28, 'pt_anna',       'Anna',      'Ricci',      'anna.ricci.pt@hotmail.it',    '$2b$10$JAtXUNlwY5x4C1NIpvpXAOm/XYXaG2E/XusPtE/F67XNYCEBbwp/C', '1990-07-16', 62.0, 169.0, 2100.0, 21, 13200.0, 19.0, 2900, 70,  90, 1, 2),
+(29, 'pt_carlos',     'Carlos',    'Hernández',  'carlos.hernandez.pt@email.es','$2b$10$JAtXUNlwY5x4C1NIpvpXAOm/XYXaG2E/XusPtE/F67XNYCEBbwp/C', '1981-12-03', 86.0, 181.0, 2600.0, 26, 18000.0, 24.0, 8500, 22,  145, 1, 3),
+(30, 'pt_marie',      'Marie',     'Laurent',    'marie.laurent.pt@gmail.fr',   '$2b$10$JAtXUNlwY5x4C1NIpvpXAOm/XYXaG2E/XusPtE/F67XNYCEBbwp/C', '1986-05-28', 60.0, 167.0, 2200.0, 22, 14200.0, 20.0, 3800, 58,  100, 1, 4),
+-- ─── ATLETI NON VERIFICATI (meno follower/sessioni o minorenni) ──
+(31, 'newbie_luca',   'Luca',      'Sergi',      'luca.sergi@gmail.com',        '$2b$10$JAtXUNlwY5x4C1NIpvpXAOm/XYXaG2E/XusPtE/F67XNYCEBbwp/C', '2000-03-10', 70.0, 175.0, 80.0,  3,  180.0,  2.0,  12,  8,   3,  0, 1),
+(32, 'starter_bianca','Bianca',    'Neri',       'bianca.neri@email.it',        '$2b$10$JAtXUNlwY5x4C1NIpvpXAOm/XYXaG2E/XusPtE/F67XNYCEBbwp/C', '1998-06-15', 55.0, 162.0, 150.0, 3,  350.0,  3.5,  28,  15,  5,  0, 1),
+(33, 'casual_tom',    'Tommaso',   'Greco',      'tommaso.greco@libero.it',     '$2b$10$JAtXUNlwY5x4C1NIpvpXAOm/XYXaG2E/XusPtE/F67XNYCEBbwp/C', '1997-11-22', 76.0, 178.0, 420.0, 7,  900.0,  7.0,  45,  30,  10, 0, 1),
+(34, 'mid_elena',     'Elena',     'Bruno',      'elena.bruno@yahoo.it',        '$2b$10$JAtXUNlwY5x4C1NIpvpXAOm/XYXaG2E/XusPtE/F67XNYCEBbwp/C', '1996-08-04', 62.0, 166.0, 680.0, 9,  2100.0, 8.5,  180, 55,  18, 0, 1),
+(35, 'grind_hugo',    'Hugo',      'Blanc',      'hugo.blanc@email.fr',         '$2b$10$JAtXUNlwY5x4C1NIpvpXAOm/XYXaG2E/XusPtE/F67XNYCEBbwp/C', '1999-04-17', 74.0, 177.0, 320.0, 6,  750.0,  6.0,  60,  40,  8,  0, 4),
+(36, 'active_hana',   'Hana',      'Novak',      'hana.novak@email.cz',         '$2b$10$JAtXUNlwY5x4C1NIpvpXAOm/XYXaG2E/XusPtE/F67XNYCEBbwp/C', '2001-09-28', 57.0, 164.0, 90.0,  3,  200.0,  2.5,  5,   10,  2,  0, 23),
+(37, 'beginner_dan',  'Daniel',    'Pop',        'daniel.pop@email.ro',         '$2b$10$JAtXUNlwY5x4C1NIpvpXAOm/XYXaG2E/XusPtE/F67XNYCEBbwp/C', '1999-01-11', 80.0, 180.0, 210.0, 4,  480.0,  4.5,  20,  18,  6,  0, 25),
+(38, 'gym_rat_kosta', 'Kostantinos','Papadopoulos','kosta.papa@email.gr',       '$2b$10$JAtXUNlwY5x4C1NIpvpXAOm/XYXaG2E/XusPtE/F67XNYCEBbwp/C', '1997-07-05', 84.0, 182.0, 750.0, 9,  2400.0, 9.0,  290, 65,  22, 0, 20),
+(39, 'fit_nina',      'Nina',      'Kovač',      'nina.kovac@email.hr',         '$2b$10$JAtXUNlwY5x4C1NIpvpXAOm/XYXaG2E/XusPtE/F67XNYCEBbwp/C', '2000-12-19', 58.0, 165.0, 550.0, 8,  1400.0, 7.5,  120, 75,  15, 0, 47),
+(40, 'bulk_mateusz',  'Mateusz',   'Kowalski',   'mateusz.kowalski@email.pl',   '$2b$10$JAtXUNlwY5x4C1NIpvpXAOm/XYXaG2E/XusPtE/F67XNYCEBbwp/C', '1995-05-08', 90.0, 185.0, 880.0, 10, 3100.0, 10.0, 380, 50,  25, 0, 22),
+-- ─── ALTRI ATLETI (mix verificati e non) ─────────────────────────
+(41, 'shred_katrin',  'Katrin',    'Berg',       'katrin.berg@mail.no',         '$2b$10$JAtXUNlwY5x4C1NIpvpXAOm/XYXaG2E/XusPtE/F67XNYCEBbwp/C', '1991-02-14', 61.0, 167.0, 1580.0, 16, 9600.0, 14.0, 1450, 88,  46, 1, 17),
+(42, 'power_sven',    'Sven',      'Lindqvist',  'sven.lindqvist@email.se',     '$2b$10$JAtXUNlwY5x4C1NIpvpXAOm/XYXaG2E/XusPtE/F67XNYCEBbwp/C', '1988-10-23', 94.0, 189.0, 1980.0, 20, 12000.0, 17.0, 3200, 45,  72, 1, 16),
+(43, 'flex_aoife',    'Aoife',     'Murphy',     'aoife.murphy@email.ie',       '$2b$10$JAtXUNlwY5x4C1NIpvpXAOm/XYXaG2E/XusPtE/F67XNYCEBbwp/C', '1993-06-07', 59.0, 164.0, 1350.0, 13, 8300.0, 12.0, 680, 120, 37, 1, 21),
+(44, 'gains_dmitri',  'Dmitri',    'Kovalenko',  'dmitri.kovalenko@email.ua',   '$2b$10$JAtXUNlwY5x4C1NIpvpXAOm/XYXaG2E/XusPtE/F67XNYCEBbwp/C', '1987-08-31', 96.0, 187.0, 2050.0, 21, 13200.0, 18.5, 4400, 38,  82, 1, 50),
+(45, 'run_fatima',    'Fatima',    'El Amrani',  'fatima.elamrani@email.ma',    '$2b$10$JAtXUNlwY5x4C1NIpvpXAOm/XYXaG2E/XusPtE/F67XNYCEBbwp/C', '1994-04-02', 55.0, 162.0, 1100.0, 11, 6800.0, 10.0, 520, 145, 30, 1, 37),
+(46, 'beast_mirko',   'Mirko',     'Đorđević',   'mirko.djordjevic@email.rs',   '$2b$10$JAtXUNlwY5x4C1NIpvpXAOm/XYXaG2E/XusPtE/F67XNYCEBbwp/C', '1990-09-16', 92.0, 186.0, 1750.0, 17, 10800.0, 15.5, 1800, 72,  54, 1, 48),
+(47, 'lift_amelia',   'Amelia',    'Clarke',     'amelia.clarke@email.co.uk',   '$2b$10$JAtXUNlwY5x4C1NIpvpXAOm/XYXaG2E/XusPtE/F67XNYCEBbwp/C', '1992-12-24', 64.0, 170.0, 1620.0, 16, 9900.0, 14.5, 1300, 95,  49, 1, 6),
+(48, 'core_maksim',   'Maksim',    'Ivanov',     'maksim.ivanov@email.bg',      '$2b$10$JAtXUNlwY5x4C1NIpvpXAOm/XYXaG2E/XusPtE/F67XNYCEBbwp/C', '1989-03-08', 88.0, 183.0, 1490.0, 15, 9100.0, 13.5, 760, 82,  41, 1, 49),
+(49, 'swole_raj',     'Raj',       'Patel',      'raj.patel@email.in',          '$2b$10$JAtXUNlwY5x4C1NIpvpXAOm/XYXaG2E/XusPtE/F67XNYCEBbwp/C', '1993-07-13', 78.0, 176.0, 1320.0, 13, 8100.0, 11.5, 550, 110, 33, 1, 28),
+(50, 'pump_takeshi',  'Takeshi',   'Yamamoto',   'takeshi.yamamoto@email.jp',   '$2b$10$JAtXUNlwY5x4C1NIpvpXAOm/XYXaG2E/XusPtE/F67XNYCEBbwp/C', '1986-11-19', 82.0, 178.0, 1900.0, 19, 11800.0, 17.0, 2600, 55,  68, 1, 7),
+-- ─── ULTIMI 10 NON VERIFICATI ─────────────────────────────────────
+(51, 'fresh_giulio',  'Giulio',    'Palumbo',    'giulio.palumbo@email.it',     '$2b$10$JAtXUNlwY5x4C1NIpvpXAOm/XYXaG2E/XusPtE/F67XNYCEBbwp/C', '2002-05-20', 73.0, 177.0, 60.0,  3,  120.0,  1.5,  8,   5,   2,  0, 1),
+(52, 'try_hard_leo',  'Leonardo',  'Fabbri',     'leonardo.fabbri@hotmail.it',  '$2b$10$JAtXUNlwY5x4C1NIpvpXAOm/XYXaG2E/XusPtE/F67XNYCEBbwp/C', '1996-08-10', 79.0, 180.0, 490.0, 7,  1100.0, 6.5,  95,  42,  12, 0, 1),
+(53, 'noob_alice',    'Alice',     'Coppola',    'alice.coppola@gmail.com',     '$2b$10$JAtXUNlwY5x4C1NIpvpXAOm/XYXaG2E/XusPtE/F67XNYCEBbwp/C', '2001-02-03', 54.0, 161.0, 130.0, 3,  280.0,  3.0,  15,  12,  4,  0, 1),
+(54, 'casual_omar',   'Omar',      'El Hassan',  'omar.elhassan@email.eg',      '$2b$10$JAtXUNlwY5x4C1NIpvpXAOm/XYXaG2E/XusPtE/F67XNYCEBbwp/C', '1998-09-27', 77.0, 179.0, 260.0, 5,  580.0,  5.0,  30,  22,  7,  0, 36),
+(55, 'gym_jose',      'José',      'Martínez',   'jose.martinez@email.es',      '$2b$10$JAtXUNlwY5x4C1NIpvpXAOm/XYXaG2E/XusPtE/F67XNYCEBbwp/C', '1997-04-14', 82.0, 181.0, 640.0, 9,  1800.0, 8.0,  200, 60,  20, 0, 3),
+(56, 'progress_katja','Katja',     'Weber',      'katja.weber@gmail.de',        '$2b$10$JAtXUNlwY5x4C1NIpvpXAOm/XYXaG2E/XusPtE/F67XNYCEBbwp/C', '2000-11-05', 60.0, 166.0, 380.0, 6,  850.0,  6.5,  55,  35,  9,  0, 5),
+(57, 'gym_bro_niko',  'Nikolas',   'Papadakis',  'nikolas.papadakis@email.gr',  '$2b$10$JAtXUNlwY5x4C1NIpvpXAOm/XYXaG2E/XusPtE/F67XNYCEBbwp/C', '1999-06-18', 85.0, 183.0, 560.0, 8,  1500.0, 7.5,  140, 68,  16, 0, 20),
+(58, 'gym_girl_luna', 'Luna',      'Moreau',     'luna.moreau@email.fr',        '$2b$10$JAtXUNlwY5x4C1NIpvpXAOm/XYXaG2E/XusPtE/F67XNYCEBbwp/C', '1998-01-30', 57.0, 163.0, 470.0, 7,  1050.0, 7.0,  110, 80,  13, 0, 4),
+(59, 'lift_jan',      'Jan',       'Novotný',    'jan.novotny@email.cz',        '$2b$10$JAtXUNlwY5x4C1NIpvpXAOm/XYXaG2E/XusPtE/F67XNYCEBbwp/C', '1996-07-22', 83.0, 182.0, 720.0, 9,  2200.0, 8.5,  320, 48,  22, 0, 23),
+(60, 'athlete_mia',   'Mia',       'Johansson',  'mia.johansson@email.se',      '$2b$10$JAtXUNlwY5x4C1NIpvpXAOm/XYXaG2E/XusPtE/F67XNYCEBbwp/C', '2001-03-09', 56.0, 164.0, 180.0, 3,  400.0,  3.8,  22,  18,  5,  0, 16);
+
+-- ══════════════════════════════════════════════════════════════════
+-- PERSONAL TRAINERS
+-- ══════════════════════════════════════════════════════════════════
+INSERT OR IGNORE INTO PersonalTrainers (id, email_professionale, id_citta, id_palestra) VALUES
+(21, 'lorenzo.vitale@pt-pro.it',      1,  1),   -- Roma, Gold Gym Roma
+(22, 'valentina.gallo@pt-pro.it',     2,  2),   -- Milano, Technogym Milano
+(23, 'roberto.sanna@pt-pro.it',       3,  26),  -- Napoli, Neapolitan Muscle
+(24, 'marina.costa@pt-pro.it',        7,  60),  -- Bologna, Bologna Body Builders
+(25, 'luca.barbieri@pt-pro.it',       8,  59),  -- Firenze, Firenze Athletic Center
+(26, 'laura.moretti@pt-pro.it',       4,  27),  -- Torino, Turin Weightlifting
+(27, 'fabio.russo@pt-pro.it',         9,  9),   -- Bari (usa FitX Munich come base internazionale... usiamo palestra a Roma)
+(28, 'anna.ricci@pt-pro.it',         12, 3),    -- New York, Brooklyn Iron
+(29, 'carlos.hernandez@pt-pro.it',   18, 24),  -- Barcellona, Catalan Power Barcelona
+(30, 'marie.laurent@pt-pro.it',      24, 7);    -- Parigi, Basic-Fit Paris
+
+-- fix pt 27: bari → palestra romana
+UPDATE PersonalTrainers SET id_citta=9, id_palestra=1 WHERE id=27;
+
+-- ══════════════════════════════════════════════════════════════════
+-- WORKOUT  (data_creazione in unix timestamp)
+-- ══════════════════════════════════════════════════════════════════
+INSERT OR IGNORE INTO Workout (id, nome, data_creazione, id_creatore) VALUES
+(1,  'Full Body Power',         1672531200, 21),
+(2,  'Upper Hypertrophy',       1673136000, 21),
+(3,  'Leg Day Destroyer',       1673740800, 22),
+(4,  'Push Pull Legs A',        1674345600, 22),
+(5,  'Core & Cardio Mix',       1674950400, 23),
+(6,  'Olympic Lifting A',       1675555200, 23),
+(7,  'Strength Base',           1676160000, 24),
+(8,  'Functional Circuit',      1676764800, 24),
+(9,  'Hypertrophy Split A',     1677369600, 25),
+(10, 'Hypertrophy Split B',     1677974400, 25),
+(11, 'Powerlifting Cycle',      1678579200, 26),
+(12, 'Athletic Performance',    1679184000, 27),
+(13, 'Beginner Full Body',      1679788800, 27),
+(14, 'Advanced Push',           1680393600, 28),
+(15, 'Advanced Pull',           1680998400, 28),
+(16, 'Shoulder & Arms',         1681603200, 29),
+(17, 'Glute & Hamstring Focus', 1682208000, 29),
+(18, 'Chest & Triceps',         1682812800, 30),
+(19, 'Back & Biceps',           1683417600, 30),
+(20, 'Metabolic Conditioning',  1684022400, 21),
+(21, 'Marco Power A',           1684627200, 1),
+(22, 'Sofia Bikini Prep',       1685232000, 2),
+(23, 'Luigi Beast Mode',        1685836800, 3),
+(24, 'Giulia Tone Up',          1686441600, 4),
+(25, 'James Powerbuilding',     1687046400, 14),
+(26, 'Sarah Fit Plan',          1687651200, 15),
+(27, 'Stefan Mass Builder',     1688256000, 11),
+(28, 'Yuki Functional',         1688860800, 17),
+(29, 'Katrin Endurance',        1689465600, 41),
+(30, 'Takeshi Budo Strength',   1690070400, 50);
+
+-- ══════════════════════════════════════════════════════════════════
+-- WORKOUT ESERCIZI
+-- ══════════════════════════════════════════════════════════════════
+INSERT OR IGNORE INTO WorkoutEsercizi (id, serie, ripetizioni, recupero, id_workout, id_esercizio) VALUES
+-- Workout 1 - Full Body Power
+(1,  4, 5,  180, 1, 64),   -- Barbell Squat
+(2,  4, 5,  180, 1, 47),   -- Barbell Deadlift
+(3,  4, 5,  180, 1, 44),   -- Barbell Bench Press Medium
+(4,  3, 8,  120, 1, 80),   -- Bent Over Row
+(5,  3, 8,  120, 1, 59),   -- Barbell Shoulder Press
+-- Workout 2 - Upper Hypertrophy
+(6,  4, 10, 90,  2, 222),  -- Dumbbell Bench Press
+(7,  4, 10, 90,  2, 344),  -- Incline Dumbbell Press
+(8,  3, 12, 60,  2, 483),  -- One-Arm Dumbbell Row
+(9,  3, 12, 60,  2, 224),  -- Dumbbell Bicep Curl
+(10, 3, 12, 60,  2, 758),  -- Standing Dumbbell Triceps Extension
+-- Workout 3 - Leg Day Destroyer
+(11, 4, 8,  150, 3, 64),   -- Barbell Squat
+(12, 4, 10, 90,  3, 448),  -- Lying Leg Curls
+(13, 3, 12, 60,  3, 410),  -- Leg Extensions
+(14, 4, 12, 60,  3, 55),   -- Barbell Lunge
+(15, 4, 15, 60,  3, 752),  -- Standing Calf Raises
+-- Workout 4 - Push Pull Legs A (push)
+(16, 4, 10, 90,  4, 44),   -- Barbell Bench Press
+(17, 3, 12, 75,  4, 53),   -- Barbell Incline Bench Press
+(18, 3, 12, 60,  4, 244),  -- Dumbbell Shoulder Press
+(19, 3, 15, 60,  4, 665),  -- Side Lateral Raise
+(20, 3, 12, 60,  4, 825),  -- Triceps Pushdown
+-- Workout 5 - Core & Cardio
+(21, 3, 20, 45,  5, 189),  -- Crunches
+(22, 3, 15, 45,  5, 588),  -- Reverse Crunch
+(23, 3, 30, 45,  5, 539),  -- Plank (secondi)
+(24, 3, 20, 45,  5, 182),  -- Cross-Body Crunch
+(25, 3, 20, 45,  5, 614),  -- Russian Twist
+-- Workout 6 - Olympic Lifting
+(26, 5, 3,  240, 6, 163),  -- Clean
+(27, 5, 3,  240, 6, 167),  -- Clean and Jerk
+(28, 4, 3,  180, 6, 716),  -- Snatch
+(29, 4, 5,  180, 6, 64),   -- Barbell Squat
+(30, 3, 5,  120, 6, 47),   -- Barbell Deadlift
+-- Workout 7 - Strength Base
+(31, 5, 5,  180, 7, 47),   -- Deadlift
+(32, 5, 5,  180, 7, 64),   -- Squat
+(33, 5, 5,  180, 7, 44),   -- Bench Press
+(34, 3, 8,  120, 7, 560),  -- Pullups
+(35, 3, 8,  120, 7, 772),  -- Standing Military Press
+-- Workout 8 - Functional Circuit
+(36, 3, 15, 60,  8, 95),   -- Bodyweight Squat
+(37, 3, 10, 60,  8, 568),  -- Pushups
+(38, 3, 10, 60,  8, 356),  -- Inverted Row
+(39, 3, 20, 45,  8, 468),  -- Mountain Climbers
+(40, 3, 15, 60,  8, 687),  -- Sit-Up
+-- Workout 9 - Hypertrophy Split A (chest/tri)
+(41, 4, 12, 75,  9, 44),   -- Bench Press
+(42, 4, 12, 75,  9, 199),  -- Decline Dumbbell Flyes
+(43, 3, 15, 60,  9, 111),  -- Cable Crossover
+(44, 3, 12, 60,  9, 825),  -- Triceps Pushdown
+(45, 3, 12, 60,  9, 826),  -- Triceps Pushdown Rope
+-- Workout 10 - Hypertrophy Split B (back/bi)
+(46, 4, 10, 90,  10, 560), -- Pullups
+(47, 4, 12, 75,  10, 858), -- Wide-Grip Lat Pulldown
+(48, 3, 12, 60,  10, 626), -- Seated Cable Rows
+(49, 3, 12, 60,  10, 45),  -- Barbell Curl
+(50, 3, 15, 60,  10, 309), -- Hammer Curls
+-- Workout 11 - Powerlifting
+(51, 5, 3,  300, 11, 44),  -- Bench Press
+(52, 5, 3,  300, 11, 64),  -- Squat
+(53, 5, 3,  300, 11, 47),  -- Deadlift
+(54, 3, 5,  180, 11, 795), -- Straight-Arm Pulldown
+(55, 3, 8,  120, 11, 59),  -- Shoulder Press
+-- Workout 12 - Athletic Performance
+(56, 4, 6,  120, 12, 100), -- Box Jump
+(57, 4, 8,  90,  12, 282), -- Freehand Jump Squat
+(58, 3, 10, 60,  12, 287), -- Front Box Jump
+(59, 3, 8,  90,  12, 67),  -- Barbell Walking Lunge
+(60, 3, 10, 60,  12, 468), -- Mountain Climbers
+-- Workout 13 - Beginner Full Body
+(61, 2, 10, 90,  13, 95),  -- Bodyweight Squat
+(62, 2, 10, 90,  13, 568), -- Pushups
+(63, 2, 10, 90,  13, 356), -- Inverted Row
+(64, 2, 12, 60,  13, 539), -- Plank
+(65, 2, 12, 60,  13, 189), -- Crunches
+-- Workout 14 - Advanced Push
+(66, 5, 5,  180, 14, 44),  -- Bench Press
+(67, 4, 8,  120, 14, 50),  -- Guillotine Bench
+(68, 4, 10, 90,  14, 53),  -- Incline Bench Press
+(69, 3, 12, 75,  14, 59),  -- Shoulder Press
+(70, 3, 15, 60,  14, 293), -- Front Plate Raise
+-- Workout 15 - Advanced Pull
+(71, 5, 5,  180, 15, 47),  -- Deadlift
+(72, 4, 8,  120, 15, 560), -- Pullups
+(73, 4, 10, 90,  15, 80),  -- Bent Over Row
+(74, 3, 12, 75,  15, 45),  -- Barbell Curl
+(75, 3, 15, 60,  15, 267), -- Face Pull
+-- Workout 16 - Shoulder & Arms
+(76, 4, 10, 90,  16, 26),  -- Arnold Dumbbell Press
+(77, 3, 12, 60,  16, 665), -- Side Lateral Raise
+(78, 3, 12, 60,  16, 290), -- Front Dumbbell Raise
+(79, 3, 12, 60,  16, 309), -- Hammer Curls
+(80, 3, 12, 60,  16, 758), -- Dumbbell Triceps Extension
+-- Workout 17 - Glute & Hamstring
+(81, 4, 10, 90,  17, 52),  -- Barbell Hip Thrust
+(82, 4, 12, 75,  17, 604), -- Romanian Deadlift
+(83, 3, 12, 75,  17, 448), -- Lying Leg Curls
+(84, 3, 15, 60,  17, 301), -- Glute Kickback
+(85, 3, 15, 60,  17, 685), -- Single Leg Glute Bridge
+-- Workout 18 - Chest & Triceps
+(86, 4, 10, 90,  18, 44),  -- Bench Press
+(87, 3, 12, 75,  18, 344), -- Incline Dumbbell Press
+(88, 3, 12, 60,  18, 227), -- Dumbbell Flyes
+(89, 3, 12, 60,  18, 171), -- Close Grip Bench
+(90, 3, 15, 60,  18, 754), -- EZ-Bar Skullcrusher... uso 254
+-- Workout 19 - Back & Biceps
+(91, 4, 10, 90,  19, 858), -- Wide-Grip Lat Pulldown
+(92, 4, 12, 75,  19, 483), -- One-Arm Dumbbell Row
+(93, 3, 12, 60,  19, 267), -- Face Pull
+(94, 3, 12, 60,  19, 45),  -- Barbell Curl
+(95, 3, 15, 60,  19, 181), -- Concentration Curls
+-- Workout 20 - Metabolic Conditioning
+(96, 4, 15, 45,  20, 568), -- Pushups
+(97, 4, 15, 45,  20, 95),  -- Bodyweight Squat
+(98, 3, 20, 30,  20, 468), -- Mountain Climbers
+(99, 3, 30, 45,  20, 539), -- Plank
+(100,3, 15, 45,  20, 687), -- Sit-Up
+-- Workout 21-30 (atleti normali, 3 esercizi ciascuno)
+(101,3, 10, 90,  21, 64),  (102,3, 10, 90,  21, 44),  (103,3, 10, 90,  21, 47),
+(104,3, 12, 75,  22, 222), (105,3, 15, 60,  22, 342), (106,3, 15, 60,  22, 665),
+(107,4, 8,  120, 23, 47),  (108,4, 8,  120, 23, 64),  (109,4, 8,  120, 23, 44),
+(110,3, 15, 60,  24, 95),  (111,3, 15, 60,  24, 568), (112,3, 20, 45,  24, 189),
+(113,4, 5,  180, 25, 47),  (114,4, 5,  180, 25, 64),  (115,4, 5,  180, 25, 44),
+(116,3, 12, 75,  26, 222), (117,3, 15, 60,  26, 665), (118,3, 15, 60,  26, 644),
+(119,4, 8,  150, 27, 64),  (120,4, 8,  150, 27, 47),  (121,3, 10, 90,  27, 559),
+(122,3, 12, 60,  28, 302), (123,3, 12, 60,  28, 383), (124,3, 15, 45,  28, 539),
+(125,3, 12, 75,  29, 89),  (126,3, 30, 60,  29, 539), (127,4, 10, 60,  29, 260),
+(128,4, 5,  180, 30, 47),  (129,3, 10, 120, 30, 64),  (130,3, 8,  90,  30, 167);
+
+-- fix workout 18 esercizio 90: uso Lying Triceps Press (455) invece di 754
+UPDATE WorkoutEsercizi SET id_esercizio=455 WHERE id=90;
+
+-- ══════════════════════════════════════════════════════════════════
+-- SESSIONI  (unix timestamps: 2023-01-01 → 2024-12-31)
+-- ══════════════════════════════════════════════════════════════════
+INSERT OR IGNORE INTO Sessioni (id, id_creatore, nome, data_svolgimento, xp, pubblica) VALUES
+-- Marco (atleta 1, 52 sessioni)
+(1,  1, 'Power Session 1',     1672617600, 120, 1),
+(2,  1, 'Upper Body A',        1673222400, 110, 1),
+(3,  1, 'Leg Day',             1673827200, 130, 1),
+(4,  1, 'Full Body Power',     1674432000, 125, 1),
+(5,  1, 'Push Day',            1675036800, 115, 1),
+(6,  1, 'Pull Day',            1675641600, 120, 1),
+(7,  1, 'Leg & Core',          1676246400, 135, 1),
+(8,  1, 'Upper Strength',      1676851200, 115, 0),
+(9,  1, 'Power Squat Session', 1677456000, 140, 1),
+(10, 1, 'Deadlift Focus',      1678060800, 130, 1),
+(11, 1, 'Bench Max',           1678665600, 125, 1),
+(12, 1, 'Athletic Training',   1679270400, 110, 1),
+(13, 1, 'Hypertrophy A',       1679875200, 105, 1),
+(14, 1, 'Hypertrophy B',       1680480000, 105, 0),
+(15, 1, 'Olympic Lifts',       1681084800, 145, 1),
+(16, 1, 'Full Body 2',         1681689600, 120, 1),
+(17, 1, 'Push Heavy',          1682294400, 115, 1),
+(18, 1, 'Pull Heavy',          1682899200, 120, 1),
+(19, 1, 'Legs Volume',         1683504000, 130, 1),
+(20, 1, 'Cardio & Core',       1684108800, 85,  1),
+(21, 1, 'Strength Test',       1684713600, 150, 1),
+(22, 1, 'Recovery Session',    1685318400, 70,  0),
+(23, 1, 'Shoulder Focus',      1685923200, 110, 1),
+(24, 1, 'Arms Day',            1686528000, 95,  1),
+(25, 1, 'Back Blast',          1687132800, 120, 1),
+(26, 1, 'Chest Volume',        1687737600, 115, 1),
+(27, 1, 'Squat PR Attempt',    1688342400, 155, 1),
+(28, 1, 'Deadlift Volume',     1688947200, 130, 1),
+(29, 1, 'Press Day',           1689552000, 115, 1),
+(30, 1, 'Full Body 3',         1690156800, 125, 1),
+(31, 1, 'Upper A 2',           1690761600, 110, 1),
+(32, 1, 'Leg Day 2',           1691366400, 130, 0),
+-- Sofia (atleta 2, 60 sessioni)
+(33, 2, 'Tone & Sculpt 1',     1672704000, 100, 1),
+(34, 2, 'Lower Body Focus',    1673308800, 115, 1),
+(35, 2, 'Upper Tone',          1673913600, 100, 1),
+(36, 2, 'Bikini Prep A',       1674518400, 105, 1),
+(37, 2, 'Glute Session',       1675123200, 120, 1),
+(38, 2, 'Cardio Burn',         1675728000, 80,  1),
+(39, 2, 'Shoulder & Arms',     1676332800, 95,  1),
+(40, 2, 'Full Body Circuit',   1676937600, 110, 1),
+(41, 2, 'Lower B',             1677542400, 115, 1),
+(42, 2, 'Upper B',             1678147200, 100, 0),
+(43, 2, 'Core Blast',          1678752000, 85,  1),
+(44, 2, 'Leg Volume',          1679356800, 120, 1),
+(45, 2, 'Push A',              1679961600, 105, 1),
+(46, 2, 'Pull A',              1680566400, 100, 1),
+(47, 2, 'Glute 2',             1681171200, 125, 1),
+(48, 2, 'Cardio 2',            1681776000, 80,  0),
+(49, 2, 'Shoulder Focus 2',    1682380800, 95,  1),
+(50, 2, 'Back & Glute',        1682985600, 110, 1),
+(51, 2, 'Lower C',             1683590400, 115, 1),
+(52, 2, 'Upper C',             1684195200, 100, 1),
+(53, 2, 'Abs Focus',           1684800000, 75,  1),
+(54, 2, 'Full Body 2',         1685404800, 110, 1),
+(55, 2, 'Bikini Prep B',       1686009600, 105, 1),
+(56, 2, 'Glute 3',             1686614400, 120, 1),
+(57, 2, 'Upper D',             1687219200, 100, 1),
+(58, 2, 'Lower D',             1687824000, 115, 0),
+(59, 2, 'PR Day',              1688428800, 130, 1),
+(60, 2, 'Recovery',            1689033600, 65,  1),
+(61, 2, 'Cardio 3',            1689638400, 80,  1),
+(62, 2, 'Core 2',              1690243200, 85,  1),
+-- Luigi (atleta 3, 75 sessioni)
+(63, 3, 'Beast Push 1',        1672790400, 140, 1),
+(64, 3, 'Beast Pull 1',        1673395200, 135, 1),
+(65, 3, 'Beast Legs 1',        1674000000, 145, 1),
+(66, 3, 'Olympic Day 1',       1674604800, 155, 1),
+(67, 3, 'Strength A',          1675209600, 140, 1),
+(68, 3, 'Strength B',          1675814400, 140, 1),
+(69, 3, 'Volume Day 1',        1676419200, 125, 1),
+(70, 3, 'Max Effort Bench',    1677024000, 160, 1),
+(71, 3, 'Max Effort Squat',    1677628800, 165, 1),
+(72, 3, 'Max Effort Dead',     1678233600, 170, 1),
+(73, 3, 'Dynamic Effort',      1678838400, 130, 0),
+(74, 3, 'Rep Day',             1679443200, 120, 1),
+(75, 3, 'Push 2',              1680048000, 140, 1),
+(76, 3, 'Pull 2',              1680652800, 135, 1),
+(77, 3, 'Legs 2',              1681257600, 145, 0),
+(78, 3, 'Olympic Day 2',       1681862400, 155, 1),
+(79, 3, 'Strength C',          1682467200, 140, 1),
+(80, 3, 'Strength D',          1683072000, 140, 1),
+(81, 3, 'Volume 2',            1683676800, 125, 1),
+(82, 3, 'Bench Focus',         1684281600, 145, 1),
+(83, 3, 'Squat Focus',         1684886400, 150, 1),
+(84, 3, 'Dead Focus',          1685491200, 155, 1),
+(85, 3, 'Push 3',              1686096000, 140, 1),
+(86, 3, 'Pull 3',              1686700800, 135, 0),
+(87, 3, 'Legs 3',              1687305600, 145, 1),
+(88, 3, 'Conditioning',        1687910400, 110, 1),
+-- Giulia (atleta 4, 45 sessioni)
+(89, 4, 'Tone A',              1672876800, 95,  1),
+(90, 4, 'Lower Tone 1',        1673481600, 110, 1),
+(91, 4, 'Upper Tone 1',        1674086400, 95,  1),
+(92, 4, 'Full Body 1',         1674691200, 105, 1),
+(93, 4, 'Cardio Burn',         1675296000, 75,  1),
+(94, 4, 'Glute Focus',         1675900800, 115, 1),
+(95, 4, 'Arms & Shoulders',    1676505600, 90,  0),
+(96, 4, 'Lower Tone 2',        1677110400, 110, 1),
+(97, 4, 'Upper Tone 2',        1677715200, 95,  1),
+(98, 4, 'Full Body 2',         1678320000, 105, 1),
+(99, 4, 'Core Focus',          1678924800, 80,  1),
+(100,4, 'Glute 2',             1679529600, 115, 1),
+(101,4, 'Tone C',              1680134400, 95,  1),
+(102,4, 'Lower C',             1680739200, 110, 0),
+(103,4, 'Upper C',             1681344000, 95,  1),
+-- Antonio (atleta 5, 88 sessioni)
+(104,5, 'Power Push 1',        1672963200, 145, 1),
+(105,5, 'Power Pull 1',        1673568000, 140, 1),
+(106,5, 'Power Legs 1',        1674172800, 150, 1),
+(107,5, 'Olympic A',           1674777600, 160, 1),
+(108,5, 'Max Bench',           1675382400, 165, 1),
+(109,5, 'Max Squat',           1675987200, 170, 1),
+(110,5, 'Max Dead',            1676592000, 175, 1),
+(111,5, 'Volume Push',         1677196800, 130, 1),
+(112,5, 'Volume Pull',         1677801600, 130, 0),
+(113,5, 'Volume Legs',         1678406400, 140, 1),
+(114,5, 'Athletic 1',          1679011200, 120, 1),
+(115,5, 'Athletic 2',          1679616000, 120, 1),
+(116,5, 'Power Push 2',        1680220800, 145, 1),
+(117,5, 'Power Pull 2',        1680825600, 140, 1),
+(118,5, 'Power Legs 2',        1681430400, 150, 1),
+(119,5, 'Olympic B',           1682035200, 160, 1),
+(120,5, 'Conditioning',        1682640000, 110, 0),
+-- Emma (atleta 6, 55 sessioni)
+(121,6, 'Lift & Tone 1',       1673049600, 110, 1),
+(122,6, 'Lower Focus 1',       1673654400, 120, 1),
+(123,6, 'Upper Focus 1',       1674259200, 105, 1),
+(124,6, 'Circuit 1',           1674864000, 115, 1),
+(125,6, 'Olympic Intro',       1675468800, 130, 1),
+(126,6, 'Strength A',          1676073600, 125, 1),
+(127,6, 'Strength B',          1676678400, 125, 0),
+(128,6, 'Hypertrophy 1',       1677283200, 110, 1),
+(129,6, 'Hypertrophy 2',       1677888000, 110, 1),
+(130,6, 'Core Power',          1678492800, 90,  1),
+(131,6, 'Full Body A',         1679097600, 115, 1),
+(132,6, 'Full Body B',         1679702400, 115, 1),
+(133,6, 'Push Focus',          1680307200, 110, 1),
+(134,6, 'Pull Focus',          1680912000, 115, 1),
+(135,6, 'Legs Volume',         1681516800, 120, 0),
+-- PT Lorenzo (atleta 21, 120 sessioni - campionato)
+(136,21,'PT Demo Push',        1673136000, 150, 1),
+(137,21,'PT Demo Pull',        1673740800, 145, 1),
+(138,21,'PT Demo Legs',        1674345600, 155, 1),
+(139,21,'Client Shadow 1',     1674950400, 130, 1),
+(140,21,'Client Shadow 2',     1675555200, 130, 1),
+(141,21,'Olympic Coaching',    1676160000, 160, 1),
+(142,21,'Strength Coaching',   1676764800, 150, 1),
+(143,21,'Functional 1',        1677369600, 130, 1),
+(144,21,'Functional 2',        1677974400, 130, 0),
+(145,21,'Max Push',            1678579200, 165, 1),
+(146,21,'Max Pull',            1679184000, 160, 1),
+(147,21,'Max Legs',            1679788800, 170, 1),
+(148,21,'Speed A',             1680393600, 140, 1),
+(149,21,'Speed B',             1680998400, 140, 1),
+(150,21,'Conditioning 1',      1681603200, 120, 1),
+-- PT Valentina (atleta 22, 110 sessioni)
+(151,22,'Hyper Push 1',        1673222400, 140, 1),
+(152,22,'Hyper Pull 1',        1673827200, 135, 1),
+(153,22,'Hyper Legs 1',        1674432000, 145, 1),
+(154,22,'Shape Session 1',     1675036800, 120, 1),
+(155,22,'Shape Session 2',     1675641600, 120, 1),
+(156,22,'Full Power A',        1676246400, 150, 1),
+(157,22,'Full Power B',        1676851200, 150, 0),
+(158,22,'Olympic Assist 1',    1677456000, 155, 1),
+(159,22,'Olympic Assist 2',    1678060800, 155, 1),
+(160,22,'Circuit Demo',        1678665600, 125, 1),
+-- Atleti con 30+ sessioni verificati
+-- James (14), 65 sessioni
+(161,14,'James Push 1',        1673308800, 130, 1),
+(162,14,'James Pull 1',        1673913600, 125, 1),
+(163,14,'James Legs 1',        1674518400, 135, 1),
+(164,14,'Powerbuilding A',     1675123200, 140, 1),
+(165,14,'Powerbuilding B',     1675728000, 140, 1),
+(166,14,'Volume Push',         1676332800, 125, 1),
+(167,14,'Volume Pull',         1676937600, 125, 0),
+(168,14,'Volume Legs',         1677542400, 130, 1),
+(169,14,'Strength Max 1',      1678147200, 155, 1),
+(170,14,'Strength Max 2',      1678752000, 155, 1),
+(171,14,'Athletic 1',          1679356800, 115, 1),
+(172,14,'Athletic 2',          1679961600, 115, 1),
+(173,14,'Push 2',              1680566400, 130, 1),
+(174,14,'Pull 2',              1681171200, 125, 1),
+(175,14,'Legs 2',              1681776000, 135, 0),
+-- Sarah (15), 58 sessioni
+(176,15,'Sarah Tone 1',        1673395200, 105, 1),
+(177,15,'Lower A',             1674000000, 115, 1),
+(178,15,'Upper A',             1674604800, 100, 1),
+(179,15,'Circuit A',           1675209600, 110, 1),
+(180,15,'Glute Session 1',     1675814400, 120, 1),
+(181,15,'Full Body A',         1676419200, 110, 1),
+(182,15,'Cardio Mix',          1677024000, 80,  1),
+(183,15,'Strength Intro',      1677628800, 120, 0),
+(184,15,'Tone B',              1678233600, 105, 1),
+(185,15,'Lower B',             1678838400, 115, 1),
+(186,15,'Upper B',             1679443200, 100, 1),
+(187,15,'Circuit B',           1680048000, 110, 1),
+(188,15,'Glute 2',             1680652800, 120, 1),
+(189,15,'Full Body B',         1681257600, 110, 0),
+(190,15,'PR Session',          1681862400, 135, 1),
+-- Stefan (11), 92 sessioni
+(191,11,'Stefan Mass 1',       1673481600, 145, 1),
+(192,11,'Stefan Push 1',       1674086400, 140, 1),
+(193,11,'Stefan Pull 1',       1674691200, 135, 1),
+(194,11,'Stefan Legs 1',       1675296000, 150, 1),
+(195,11,'Max Bench',           1675900800, 170, 1),
+(196,11,'Max Squat',           1676505600, 175, 1),
+(197,11,'Max Dead',            1677110400, 180, 1),
+(198,11,'Volume A',            1677715200, 130, 0),
+(199,11,'Volume B',            1678320000, 130, 1),
+(200,11,'Speed A',             1678924800, 135, 1),
+(201,11,'Speed B',             1679529600, 135, 1),
+(202,11,'Mass 2',              1680134400, 145, 1),
+(203,11,'Push 2',              1680739200, 140, 1),
+(204,11,'Pull 2',              1681344000, 135, 1),
+(205,11,'Legs 2',              1681948800, 150, 1),
+-- Nikolaj (16), 80 sessioni
+(206,16,'Viking Push 1',       1673568000, 150, 1),
+(207,16,'Viking Pull 1',       1674172800, 145, 1),
+(208,16,'Viking Legs 1',       1674777600, 155, 1),
+(209,16,'Nordic Max 1',        1675382400, 165, 1),
+(210,16,'Nordic Max 2',        1675987200, 165, 1),
+(211,16,'Olympic Nordic 1',    1676592000, 160, 1),
+(212,16,'Volume A',            1677196800, 135, 1),
+(213,16,'Volume B',            1677801600, 135, 0),
+(214,16,'Conditioning',        1678406400, 115, 1),
+(215,16,'Push 2',              1679011200, 150, 1),
+(216,16,'Pull 2',              1679616000, 145, 1),
+(217,16,'Legs 2',              1680220800, 155, 1),
+(218,16,'Max 2',               1680825600, 165, 1),
+(219,16,'Speed',               1681430400, 140, 1),
+(220,16,'Conditioning 2',      1682035200, 115, 1),
+-- PT Roberto (23), 105 sessioni
+(221,23,'PT Rob Push 1',       1673654400, 150, 1),
+(222,23,'PT Rob Pull 1',       1674259200, 145, 1),
+(223,23,'PT Rob Legs 1',       1674864000, 155, 1),
+(224,23,'Strength Demo 1',     1675468800, 155, 1),
+(225,23,'Strength Demo 2',     1676073600, 155, 1),
+(226,23,'Olympic Demo 1',      1676678400, 165, 1),
+(227,23,'Olympic Demo 2',      1677283200, 165, 0),
+(228,23,'Circuit Demo 1',      1677888000, 130, 1),
+(229,23,'Circuit Demo 2',      1678492800, 130, 1),
+(230,23,'Push 2',              1679097600, 150, 1),
+(231,23,'Pull 2',              1679702400, 145, 1),
+(232,23,'Legs 2',              1680307200, 155, 1),
+(233,23,'Max Effort',          1680912000, 175, 1),
+(234,23,'Speed A',             1681516800, 140, 1),
+(235,23,'Conditioning',        1682121600, 120, 0),
+-- Atleti verificati rimanenti - sessioni minime 30
+-- Pierre (12)
+(236,12,'Pierre Push 1',       1673740800, 125, 1),
+(237,12,'Pierre Pull 1',       1674345600, 120, 1),
+(238,12,'Pierre Legs 1',       1674950400, 130, 1),
+(239,12,'Circuit A',           1675555200, 110, 1),
+(240,12,'Cardio Burn',         1676160000, 80,  1),
+(241,12,'Full Body A',         1676764800, 115, 1),
+(242,12,'Strength A',          1677369600, 130, 1),
+(243,12,'Hyper A',             1677974400, 120, 0),
+(244,12,'Push 2',              1678579200, 125, 1),
+(245,12,'Pull 2',              1679184000, 120, 1),
+(246,12,'Legs 2',              1679788800, 130, 1),
+(247,12,'Full Body B',         1680393600, 115, 1),
+(248,12,'Strength B',          1680998400, 130, 1),
+(249,12,'PR Day',              1681603200, 145, 1),
+(250,12,'Conditioning',        1682208000, 100, 1),
+-- Ana (13)
+(251,13,'Ana Push 1',          1673827200, 120, 1),
+(252,13,'Ana Lower 1',         1674432000, 125, 1),
+(253,13,'Ana Upper 1',         1675036800, 110, 1),
+(254,13,'Glute 1',             1675641600, 125, 1),
+(255,13,'Circuit 1',           1676246400, 105, 1),
+(256,13,'Full Body A',         1676851200, 115, 1),
+(257,13,'Strength A',          1677456000, 125, 0),
+(258,13,'Hyper A',             1678060800, 115, 1),
+(259,13,'Push 2',              1678665600, 120, 1),
+(260,13,'Lower 2',             1679270400, 125, 1),
+(261,13,'Upper 2',             1679875200, 110, 1),
+(262,13,'Glute 2',             1680480000, 125, 1),
+(263,13,'Circuit 2',           1681084800, 105, 1),
+(264,13,'Full Body B',         1681689600, 115, 1),
+(265,13,'PR Session',          1682294400, 140, 0),
+-- Pedro (20)
+(266,20,'Pedro Push 1',        1673913600, 130, 1),
+(267,20,'Pedro Pull 1',        1674518400, 125, 1),
+(268,20,'Pedro Legs 1',        1675123200, 135, 1),
+(269,20,'Functional A',        1675728000, 115, 1),
+(270,20,'Strength A',          1676332800, 135, 1),
+(271,20,'Hyper A',             1676937600, 120, 1),
+(272,20,'Olympic Intro',       1677542400, 140, 0),
+(273,20,'Push 2',              1678147200, 130, 1),
+(274,20,'Pull 2',              1678752000, 125, 1),
+(275,20,'Legs 2',              1679356800, 135, 1),
+(276,20,'Functional B',        1679961600, 115, 1),
+(277,20,'Strength B',          1680566400, 135, 1),
+(278,20,'PR Day',              1681171200, 150, 1),
+(279,20,'Conditioning',        1681776000, 105, 1),
+(280,20,'Volume Day',          1682380800, 120, 1),
+-- Atleti non verificati (poche sessioni)
+(281,31,'First Workout',       1685404800, 60,  1),
+(282,31,'Second Workout',      1686009600, 65,  1),
+(283,31,'Third Workout',       1686614400, 68,  0),
+(284,32,'Cardio 1',            1685491200, 55,  1),
+(285,32,'Tone 1',              1686096000, 70,  1),
+(286,32,'Full Body',           1686700800, 75,  1),
+(287,32,'Lower 1',             1687305600, 75,  1),
+(288,32,'Upper 1',             1687910400, 70,  1),
+(289,33,'Tom Push 1',          1680393600, 90,  1),
+(290,33,'Tom Pull 1',          1680998400, 85,  1),
+(291,33,'Tom Legs 1',          1681603200, 95,  1),
+(292,33,'Tom FB',              1682208000, 88,  1),
+(293,33,'Tom Cardio',          1682812800, 70,  0),
+(294,33,'Tom Push 2',          1683417600, 90,  1),
+(295,33,'Tom Pull 2',          1684022400, 85,  1),
+(296,33,'Tom Legs 2',          1684627200, 95,  1),
+(297,33,'Tom Max',             1685232000, 105, 1),
+(298,33,'Tom Recovery',        1685836800, 60,  1),
+(299,34,'Elena Tone 1',        1678406400, 85,  1),
+(300,34,'Elena Lower',         1679011200, 95,  1),
+(301,34,'Elena Upper',         1679616000, 85,  1),
+(302,34,'Elena FB A',          1680220800, 95,  1),
+(303,34,'Elena Glute',         1680825600, 100, 1),
+(304,34,'Elena Circuit',       1681430400, 88,  0),
+(305,34,'Elena Tone 2',        1682035200, 85,  1),
+(306,34,'Elena Push',          1682640000, 90,  1),
+(307,34,'Elena Pull',          1683244800, 85,  1),
+(308,34,'Elena Legs',          1683849600, 95,  1),
+(309,34,'Elena Core',          1684454400, 70,  1),
+(310,34,'Elena Full Body B',   1685059200, 95,  1),
+(311,34,'Elena PR',            1685664000, 110, 0),
+(312,34,'Elena Cardio',        1686268800, 65,  1),
+(313,34,'Elena Conditioning',  1686873600, 90,  1),
+(314,34,'Elena Max',           1687478400, 115, 1),
+(315,34,'Elena Recovery',      1688083200, 55,  1),
+(316,34,'Elena Tone 3',        1688688000, 85,  1),
+-- Yuki (17) 33 sessioni verificato
+(317,17,'Yuki Function 1',     1673481600, 110, 1),
+(318,17,'Yuki Strength 1',     1674086400, 115, 1),
+(319,17,'Yuki Olympic 1',      1674691200, 125, 1),
+(320,17,'Yuki Circuit 1',      1675296000, 100, 1),
+(321,17,'Yuki Push 1',         1675900800, 108, 1),
+(322,17,'Yuki Pull 1',         1676505600, 108, 1),
+(323,17,'Yuki Legs 1',         1677110400, 118, 1),
+(324,17,'Yuki FB A',           1677715200, 112, 1),
+(325,17,'Yuki Cardio',         1678320000, 75,  0),
+(326,17,'Yuki Function 2',     1678924800, 110, 1),
+(327,17,'Yuki Strength 2',     1679529600, 115, 1),
+(328,17,'Yuki Olympic 2',      1680134400, 125, 1),
+(329,17,'Yuki Circuit 2',      1680739200, 100, 1),
+(330,17,'Yuki Push 2',         1681344000, 108, 1),
+(331,17,'Yuki Pull 2',         1681948800, 108, 1),
+(332,17,'Yuki Legs 2',         1682553600, 118, 0),
+(333,17,'Yuki Max',            1683158400, 130, 1),
+-- Mike (18) 36 sessioni
+(334,18,'Mike Push 1',         1673654400, 118, 1),
+(335,18,'Mike Pull 1',         1674259200, 115, 1),
+(336,18,'Mike Legs 1',         1674864000, 122, 1),
+(337,18,'Mike FB A',           1675468800, 112, 1),
+(338,18,'Mike Strength A',     1676073600, 125, 1),
+(339,18,'Mike Hyper A',        1676678400, 112, 0),
+(340,18,'Mike Circuit',        1677283200, 95,  1),
+(341,18,'Mike Push 2',         1677888000, 118, 1),
+(342,18,'Mike Pull 2',         1678492800, 115, 1),
+(343,18,'Mike Legs 2',         1679097600, 122, 1),
+(344,18,'Mike FB B',           1679702400, 112, 1),
+(345,18,'Mike Strength B',     1680307200, 125, 1),
+(346,18,'Mike Hyper B',        1680912000, 112, 1),
+(347,18,'Mike Cardio',         1681516800, 75,  1),
+(348,18,'Mike Push 3',         1682121600, 118, 0),
+(349,18,'Mike Max',            1682726400, 135, 1),
+(350,18,'Mike PR',             1683331200, 140, 1),
+(351,18,'Mike Conditioning',   1683936000, 100, 1),
+-- Lena (19) 32 sessioni
+(352,19,'Lena Tone 1',         1673740800, 100, 1),
+(353,19,'Lena Lower 1',        1674345600, 110, 1),
+(354,19,'Lena Upper 1',        1674950400, 98,  1),
+(355,19,'Lena Circuit 1',      1675555200, 95,  1),
+(356,19,'Lena Glute 1',        1676160000, 112, 1),
+(357,19,'Lena Full Body 1',    1676764800, 102, 0),
+(358,19,'Lena Strength A',     1677369600, 115, 1),
+(359,19,'Lena Hyper A',        1677974400, 102, 1),
+(360,19,'Lena Tone 2',         1678579200, 100, 1),
+(361,19,'Lena Lower 2',        1679184000, 110, 1),
+(362,19,'Lena Upper 2',        1679788800, 98,  1),
+(363,19,'Lena Circuit 2',      1680393600, 95,  1),
+(364,19,'Lena Glute 2',        1680998400, 112, 1),
+(365,19,'Lena Full Body 2',    1681603200, 102, 0),
+(366,19,'Lena PR',             1682208000, 125, 1),
+(367,19,'Lena Conditioning',   1682812800, 90,  1),
+-- Katrin (41) 46 sessioni
+(368,41,'Katrin Endurance 1',  1673827200, 108, 1),
+(369,41,'Katrin Lift 1',       1674432000, 120, 1),
+(370,41,'Katrin Lower 1',      1675036800, 115, 1),
+(371,41,'Katrin Upper 1',      1675641600, 105, 1),
+(372,41,'Katrin Circuit 1',    1676246400, 95,  1),
+(373,41,'Katrin FB A',         1676851200, 110, 0),
+(374,41,'Katrin Strength A',   1677456000, 120, 1),
+(375,41,'Katrin Push 1',       1678060800, 108, 1),
+(376,41,'Katrin Pull 1',       1678665600, 105, 1),
+(377,41,'Katrin Legs 1',       1679270400, 115, 1),
+(378,41,'Katrin Endurance 2',  1679875200, 108, 1),
+(379,41,'Katrin Lift 2',       1680480000, 120, 1),
+(380,41,'Katrin PR',           1681084800, 135, 1),
+(381,41,'Katrin Recovery',     1681689600, 65,  0),
+(382,41,'Katrin Conditioning', 1682294400, 98,  1),
+-- Sven (42) 72 sessioni
+(383,42,'Sven Power 1',        1673913600, 145, 1),
+(384,42,'Sven Mass 1',         1674518400, 140, 1),
+(385,42,'Sven Push 1',         1675123200, 142, 1),
+(386,42,'Sven Pull 1',         1675728000, 138, 1),
+(387,42,'Sven Legs 1',         1676332800, 148, 1),
+(388,42,'Sven Olympic 1',      1676937600, 155, 0),
+(389,42,'Sven Strength A',     1677542400, 145, 1),
+(390,42,'Sven Volume A',       1678147200, 130, 1),
+(391,42,'Sven Max Bench',      1678752000, 168, 1),
+(392,42,'Sven Max Squat',      1679356800, 172, 1),
+(393,42,'Sven Max Dead',       1679961600, 178, 1),
+(394,42,'Sven Power 2',        1680566400, 145, 1),
+(395,42,'Sven Mass 2',         1681171200, 140, 1),
+(396,42,'Sven Push 2',         1681776000, 142, 0),
+(397,42,'Sven Pull 2',         1682380800, 138, 1);
+
+-- ══════════════════════════════════════════════════════════════════
+-- SESSIONI ESERCIZI (3-5 esercizi per sessione, selezione rappresentativa)
+-- ══════════════════════════════════════════════════════════════════
+INSERT OR IGNORE INTO SessioniEsercizi
+  (id, peso, ripetizioni, recupero, id_sessione, id_esercizio, valida)
+VALUES
+-- Sessione 1 Marco - Power Session
+(1,  100, 5, 180, 1, 64, 1),   -- Barbell Squat
+(2,  80,  5, 180, 1, 44, 1),   -- Bench Press
+(3,  120, 5, 180, 1, 47, 1),   -- Deadlift
+-- Sessione 2 Marco - Upper Body
+(4,  82,  8, 120, 2, 44, 1),
+(5,  30,  10, 90, 2, 344, 1),  -- Incline DB Press
+(6,  25,  12, 75, 2, 560, 1),  -- Pullups (bodyweight+ extra)
+-- Sessione 3 Marco - Leg Day
+(7,  105, 8, 150, 3, 64, 1),
+(8,  40,  12, 90, 3, 448, 1),  -- Lying Leg Curls
+(9,  60,  12, 60, 3, 410, 1),  -- Leg Extensions
+(10, 0,   30, 45, 3, 752, 1),  -- Standing Calf Raises BW
+-- Sessione 4 Marco - Full Body
+(11, 102, 5, 180, 4, 64, 1),
+(12, 83,  5, 180, 4, 44, 1),
+(13, 122, 5, 180, 4, 47, 1),
+(14, 0,   8, 90,  4, 560, 1),
+-- Sessione 5 Marco - Push Day
+(15, 85,  10, 90, 5, 44, 1),
+(16, 32,  12, 75, 5, 53, 1),   -- Incline Bench
+(17, 28,  12, 75, 5, 244, 1),  -- DB Shoulder Press
+(18, 15,  15, 60, 5, 665, 1),  -- Side Lateral Raise
+-- Sessione 33 Sofia - Tone & Sculpt
+(19, 20,  15, 75, 33, 222, 1), -- DB Bench Press
+(20, 15,  15, 60, 33, 342, 1), -- Incline DB Flyes
+(21, 10,  15, 60, 33, 665, 1),
+(22, 0,   20, 45, 33, 189, 1), -- Crunches
+-- Sessione 34 Sofia - Lower Body
+(23, 50,  12, 90, 34, 64, 1),
+(24, 30,  15, 75, 34, 448, 1),
+(25, 40,  15, 75, 34, 410, 1),
+(26, 40,  15, 75, 34, 52, 1),  -- Hip Thrust
+-- Sessione 37 Sofia - Glute
+(27, 60,  12, 90, 37, 52, 1),  -- Hip Thrust
+(28, 40,  15, 75, 37, 604, 1), -- Romanian DL
+(29, 0,   20, 45, 37, 301, 1), -- Glute Kickback
+(30, 0,   15, 60, 37, 685, 1), -- Single Leg Glute Bridge
+-- Sessione 63 Luigi - Beast Push
+(31, 140, 5, 180, 63, 44, 1),  -- Heavy Bench
+(32, 50,  8, 120, 63, 53, 1),
+(33, 40,  10, 90, 63, 59, 1),  -- BB Shoulder Press
+(34, 35,  12, 75, 63, 825, 1), -- Triceps Pushdown
+-- Sessione 64 Luigi - Beast Pull
+(35, 180, 5, 180, 64, 47, 1),  -- Heavy Deadlift
+(36, 0,   8, 90,  64, 560, 1), -- Pullups weighted
+(37, 90,  10, 75, 64, 80, 1),  -- Bent Over Row
+(38, 30,  12, 60, 64, 45, 1),  -- Barbell Curl
+-- Sessione 65 Luigi - Beast Legs
+(39, 160, 5, 180, 65, 64, 1),  -- Heavy Squat
+(40, 140, 8, 120, 65, 604, 1), -- RDL
+(41, 80,  12, 90, 65, 448, 1),
+(42, 0,   15, 60, 65, 752, 1),
+-- Sessione 66 Luigi - Olympic
+(43, 100, 3, 240, 66, 163, 1), -- Clean
+(44, 80,  3, 240, 66, 716, 1), -- Snatch
+(45, 110, 3, 180, 66, 167, 1), -- Clean and Jerk
+-- Sessione 89 Giulia - Tone A
+(46, 15,  15, 75, 89, 222, 1),
+(47, 12,  15, 60, 89, 342, 1),
+(48, 8,   15, 60, 89, 665, 1),
+(49, 0,   20, 45, 89, 189, 1),
+-- Sessione 104 Antonio - Power Push
+(50, 150, 5, 180, 104, 44, 1), -- Very heavy bench
+(51, 60,  8, 120, 104, 53, 1),
+(52, 50,  8, 120, 104, 59, 1),
+(53, 30,  10, 90, 104, 244, 1),
+-- Sessione 121 Emma - Lift & Tone
+(54, 60,  12, 90, 121, 64, 1),
+(55, 40,  12, 90, 121, 44, 1),
+(56, 70,  12, 90, 121, 47, 1),
+(57, 0,   15, 60, 121, 189, 1),
+-- Sessione 136 Lorenzo PT - Demo Push
+(58, 120, 5, 180, 136, 44, 1),
+(59, 50,  8, 120, 136, 53, 1),
+(60, 45,  8, 120, 136, 59, 1),
+(61, 30,  10, 90, 136, 244, 1),
+(62, 20,  12, 75, 136, 293, 1), -- Front Plate Raise
+-- Sessione 137 Lorenzo PT - Demo Pull
+(63, 160, 5, 180, 137, 47, 1),
+(64, 0,   6, 90,  137, 560, 1),
+(65, 80,  10, 75, 137, 80, 1),
+(66, 25,  12, 60, 137, 45, 1),
+(67, 20,  12, 60, 137, 309, 1), -- Hammer Curls
+-- Sessione 161 James - Push
+(68, 130, 5, 180, 161, 44, 1),
+(69, 45,  8, 120, 161, 53, 1),
+(70, 40,  8, 120, 161, 59, 1),
+-- Sessione 176 Sarah - Tone
+(71, 20,  15, 75, 176, 222, 1),
+(72, 15,  15, 60, 176, 342, 1),
+(73, 0,   15, 60, 176, 301, 1),
+-- Sessione 191 Stefan - Mass
+(74, 145, 5, 180, 191, 44, 1),
+(75, 165, 5, 180, 191, 64, 1),
+(76, 195, 5, 180, 191, 47, 1),
+-- Sessione 206 Nikolaj - Viking Push
+(77, 155, 5, 180, 206, 44, 1),
+(78, 65,  8, 120, 206, 53, 1),
+(79, 55,  8, 120, 206, 59, 1),
+(80, 30,  10, 90, 206, 293, 1),
+-- Sessione 221 Roberto PT
+(81, 125, 5, 180, 221, 44, 1),
+(82, 55,  8, 120, 221, 53, 1),
+(83, 45,  8, 120, 221, 59, 1),
+(84, 30,  10, 90, 221, 826, 1),
+-- Sessioni atleti minori
+(85, 60,  10, 90, 281, 95, 1),  -- Luca newbie - Bodyweight Squat
+(86, 0,   10, 90, 281, 568, 1), -- Pushups
+(87, 40,  10, 90, 282, 95, 1),
+(88, 0,   12, 90, 282, 568, 1),
+(89, 0,   10, 90, 283, 356, 1), -- Inverted Row
+(90, 40,  12, 75, 284, 230, 1), -- DB Lunges (Bianca)
+(91, 0,   20, 45, 284, 189, 1),
+(92, 15,  15, 60, 285, 222, 1),
+(93, 0,   15, 60, 285, 665, 1),
+(94, 40,  12, 90, 286, 64, 1),
+(95, 25,  12, 90, 286, 44, 1),
+(96, 50,  12, 90, 286, 47, 1),
+(97, 55,  10, 90, 289, 64, 1),  -- Tom push
+(98, 45,  10, 90, 289, 44, 1),
+(99, 0,   12, 75, 289, 560, 1),
+(100,45,  10, 90, 290, 80, 1),  -- Tom pull
+(101,0,   10, 90, 290, 560, 1),
+(102,20,  12, 60, 290, 45, 1),
+(103,60,  10, 90, 291, 64, 1),  -- Tom legs
+(104,35,  12, 75, 291, 448, 1),
+(105,40,  15, 60, 291, 410, 1),
+-- Sessioni verificati rimanenti minime
+(106,75,  12, 90, 236, 64, 1),  -- Pierre
+(107,60,  12, 90, 236, 44, 1),
+(108,90,  12, 90, 236, 47, 1),
+(109,60,  12, 90, 251, 64, 1),  -- Ana
+(110,25,  15, 75, 251, 344, 1),
+(111,30,  12, 60, 251, 52, 1),
+(112,85,  10, 90, 266, 64, 1),  -- Pedro
+(113,70,  10, 90, 266, 44, 1),
+(114,100, 10, 90, 266, 47, 1),
+(115,40,  12, 90, 317, 302, 1), -- Yuki Goblet Squat
+(116,30,  12, 60, 317, 383, 1), -- Kettlebell Thruster
+(117,0,   30, 45, 317, 539, 1), -- Plank
+(118,80,  10, 90, 334, 44, 1),  -- Mike
+(119,70,  10, 90, 334, 64, 1),
+(120,95,  10, 90, 334, 47, 1),
+(121,30,  15, 60, 352, 222, 1), -- Lena
+(122,20,  15, 60, 352, 342, 1),
+(123,0,   20, 45, 352, 189, 1),
+(124,65,  12, 90, 368, 64, 1),  -- Katrin
+(125,0,   45, 60, 368, 260, 1), -- Elliptical (tempo come reps)
+(126,40,  12, 75, 368, 448, 1),
+(127,110, 8, 120, 383, 64, 1),  -- Sven
+(128,130, 8, 120, 383, 44, 1),
+(129,150, 8, 120, 383, 47, 1);
+
+-- ══════════════════════════════════════════════════════════════════
+-- FOLLOW  (follower → followed, coerente con i contatori)
+-- ══════════════════════════════════════════════════════════════════
+INSERT OR IGNORE INTO Follow (id_follower, id_followed) VALUES
+-- Tutti seguono i PT e i top atleti
+(1,  21),(1,  22),(1,  23),(1,  25),(1,  3),(1,  5),(1,  11),(1,  14),
+(2,  21),(2,  22),(2,  24),(2,  26),(2,  3),(2,  4),(2,  15),(2,  29),
+(3,  21),(3,  25),(3,  27),(3,  5),(3,  11),(3,  14),(3,  16),(3,  42),
+(4,  22),(4,  26),(4,  29),(4,  30),(4,  2),(4,  6),(4,  15),(4,  22),
+(5,  21),(5,  23),(5,  27),(5,  3),(5,  11),(5,  16),(5,  42),(5,  44),
+(6,  22),(6,  24),(6,  26),(6,  2),(6,  4),(6,  15),(6,  13),(6,  45),
+(7,  21),(7,  25),(7,  3),(7,  5),(7,  14),(7,  11),(7,  16),(7,  50),
+(8,  22),(8,  24),(8,  26),(8,  2),(8,  6),(8,  15),(8,  13),(8,  41),
+(9,  21),(9,  25),(9,  27),(9,  1),(9,  3),(9,  5),(9,  14),(9,  47),
+(10, 22),(10, 24),(10, 26),(10, 2),(10, 6),(10, 15),(10, 20),(10, 43),
+(11, 21),(11, 25),(11, 27),(11, 3),(11, 5),(11, 14),(11, 16),(11, 42),
+(12, 21),(12, 22),(12, 30),(12, 3),(12, 11),(12, 14),(12, 15),(12, 29),
+(13, 22),(13, 24),(13, 29),(13, 2),(13, 6),(13, 15),(13, 30),(13, 20),
+(14, 21),(14, 25),(14, 27),(14, 28),(14, 3),(14, 5),(14, 11),(14, 16),
+(15, 22),(15, 24),(15, 26),(15, 29),(15, 30),(15, 2),(15, 6),(15, 13),
+(16, 21),(16, 25),(16, 27),(16, 3),(16, 5),(16, 11),(16, 42),(16, 44),
+(17, 21),(17, 22),(17, 50),(17, 3),(17, 11),(17, 14),(17, 16),(17, 7),
+(18, 21),(18, 25),(18, 28),(18, 14),(18, 16),(18, 3),(18, 5),(18, 11),
+(19, 22),(19, 24),(19, 26),(19, 30),(19, 6),(19, 15),(19, 13),(19, 2),
+(20, 21),(20, 23),(20, 27),(20, 3),(20, 5),(20, 11),(20, 14),(20, 16),
+-- Seguono i verificati meno famosi
+(31, 21),(31, 25),(31, 1),(31, 2),(31, 3),
+(32, 22),(32, 26),(32, 2),(32, 4),(32, 6),
+(33, 21),(33, 25),(33, 3),(33, 5),(33, 11),
+(34, 22),(34, 24),(34, 6),(34, 15),(34, 2),
+(35, 12),(35, 30),(35, 3),(35, 14),(35, 15),
+(36, 21),(36, 22),(36, 2),(36, 3),
+(37, 21),(37, 25),(37, 11),(37, 16),
+(38, 20),(38, 21),(38, 3),(38, 14),(38, 15),
+(39, 22),(39, 24),(39, 13),(39, 15),
+(40, 21),(40, 25),(40, 44),(40, 11),(40, 16),
+(41, 21),(41, 22),(41, 3),(41, 14),(41, 42),
+(42, 21),(42, 25),(42, 27),(42, 11),(42, 16),
+(43, 22),(43, 24),(43, 26),(43, 6),(43, 15),
+(44, 21),(44, 25),(44, 27),(44, 3),(44, 11),
+(45, 21),(45, 22),(45, 20),(45, 6),(45, 13),
+(46, 21),(46, 23),(46, 25),(46, 3),(46, 11),
+(47, 21),(47, 22),(47, 26),(47, 6),(47, 15),
+(48, 21),(48, 25),(48, 44),(48, 11),(48, 16),
+(49, 21),(49, 22),(49, 50),(49, 17),(49, 3),
+(50, 21),(50, 27),(50, 3),(50, 5),(50, 11),
+(51, 21),(51, 1),(51, 3),(51, 25),
+(52, 21),(52, 22),(52, 1),(52, 2),(52, 3),
+(53, 22),(53, 26),(53, 2),(53, 4),
+(54, 21),(54, 22),(54, 20),(54, 3),
+(55, 21),(55, 29),(55, 3),(55, 13),(55, 14),
+(56, 22),(56, 26),(56, 19),(56, 2),
+(57, 21),(57, 20),(57, 3),(57, 15),(57, 38),
+(58, 22),(58, 30),(58, 2),(58, 12),
+(59, 21),(59, 25),(59, 11),(59, 16),(59, 44),
+(60, 22),(60, 26),(60, 42),(60, 19),(60, 16);
+
+-- ══════════════════════════════════════════════════════════════════
+-- SEGNALAZIONI
+-- ══════════════════════════════════════════════════════════════════
+INSERT OR IGNORE INTO Segnalazioni
+  (id, id_segnalante, id_segnalato, timestamp_creazione, motivazione,
+   id_moderatore, timestamp_risoluzione, esito)
+VALUES
+(1,  31, 54,  1685491200, 'Profilo con contenuti inappropriati nel bio',       1, 1685577600, 'Avvertimento inviato'),
+(2,  32, 55,  1686009600, 'Spam di messaggi promozionali nel feed',            1, 1686096000, 'Rimosso contenuto'),
+(3,  33, 36,  1686614400, 'Account sospetto, possibile bot',                  NULL, NULL, NULL),
+(4,  1,  54,  1685577600, 'Comportamento offensivo nei commenti',              1, 1685664000, 'Segnalazione non fondata'),
+(5,  2,  55,  1686096000, 'Promuove integratori non sicuri',                  1, 1686182400, 'Contenuto rimosso'),
+(6,  14, 37,  1686700800, 'Immagini del profilo inappropriate',                NULL, NULL, NULL),
+(7,  15, 57,  1687305600, 'Copia workouts altrui spacciandoli per propri',    1, 1687392000, 'Avvertimento inviato'),
+(8,  3,  58,  1687910400, 'Fornisce consigli di allenamento pericolosi',      1, 1687996800, 'Rimosso contenuto'),
+(9,  5,  59,  1688515200, 'Account fake, foto non sue',                       NULL, NULL, NULL),
+(10, 11, 60,  1689120000, 'Comportamento aggressivo con altri utenti',        1, 1689206400, 'Segnalazione non fondata'),
+(11, 22, 56,  1689724800, 'Diffonde informazioni false su diete',             1, 1689811200, 'Contenuto rimosso'),
+(12, 25, 40,  1690329600, 'Spamming di inviti a gruppi esterni',              NULL, NULL, NULL),
+(13, 21, 31,  1690934400, 'Utilizzo improprio di foto di altri atleti',       1, 1691020800, 'Avvertimento inviato'),
+(14, 27, 35,  1691539200, 'Promuove doping e sostanze illegali',              1, 1691625600, 'Account sospeso temporaneamente'),
+(15, 29, 39,  1692144000, 'Contenuti spam su ogni sessione',                  NULL, NULL, NULL);
+
+-- ══════════════════════════════════════════════════════════════════
+-- RICHIESTE (per diventare Personal Trainer)
+-- ══════════════════════════════════════════════════════════════════
+INSERT OR IGNORE INTO Richieste
+  (id, id_richiedente, timestamp_creazione, id_moderatore, status,
+   timestamp_risoluzione)
+VALUES
+-- Approvate (già diventati PT: 21-30)
+(1,  21, 1669852800, 1, 'APPROVED', 1669939200),
+(2,  22, 1669939200, 1, 'APPROVED', 1670025600),
+(3,  23, 1670025600, 1, 'APPROVED', 1670112000),
+(4,  24, 1670112000, 1, 'APPROVED', 1670198400),
+(5,  25, 1670198400, 1, 'APPROVED', 1670284800),
+(6,  26, 1670284800, 1, 'APPROVED', 1670371200),
+(7,  27, 1670371200, 1, 'APPROVED', 1670457600),
+(8,  28, 1670457600, 1, 'APPROVED', 1670544000),
+(9,  29, 1670544000, 1, 'APPROVED', 1670630400),
+(10, 30, 1670630400, 1, 'APPROVED', 1670716800),
+-- Rifiutate
+(11, 34, 1685491200, 1, 'REJECTED', 1685577600),  -- Elena rifiutata (non abbastanza exp)
+(12, 38, 1686009600, 1, 'REJECTED', 1686096000),  -- Kosta rifiutato
+(13, 40, 1686700800, 1, 'REJECTED', 1686787200),  -- Mateusz rifiutato
+-- In attesa
+(14, 7,  1691539200, NULL, NULL, NULL),  -- Alessandro in attesa
+(15, 9,  1692144000, NULL, NULL, NULL),  -- Davide in attesa
+(16, 10, 1692748800, NULL, NULL, NULL),  -- Carla in attesa
+(17, 42, 1693353600, NULL, NULL, NULL),  -- Sven in attesa
+(18, 44, 1693958400, NULL, NULL, NULL),  -- Dmitri in attesa
+(19, 50, 1694563200, NULL, NULL, NULL),  -- Takeshi in attesa
+(20, 46, 1695168000, NULL, NULL, NULL);  -- Mirko in attesa
