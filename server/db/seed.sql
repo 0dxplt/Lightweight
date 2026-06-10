@@ -3658,7 +3658,7 @@ INSERT OR IGNORE INTO Palestre (id, nome, indirizzo, lat, lng) VALUES
 (47, 'Nordic Power Stockholm', 'Drottninggatan, Stoccolma', 59.3293, 18.0686),
 (48, 'Copenhagen Cross', 'Strøget, Copenaghen', 55.6761, 12.5683),
 (49, 'Helsinki Ice Gym', 'Mannerheimintie, Helsinki', 60.1695, 24.9354),
-(50, 'Bucuresti Power', 'Calea Victoriei, Bucarest', 44.4268, 26.1025);
+(50, 'Bucuresti Power', 'Calea Victoriei, Bucarest', 44.4268, 26.1025),
 (51, 'Venice Iron House', 'Sestiere Dorsoduro 10, Venezia', 45.4340, 12.3261),
 (52, 'Arena Fitness Verona', 'Via Mazzini 5, Verona', 45.4384, 10.9916),
 (54, 'Padova Strength Lab', 'Prato della Valle 1, Padova', 45.4021, 11.8796),
