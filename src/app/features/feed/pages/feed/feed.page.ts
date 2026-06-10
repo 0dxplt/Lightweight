@@ -1,4 +1,4 @@
-import { Component, effect, inject, OnInit, signal, ViewChild } from '@angular/core';
+import { Component, computed, effect, inject, OnInit, signal, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonModal, IonSearchbar, IonList, IonItem, IonAvatar, IonImg, IonLabel, IonButton, IonIcon, IonRefresher, IonRefresherContent, IonCard } from '@ionic/angular/standalone';
@@ -34,6 +34,8 @@ export class FeedPage implements OnInit {
   private feedService = inject(FeedService);
 
   private userService = inject(UserService);
+
+  public hasSession = computed(() => this.user_sessions().length > 0);
 
   @ViewChild('ptSearchModal') ptSearchModal!: IonModal;
 

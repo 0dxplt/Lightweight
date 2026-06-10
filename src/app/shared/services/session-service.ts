@@ -56,7 +56,8 @@ export class SessionService {
       img: string | null,
       nome: string,
       nome_sessione: string,
-      serie: string
+      serie: string,
+      xp: number
     }[]>(`${environment.apiUrl}/api/sessions/` + id).pipe(
       map(rows => {
         const sessionData = rows[0];
@@ -81,7 +82,8 @@ export class SessionService {
                 perc: g.percentuale
               }))
             };
-          })
+          }),
+          xp: sessionData.xp
         };
       })
     );

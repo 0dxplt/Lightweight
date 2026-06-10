@@ -125,6 +125,7 @@ export class WorkoutPage implements OnInit {
       componentProps: {
         exercise: exercise
       },
+      cssClass: 'exercise-modal'
     });
 
     await modal.present();

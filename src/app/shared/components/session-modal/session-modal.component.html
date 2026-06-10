@@ -1,15 +1,18 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar class="toolbar">
     <ion-title>{{sessionInfo().nome}}</ion-title>
-    <ion-buttons slot="end">
-      <ion-button (click)="close()">Close</ion-button>
-    </ion-buttons>
+    <ion-button slot="end" class="close-button" (click)="close()">Close</ion-button>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-  <div class="date-time">
-    <p>{{sessionInfo().timestamp | datefy}}</p>
+  <div class="head">
+    <div class="date-time">
+      <p>{{sessionInfo().timestamp | datefy}}</p>
+    </div>
+    <div class="xp">
+      <p>{{sessionInfo().xp | number:"1.0-0"}}</p><ion-icon color="secondary" name="flash-outline"></ion-icon>
+    </div>
   </div>
   <div class="exercises">
     @for (exercise of sessionInfo().exercises; track exercise) {
@@ -25,12 +28,12 @@
         </div>
       </div>
       <div class="tags">
-          @for (tag of exercise.tags; track tag) {
-          <ion-chip>
-            {{tag.nome}} {{tag.perc + '%'}}
-          </ion-chip>
-          }
-        </div>
+        @for (tag of exercise.tags; track tag) {
+        <ion-chip>
+          {{tag.nome}} {{tag.perc + '%'}}
+        </ion-chip>
+        }
+      </div>
       <div class="series">
         @for (serie of exercise.serie; track serie) {
         <div class="serie">

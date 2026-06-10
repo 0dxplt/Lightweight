@@ -20,4 +20,5 @@ export type SessionModalComponentInfo = {
     nome: string;
     timestamp: number;
     exercises: SessionExercise[];
+    xp: number;
 }

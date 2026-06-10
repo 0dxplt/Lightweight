@@ -10,7 +10,7 @@ import { star, starOutline } from 'ionicons/icons';
   selector: 'app-exercise-modal',
   templateUrl: './exercise-modal.component.html',
   styleUrls: ['./exercise-modal.component.scss'],
-  imports: [IonChip, IonFooter, IonImg, IonContent, IonIcon, IonButton, BetterMsViewerPipe],
+  imports: [IonChip, IonFooter, IonImg, IonContent, IonIcon, IonButton, BetterMsViewerPipe, IonHeader, IonToolbar],
 })
 export class ExerciseModalComponent  implements OnInit {
 

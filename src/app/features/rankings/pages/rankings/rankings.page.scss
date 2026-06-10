@@ -1,11 +1,27 @@
-#page-title {
-    color: var(--ion-color-tertiary);
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-size: 32px;
-    font-weight: bolder;
-    letter-spacing: 3px;
-}
-
 ion-segment-view {
   height: 100%;
+}
+
+ion-header {
+    background-color: transparent;
+}
+
+.toolbar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    --background: var(--ion-color-secondary);
+    padding: 10px;
+    border-radius: 25px;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+}
+
+ion-title {
+    font-size: 1.7rem;
+}
+
+ion-toolbar::part(container) {
+    --background: transparent;
+    background-color: transparent;
 }

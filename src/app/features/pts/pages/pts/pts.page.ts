@@ -1,7 +1,7 @@
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonToolbar, IonSearchbar, IonList, IonItem, IonLabel, IonButton, IonModal, IonIcon, IonAvatar } from '@ionic/angular/standalone';
+import { IonContent, IonHeader, IonToolbar, IonSearchbar, IonList, IonItem, IonLabel, IonButton, IonModal, IonIcon, IonAvatar, IonTitle } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { navigateOutline } from 'ionicons/icons';
 import { PtCardComponent } from "../../components/pt-card/pt-card.component";
@@ -34,7 +34,14 @@ export class PtsPage implements OnInit {
 
   public cities = signal<CityMinimal[]>([])
 
-  public results: CityMinimal[] = [];
+  public ricerca = signal<string>("");
+
+  public results = computed(() => {
+    const query = this.ricerca().toLowerCase().trim();
+    return this.cities().filter((city) => city.nome.toLowerCase().includes(query));
+  });
+
+  @ViewChild('cityModal') cityModal!: IonModal;
 
   constructor() {
     addIcons({ navigateOutline });
@@ -44,7 +51,6 @@ export class PtsPage implements OnInit {
     this.cityService.allMinimal().subscribe({
       next: (data) => {
         this.cities.set(data);
-        this.results = (this.cities()) ? [...this.cities()] : [];
       },
       error: (err) => {
         console.log("Errore nel caricare le città");
@@ -52,10 +58,15 @@ export class PtsPage implements OnInit {
     })
   }
 
+  ngAfterViewInit() {
+    this.cityModal.ionModalDidDismiss.subscribe(() => {
+      this.ricerca.set("");
+    });
+  }
+
   handleInput(event: Event) {
     const target = event.target as HTMLIonSearchbarElement;
-    const query = target.value?.toLowerCase() || '';
-    this.results = this.cities().filter((d) => d.nome.toLowerCase().includes(query));
+    this.ricerca.set(target.value || '');
   }
 
   filterPts(city: string) {
@@ -99,5 +110,9 @@ export class PtsPage implements OnInit {
     } catch (error) {
       console.error('Impossibile ottenere la posizione:', error);
     }
+  }
+
+  openCityModal() {
+    this.cityModal.present();
   }
 }

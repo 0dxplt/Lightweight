@@ -1,36 +1,38 @@
 <ion-header [translucent]="true" class="ion-no-border">
-  <ion-toolbar>
-    <div class="toolbar">
-      <ion-title>Feed</ion-title>
-      <ion-button (click)="openPtSearchModal()">
-        <ion-icon slot="icon-only" name="search-outline"></ion-icon>
-      </ion-button>
-    </div>
+  <ion-toolbar class="toolbar">
+    <ion-title>Feed</ion-title>
+    <ion-button slot="end" (click)="openPtSearchModal()">
+      <ion-icon slot="icon-only" name="search-outline"></ion-icon>
+    </ion-button>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" >
   <ion-header collapse="condense">
   </ion-header>
-  <ion-refresher slot="fixed" [pullFactor]="0.5" [pullMin]="100" [pullMax]="200" (ionRefresh)="handleRefresh($event)" class="refresh">
+  <ion-refresher slot="fixed" [pullFactor]="0.5" [pullMin]="100" [pullMax]="200" (ionRefresh)="handleRefresh($event)"
+    class="refresh">
     <ion-refresher-content refreshingSpinner="circles">
     </ion-refresher-content>
   </ion-refresher>
+  @if (hasSession()) {
   <div class="sessions">
     @for (user of user_sessions(); track user.username) {
-    <app-user-card [username]="user.username" [sessionName]="user.sessionName"
-      [gainedXP]="user.gainedXP" [tags]="user.tags" [avatarUrl]="user.avatarUrl || '/assets/icon/favicon.png'" [verified]="user.verified"
+    <app-user-card [username]="user.username" [sessionName]="user.sessionName" [gainedXP]="user.gainedXP"
+      [tags]="user.tags" [avatarUrl]="user.avatarUrl || '/assets/icon/favicon.png'" [verified]="user.verified"
       [pt]="user.pt" [sessionId]="user.sessionId"></app-user-card>
     }
-    @empty {
-    <p>It’s pretty lonely here! Use the search button to start looking for someone to follow.</p>
-    }
   </div>
-  <ion-modal #ptSearchModal [initialBreakpoint]="0.25"
-    [breakpoints]="[0, 0.25, 0.5, 0.75]" [expandToScroll]="false" class="custom-modal">
+  }
+  @else {
+  <h1 class="no-feed">E' un pò solitario qui, prova a seguire qualcuno utilizzando la barra di ricerca.</h1>
+  }
+  <ion-modal #ptSearchModal [initialBreakpoint]="0.25" [breakpoints]="[0, 0.25, 0.5, 0.75]" [expandToScroll]="false"
+    class="custom-modal">
     <ng-template>
       <ion-content class="modal-content">
-        <ion-searchbar showCancelButton="focus" class="search-users" placeholder="Search Users" (click)="ptSearchModal.setCurrentBreakpoint(0.75)" (ionInput)="searchUser($event)"></ion-searchbar>
+        <ion-searchbar showCancelButton="focus" class="search-users" placeholder="Search Users"
+          (click)="ptSearchModal.setCurrentBreakpoint(0.75)" (ionInput)="searchUser($event)"></ion-searchbar>
         <ion-list>
           @for (user of users(); track $index;) {
           <div class="pt-item" (click)="visitProfile(user.username)">

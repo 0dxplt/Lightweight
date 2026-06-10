@@ -9,7 +9,8 @@ ion-header {
     --background: var(--ion-color-secondary);
     padding: 10px;
     border-radius: 25px;
-    border: 1px solid white;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
 }
 
 ion-title {

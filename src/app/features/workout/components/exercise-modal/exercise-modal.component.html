@@ -1,36 +1,24 @@
-<ion-content>
-  <div class="exercise">
-    <div class="header">
-      <div class="small-infos">
-        <div class="img"><ion-img src="{{exercise.imgpath}}"></ion-img></div>
-        <div class="difficulty">
-          @for (star of getStars(exercise.difficulty); track $index) {
-          <ion-icon color="white" name="star"></ion-icon>
-          }
-
-          @for (empty of getStars(5 - exercise.difficulty); track $index) {
-          <ion-icon color="white" name="star-outline"></ion-icon>
-          }
-        </div>
-      </div>
-      <div class="info">
-        <div class="title">
-          <h1>{{exercise.name}}</h1>
-        </div>
-        <div class="desc">
-          <p>{{exercise.desc}}</p>
-        </div>
+<ion-header [translucent]="true">
+  <ion-toolbar class="header">
+    <div class="small-infos">
+      <div class="img"><ion-img src="{{exercise.imgpath}}"></ion-img></div>
+      <div class="title">
+        <h1>{{exercise.name}}</h1>
       </div>
     </div>
-    <div class="exercise-bottom">
+  </ion-toolbar>
+</ion-header>
 
+<ion-content [scrollY]="false" class="bg">
+  <div class="exercise">
+    <div class="exercise-bottom">
       <div class="tags">
-        @for(tag of exercise.groups; track tag) {
-        <ion-chip color="secondary">
-          {{tag.muscolarGroup.name}} {{tag.perc}}%
-        </ion-chip>
-        }
-      </div>
+          @for(tag of exercise.groups; track tag) {
+          <ion-chip color="secondary">
+            {{tag.muscolarGroup.name}} {{tag.perc}}%
+          </ion-chip>
+          }
+        </div>
 
       <div class="stats-row">
         <div class="stat">
