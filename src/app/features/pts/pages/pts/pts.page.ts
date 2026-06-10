@@ -97,8 +97,9 @@ export class PtsPage implements OnInit {
       const lat = posizione.coords.latitude;
       const lng = posizione.coords.longitude;
 
-      this.geoService.getCityName(lat, lng).subscribe({
-        next: (city) => {
+      this.geoService.getCityAndNation(lat, lng).subscribe({
+        next: (data) => {
+          const city: string = data.cityName;
           this.selectedCity.set(city);
           this.filterPts(this.selectedCity());
         },

@@ -19,4 +19,14 @@ This project uses the following third-party resources:
    - License: The Unlicense  
    - Description: Free dataset of exercises used in the project.
 
+4. **OpenStreetMap Data**  
+   - Source: [https://www.openstreetmap.org](https://www.openstreetmap.org)  
+   - License: Open Database License (ODbL)  
+   - Description: Geographic data used for mapping and location features.
+
+5. **Nominatim Geocoding Service**  
+   - Source: [https://nominatim.org](https://nominatim.org)  
+   - License: Open Database License (ODbL) / OSMF Usage Policy  
+   - Description: Search engine for OpenStreetMap data used for geocoding.
+
 For full license texts and attributions, see [`ATTRIBUTIONS.md`](./ATTRIBUTIONS.md)

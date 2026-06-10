@@ -9,17 +9,20 @@ export class GeoLocalizationService {
   
   constructor(private http: HttpClient) {}
 
-  getCityName(lat: number, lng: number): Observable<string> {
-    return this.http.get<any>(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`).pipe(
-      map(data => data.address.city || data.address.town || data.address.county || '')
+  getCityAndNation(lat: number, lng: number): Observable<{cityName: string, nationName: string}> {
+    return this.http.get<any>(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&accept-language=it`).pipe(
+      map(data => ({
+        cityName: data.address.city || data.address.town || data.address.county || '',
+        nationName: data.address.country || ''
+      }))
     );
   }
 
   search(address: string): Observable<any[]> {
-    return this.http.get<any[]>(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`);
+    return this.http.get<any[]>(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}&accept-language=it`);
   }
 
   reverse(lat: number, lng: number): Observable<any> {
-    return this.http.get<any>(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`);
+    return this.http.get<any>(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&accept-language=it`);
   }
 }
