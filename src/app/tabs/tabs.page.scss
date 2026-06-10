@@ -1,6 +1,15 @@
 ion-tab-bar {
   --color: var(--ion-color-medium); 
-  --color-selected: var(--ion-color-secondary);
+  --color-selected: white;
+  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  --background: var(--ion-color-secondary);
+  padding: 10px;
+  border-radius: 25px;
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
 }
 
 ion-tab-button:hover {

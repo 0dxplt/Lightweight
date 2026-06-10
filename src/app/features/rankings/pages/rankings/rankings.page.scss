@@ -25,3 +25,30 @@ ion-toolbar::part(container) {
     --background: transparent;
     background-color: transparent;
 }
+
+ion-footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    box-shadow: none;
+}
+
+.ranking-toolbar {
+    --background: transparent;
+    // color: white;
+    --box-shadow: none;
+    border-radius: 10px;
+
+    @media (min-width: 748px) {
+        width: 40%;
+    }
+
+    @media (max-width: 748px) {
+        width: 70%;
+    }
+}
+
+ion-segment-button {
+    color: var(--ion-color-primary);
+}
