@@ -10,9 +10,7 @@ import { ProfilePageBodyComponent } from '../../components/profile-page-body/pro
 import { ModalController } from '@ionic/angular/standalone';
 import { ChangePasswordModalPage } from '../change-password-modal/change-password-modal.page';
 import { VerifyProfileModalPage } from '../verify-profile-modal/verify-profile-modal.page';
-import { Nation } from 'src/app/models/nation.model';
 import { RequestService } from 'src/app/features/mod/services/request-service';
-import { VERIFY_MIN_AGE, VERIFY_MIN_FOLLOWERS, VERIFY_MIN_SESSIONS } from 'src/app/shared/global';
 import { PtRequestModalPage } from '../pt-request-modal/pt-request-modal.page';
 import { Gym } from 'src/app/models/gym.model';
 import { City } from 'src/app/models/city.model';
@@ -168,7 +166,7 @@ export class ProfilePage implements OnInit {
   async openVerifyModal() {
     const modal = await this.modalController.create({
       component: VerifyProfileModalPage,
-      cssClass: 'verify-profile-modal',
+      cssClass: 'desktop-fullscreen',
     });
 
     await modal.present();
@@ -229,7 +227,7 @@ export class ProfilePage implements OnInit {
   async openPTModal() {
     const modal = await this.modalController.create({
       component: PtRequestModalPage,
-      cssClass: "pt-request-modal"
+      cssClass: "desktop-fullscreen"
     });
 
     await modal.present();

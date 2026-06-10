@@ -1,9 +1,8 @@
 <ion-header class="ion-no-border">
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-button color="medium" (click)="cancel()">Cancel</ion-button>
+  <ion-toolbar class="toolbar">
+    <ion-buttons slot="end">
+      <ion-button color="primary" (click)="cancel()">Cancel</ion-button>
     </ion-buttons>
-    <ion-title>Verification</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -66,7 +65,13 @@
       <!-- Nazionalità -->
       @if (verifyForm.contains('nationality')) {
         <ion-item class="input-item" lines="none">
-          <ion-select label="Nationality" labelPlacement="floating" formControlName="nationality" errorText="Insert a valid Nation">
+          <ion-select
+            label="Nationality"
+            labelPlacement="floating"
+            formControlName="nationality"
+            interface="modal"
+            [interfaceOptions]="customSelectFilter"
+            errorText="Insert a valid Nation">
             @for (nation of nations(); track nation.id) {
               <ion-select-option [value]="nation">{{ nation.name }}</ion-select-option>
             }
