@@ -28,7 +28,7 @@
     <ion-item>
       <ion-icon slot="start" name="checkmark-circle" color="primary"></ion-icon>
       <ion-label>Verified Account</ion-label>
-      <ion-toggle [checked]="user()?.verified" (ionChange)="onToggleVerified($event)"></ion-toggle>
+      <ion-toggle [checked]="user()?.verified" (ionChange)="onToggleVerified($event)" color="secondary"></ion-toggle>
     </ion-item>
   }
 
@@ -67,7 +67,7 @@
 
   <!-- Pulsante di Salvataggio -->
   <div class="ion-margin-top">
-    <ion-button expand="block" color="primary" (click)="saveChanges()" style="color: black">
+    <ion-button expand="block" color="secondary" (click)="saveChanges()">
       Done
     </ion-button>
   </div>
