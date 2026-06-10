@@ -12,6 +12,7 @@ import { ToastController } from '@ionic/angular/standalone';
 import { Nation } from 'src/app/models/nation.model';
 import { HttpClient } from '@angular/common/http';
 import { GeoLocalizationService } from 'src/app/shared/services/geo-localization-service';
+import { NationService } from 'src/app/shared/services/nation-service';
 
 @Component({
   selector: 'app-pt-request-modal',
@@ -43,6 +44,7 @@ export class PtRequestModalPage implements OnInit {
     private cityService: CityService,
     private gymService: GymService,
     private geoService: GeoLocalizationService,
+    private nationService: NationService,
     private modalController: ModalController,
     private toastController: ToastController,
     private loadingController: LoadingController
@@ -70,21 +72,39 @@ export class PtRequestModalPage implements OnInit {
 
       const lat: number = event.detail.value.lat;
       const lng: number = event.detail.value.lng;
-      this.geoService.getCityName(lat, lng).subscribe({
-        next: (cityName) => {
-          this.cityService.getByName(cityName).subscribe({
-            next: (city) => {
-              loading.dismiss();
-              this._city.set(city);
+      
+      this.geoService.getCityAndNation(lat, lng).subscribe({
+        next: (data) => {
+          const cityName: string = data.cityName;
+          const nationName: string = data.nationName;
+          this.nationService.getByName(nationName).subscribe({
+            next: (nation) => {
+              this.cityService.getOrInsert(cityName, nation).subscribe({
+                next: (city) => {
+                  loading.dismiss();
+                  this._city.set(city);
+                },
+                error: (err) => {
+                  console.log(err);
+                  loading.dismiss();
+                  this.ptFormGroup.get('gym')?.setValue(null);
+                  this._city.set(null);
+                  this._showToast("Error: " + (err.error?.message ?? 'Unknown'), 'danger', 2000);
+                }
+              });
             },
             error: (err) => {
               loading.dismiss();
+              this.ptFormGroup.get('gym')?.setValue(null);
+              this._city.set(null);
               this._showToast("Error: " + (err.error?.message ?? 'Unknown'), 'danger', 2000);
             }
-          });
+          })
         },
         error: (err) => {
           loading.dismiss();
+          this.ptFormGroup.get('gym')?.setValue(null);
+          this._city.set(null);
           this._showToast("Error: " + (err.message), 'danger', 2000);
         }
       });

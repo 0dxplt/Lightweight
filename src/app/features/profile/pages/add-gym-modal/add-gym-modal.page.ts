@@ -142,7 +142,6 @@ export class AddGymModalPage implements AfterViewInit, OnDestroy {
 
     this.nationService.getByName(this.countryFound).subscribe({
       next: (nation) => {
-        console.log(nation);
         this.modalCtrl.dismiss({
           gym: newGym,
           city: this.cityFound,

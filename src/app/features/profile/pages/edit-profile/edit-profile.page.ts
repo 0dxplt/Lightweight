@@ -266,12 +266,25 @@ export class EditProfilePage implements OnInit {
       const lat: number = event.detail.value.lat;
       const lng: number = event.detail.value.lng;
 
-      this.geoService.getCityName(lat, lng).subscribe({
-        next: (cityName) => {
-          this.cityService.getByName(cityName).subscribe({
-            next: (city) => {
-              loading.dismiss();
-              this._city.set(city);
+      this.geoService.getCityAndNation(lat, lng).subscribe({
+        next: (data) => {
+          const cityName: string = data.cityName;
+          const nationName: string = data.nationName;
+          this.nationService.getByName(nationName).subscribe({
+            next: (nation) => {
+              this.cityService.getOrInsert(cityName, nation).subscribe({
+                next: (city) => {
+                  loading.dismiss();
+                  this._city.set(city);
+                },
+                error: (err) => {
+                  console.log(err);
+                  loading.dismiss();
+                  this.userForm.get('gym')?.setValue(null);
+                  this._city.set(null);
+                  this._showToast("Error: " + (err.error?.message ?? 'Unknown'), 'danger', 2000);
+                }
+              });
             },
             error: (err) => {
               loading.dismiss();
@@ -279,10 +292,12 @@ export class EditProfilePage implements OnInit {
               this._city.set(null);
               this._showToast("Error: " + (err.error?.message ?? 'Unknown'), 'danger', 2000);
             }
-          });
+          })
         },
         error: (err) => {
           loading.dismiss();
+          this.userForm.get('gym')?.setValue(null);
+          this._city.set(null);
           this._showToast("Error: " + (err.message), 'danger', 2000);
         }
       });
