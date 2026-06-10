@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormControl, FormGroup, Validators, FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonInput, IonInputPasswordToggle, IonButton, IonRippleEffect, IonRouterLink, IonText } from '@ionic/angular/standalone';
+import { IonContent, IonInput, IonInputPasswordToggle, IonButton, IonRouterLink, IonText } from '@ionic/angular/standalone';
 import { AuthService } from '../../services/auth-service';
 import { Router, RouterModule } from '@angular/router';
 import { MAX_HEIGHT_VALUE, MAX_PASSWORD_LENGTH, MAX_USERNAME_LENGTH, MAX_WEIGHT_VALUE, MIN_HEIGHT_VALUE, MIN_PASSWORD_LENGTH, MIN_USERNAME_LENGTH, MIN_WEIGHT_VALUE } from 'src/app/shared/global';
@@ -72,5 +72,37 @@ export class RegisterPage implements OnInit {
       duration: duration
     });
     await toast.present();
+  }
+
+  usernameMinLength(): number {
+    return MIN_USERNAME_LENGTH;
+  }
+
+  usernameMaxLength(): number {
+    return MAX_USERNAME_LENGTH;
+  }
+
+  usernameErrorText(): string {
+    return `Username must be ${MIN_USERNAME_LENGTH}-${MAX_USERNAME_LENGTH} characters long`;
+  }
+
+  passwordMinLength(): number {
+    return MIN_PASSWORD_LENGTH;
+  }
+
+  passwordMaxLength(): number {
+    return MAX_PASSWORD_LENGTH;
+  }
+
+  passwordErrorText(): string {
+    return `Password must be ${MIN_PASSWORD_LENGTH}-${MAX_PASSWORD_LENGTH} characters long`;
+  }
+
+  weightErrorText(): string {
+    return `Weight must be between ${MIN_WEIGHT_VALUE} and ${MAX_WEIGHT_VALUE} (kg)`;
+  }
+
+  heightErrorText(): string {
+    return `Height must be between ${MIN_HEIGHT_VALUE} and ${MAX_HEIGHT_VALUE} (cm)`;
   }
 }
