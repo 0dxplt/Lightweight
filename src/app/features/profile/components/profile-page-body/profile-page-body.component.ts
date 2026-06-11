@@ -87,6 +87,7 @@ export class ProfilePageBodyComponent  implements OnInit {
   seasonalPerc = computed(() => {
     const user = this.user();
     if (!user) return 0;
+    if (user.sxp >= 2500) return 1;
     return (Math.floor(user.sxp) % SEASONAL_RANK_UP) / SEASONAL_RANK_UP;
   });
   globalPerc = computed(() => {

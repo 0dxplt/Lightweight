@@ -44,7 +44,7 @@ async function getSeasonalRankings(req, res) {
             FROM Atleti A
             LEFT JOIN PersonalTrainers PT ON A.id = PT.id
             WHERE A.verificato = 1
-            ORDER BY A.livello_stagionale DESC
+            ORDER BY A.xp_stagionali DESC
             LIMIT 200`
         );
 

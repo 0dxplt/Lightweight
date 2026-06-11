@@ -29,15 +29,31 @@ export class FeedPage implements OnInit {
 
   public user_sessions = signal<SessionCard[]>([]);
 
-  public users = signal<SearchUserInfo[] | null>(null);
-
   private feedService = inject(FeedService);
 
   private userService = inject(UserService);
 
   public hasSession = computed(() => this.user_sessions().length > 0);
 
-  @ViewChild('ptSearchModal') ptSearchModal!: IonModal;
+  public ricerca = signal<string>("");
+
+  public users = computed(() => {
+    const ricercaUtente = this.ricerca().toLowerCase().trim();
+
+    if (!ricercaUtente) return this.data();
+
+    return this.data().filter(u => {
+      const username = u.username.toLowerCase();
+      const name = u.name?.toLowerCase() || '';
+      const surname = u.surname?.toLowerCase() || '';
+
+      return username.includes(ricercaUtente) ||
+        name.includes(ricercaUtente) ||
+        surname.includes(ricercaUtente);
+    })
+  })
+
+  @ViewChild('searchModal') searchModal!: IonModal;
 
   constructor(private authService: AuthService) {
     addIcons({ searchOutline });
@@ -54,12 +70,17 @@ export class FeedPage implements OnInit {
     // this._loadData();
   }
 
+  ngAfterViewInit() {
+    this.searchModal.ionModalDidDismiss.subscribe(() => {
+      this.ricerca.set("");
+    });
+  }
+
   private _loadData(event?: any) {
     let completed: boolean = false;
     this.userService.getUsersMinimal().subscribe({
       next: (data) => {
         this.data.set(data);
-        this.users.set([...this.data()]);
         if (!completed && event) {
           event.target.complete();
           completed = true;
@@ -84,24 +105,7 @@ export class FeedPage implements OnInit {
   }
 
   searchUser(event: IonSearchbarCustomEvent<SearchbarInputEventDetail>) {
-    const query = event.detail.value?.toLowerCase() || '';
-
-    if (!query.trim()) {
-      this.users.set([...this.data()]);
-      return;
-    }
-
-    const filtered = this.data().filter(u => {
-      const username = u.username.toLowerCase();
-      const name = u.name?.toLowerCase() || '';
-      const surname = u.surname?.toLowerCase() || '';
-
-      return username.includes(query) ||
-        name.includes(query) ||
-        surname.includes(query);
-    });
-
-    this.users.set(filtered);
+    this.ricerca.set(event.detail.value?.toLowerCase() || '');
   }
 
   visitProfile(username: string) {
@@ -113,7 +117,7 @@ export class FeedPage implements OnInit {
     this._loadData(event);
   }
 
-  async openPtSearchModal() {
-    await this.ptSearchModal.present();
+  async openSearchModal() {
+    await this.searchModal.present();
   }
 }

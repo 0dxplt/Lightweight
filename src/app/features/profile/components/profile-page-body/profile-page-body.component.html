@@ -82,7 +82,7 @@
           <div class="progress-info">
             <ion-progress-bar [value]="this.seasonalPerc()" color="tertiary"></ion-progress-bar>
             <p>{{this.seasonalInfos().rankName}}</p>
-            <small>{{this.seasonalPerc() * SEASONAL_RANKUP}} / {{SEASONAL_RANKUP}}</small>
+            <small>{{(this.seasonalPerc() * SEASONAL_RANKUP) | toInt}} / {{SEASONAL_RANKUP}}</small>
           </div>
         </div>
       </ion-card-content>

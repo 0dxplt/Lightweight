@@ -1,7 +1,7 @@
 <ion-header [translucent]="true" class="ion-no-border">
   <ion-toolbar class="toolbar">
     <ion-title>Feed</ion-title>
-    <ion-button slot="end" (click)="openPtSearchModal()">
+    <ion-button slot="end" (click)="openSearchModal()">
       <ion-icon slot="icon-only" name="search-outline"></ion-icon>
     </ion-button>
   </ion-toolbar>
@@ -27,12 +27,12 @@
   @else {
   <h1 class="no-feed">E' un pò solitario qui, prova a seguire qualcuno utilizzando la barra di ricerca.</h1>
   }
-  <ion-modal #ptSearchModal [initialBreakpoint]="0.25" [breakpoints]="[0, 0.25, 0.5, 0.75]" [expandToScroll]="false"
+  <ion-modal #searchModal [initialBreakpoint]="0.25" [breakpoints]="[0, 0.25, 0.5, 0.75]" [expandToScroll]="false"
     class="custom-modal">
     <ng-template>
       <ion-content class="modal-content">
         <ion-searchbar showCancelButton="focus" class="search-users" placeholder="Search Users"
-          (click)="ptSearchModal.setCurrentBreakpoint(0.75)" (ionInput)="searchUser($event)"></ion-searchbar>
+          (click)="searchModal.setCurrentBreakpoint(0.75)" (ionInput)="searchUser($event)"></ion-searchbar>
         <ion-list>
           @for (user of users(); track $index;) {
           <div class="pt-item" (click)="visitProfile(user.username)">
