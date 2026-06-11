@@ -10,7 +10,7 @@ const OFFSET = Number(config.seasonalMonthOffset);
 function init() {
     console.log("Season Chrono Checker init...");
     // Ogni giorno a mezzanotte
-    chrono.schedule("0 0 0 * * *", async () => {
+    chrono.schedule("0 17 13 * * *", async () => {
         const filepath = path.resolve(config.seasonalDir, FILENAME);
 
         if (!fs.existsSync(filepath))
@@ -23,13 +23,17 @@ function init() {
 
         let active_transaction = false;
 
-        if (now >= next) {
+        if (true) {
             try {
                 await dbutils.run("BEGIN TRANSACTION");
                 active_transaction = true;
 
                 await dbutils.run(
                     "UPDATE Atleti SET xp_stagionali = 0, livello_stagionale = 3"
+                );
+
+                await dbutils.run(
+                    "UPDATE Sessioni SET stagione_valida = 0 WHERE stagione_valida = 1"
                 );
 
                 await dbutils.run("COMMIT");
