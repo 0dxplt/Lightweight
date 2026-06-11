@@ -8,12 +8,13 @@ import { ChartModalComponent } from '../chart-modal/chart-modal.component';
 import { SessionService } from '../../services/session-service';
 import { DatefyPipe } from "../../pipes/datefy-pipe";
 import { DecimalPipe } from "@angular/common";
+import { ToIntPipe } from "../../pipes/to-int-pipe";
 
 @Component({
   selector: 'app-session-modal',
   templateUrl: './session-modal.component.html',
   styleUrls: ['./session-modal.component.scss'],
-  imports: [IonIcon, IonFabButton, IonFab, IonImg, IonContent, IonToolbar, IonTitle, IonHeader, IonButton, IonChip, BetterMsViewerPipe, DatefyPipe, DecimalPipe],
+  imports: [IonIcon, IonFabButton, IonFab, IonImg, IonContent, IonToolbar, IonTitle, IonHeader, IonButton, IonChip, BetterMsViewerPipe, DatefyPipe, ToIntPipe],
 })
 export class SessionModalComponent implements OnInit {
 

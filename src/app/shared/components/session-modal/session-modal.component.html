@@ -11,7 +11,7 @@
       <p>{{sessionInfo().timestamp | datefy}}</p>
     </div>
     <div class="xp">
-      <p>{{sessionInfo().xp | number:"1.0-0"}}</p><ion-icon color="secondary" name="flash-outline"></ion-icon>
+      <p>{{sessionInfo().xp | toInt}}</p><ion-icon color="secondary" name="flash-outline"></ion-icon>
     </div>
   </div>
   <div class="exercises">
