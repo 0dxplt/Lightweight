@@ -130,7 +130,10 @@ export class AddGymModalPage implements AfterViewInit, OnDestroy {
   }
 
   confirm() {
-    if (!this.gymName || !this.lat) return;
+    if (!this.gymName || this.gymName.trim() === '' || !this.lat) {
+      this._showToast('Insert all the values', 'danger');
+      return;
+    }
 
     const newGym: Gym = {
       id: Math.floor(Math.random() * 10000),

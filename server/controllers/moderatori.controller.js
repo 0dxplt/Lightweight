@@ -1,5 +1,7 @@
 const global = require('../config/global');
 const dbutils = require('../db/database.utils');
+const updateUserRank = require('../utils/updateUserRank.util');
+const calcolaXP = require('../utils/calcolaXp.util');
 
 async function getAllModerators(req, res) {
     try {
@@ -10,85 +12,6 @@ async function getAllModerators(req, res) {
         res.status(500).json({
             err: "Could not retrieve all moderators"
         });
-    }
-}
-
-const calcolaXP = async (userId, series) => {
-    let sum = 0;
-    const { height, weight } = await dbutils.get(
-        `SELECT height, weight FROM Atleti WHERE id = ?`, [userId]);
-
-    const exercisesIds = [...new Set(series.map(serie => serie.exerciseId))];
-    const parameters = exercisesIds.map(() => '?').join(',');
-
-    const esercizi = await dbutils.all(
-        `SELECT id, difficolta FROM esercizi WHERE id IN (${parameters})`,
-        exercisesIds
-    );
-
-    const seriesCounter = {};
-
-    for (const serie of series) {
-        seriesCounter[serie.exerciseId] = (seriesCounter[serie.exerciseId] || 0) + 1;
-    }
-
-    const difficulty = {};
-
-    esercizi.forEach((esercizio) => {
-        difficulty[esercizio.id] = esercizio.difficolta;
-    });
-
-    for (const serie of series) {
-        sum += (serie.reps * serie.weight) * Math.sqrt(seriesCounter[serie.exerciseId]) * Math.log(1 + (weight / serie.weight)) * (1 + (0.5 * (1 - difficulty[serie.exerciseId]))) * (1 / ((weight ** 0.7) * (height ** 0.31)));
-    }
-    return sum;
-}
-
-async function updateUserRank(userId, deltaXp) {
-    try {
-        await dbutils.run(`
-            UPDATE Atleti
-            SET xp_stagionali = xp_stagionali + ?,
-                xp_globali = xp_globali + ?
-            WHERE id = ?`,
-            [deltaXp, deltaXp, userId]
-        );
-
-        const xp = await dbutils.get(`
-            SELECT xp_stagionali
-            FROM Atleti WHERE id = ?`,
-            [userId]
-        );
-        const xp_stagionali = xp.xp_stagionali < 0 ? 0 : (xp.xp_stagionali ?? 0);
-        
-        // Global Level
-        await dbutils.run(`
-            UPDATE Atleti
-            SET livello_globale = max(floor(xp_globali / ?), 0)
-            WHERE id = ?`,
-            [global.global_level_step, userId]
-        );
-        
-        // Seasonal Rank
-        const seasonInfoRow = await dbutils.get(
-            `SELECT id
-            FROM SeasonalRankInfo
-            WHERE (? BETWEEN start AND end) OR (? >= start AND end IS NULL)`,
-            [xp_stagionali, xp_stagionali]
-        );
-        
-        if (!seasonInfoRow)
-            throw new Error('Error during profile update');
-
-        const id = seasonInfoRow.id;
-
-        await dbutils.run(
-            "UPDATE Atleti SET livello_stagionale = ? WHERE id = ?",
-            [id, userId]
-        );
-
-    } catch(err) {
-        throw err;
     }
 }
 
@@ -123,8 +46,9 @@ async function updateSessionValidity(req, res) {
             );
         }
 
-        const oldXpsRow = await dbutils.get("SELECT xp FROM Sessioni WHERE id = ?", [sessionId]);
-        const oldXps = oldXpsRow?.xp ?? 0;
+        const sessionInfoRow = await dbutils.get("SELECT xp, stagione_valida as 'seasonal_valid' FROM Sessioni WHERE id = ?", [sessionId]);
+        const oldXps = sessionInfoRow?.xp ?? 0;
+        const seasonal_valid = (sessionInfoRow?.seasonal_valid === 1) ? true : false;
 
         // console.log("OldXps: " + oldXps.xp);
 
@@ -153,7 +77,7 @@ async function updateSessionValidity(req, res) {
 
             // aggiornamento degli xp dell'utente
             const delta = xps - oldXps;
-            await updateUserRank(sessionCreator, delta);
+            await updateUserRank(sessionCreator, delta, seasonal_valid);
         }
         await dbutils.run("COMMIT");
         active_transaction = false;

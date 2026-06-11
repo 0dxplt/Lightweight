@@ -32,6 +32,10 @@ function init() {
                     "UPDATE Atleti SET xp_stagionali = 0, livello_stagionale = 3"
                 );
 
+                await dbutils.run(
+                    "UPDATE Sessioni SET stagione_valida = 0 WHERE stagione_valida = 1"
+                );
+
                 await dbutils.run("COMMIT");
                 active_transaction = false;
 
