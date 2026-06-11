@@ -6,12 +6,13 @@ import { addIcons } from 'ionicons';
 import { calendarOutline, flashOutline, lockClosedOutline, shareSocialOutline } from 'ionicons/icons';
 import { DatefyPipe } from "../../../../shared/pipes/datefy-pipe";
 import { DecimalPipe } from '@angular/common';
+import { ToIntPipe } from "../../../../shared/pipes/to-int-pipe";
 
 @Component({
   selector: 'app-session-card',
   templateUrl: './session-card.component.html',
   styleUrls: ['./session-card.component.scss'],
-  imports: [IonicModule, DatefyPipe, DecimalPipe]
+  imports: [IonicModule, DatefyPipe, ToIntPipe]
 })
 export class SessionCardComponent  implements OnInit {
 
