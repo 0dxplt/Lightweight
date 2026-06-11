@@ -55,9 +55,9 @@ CREATE TABLE IF NOT EXISTS Atleti (
     weight REAL NOT NULL CHECK(weight BETWEEN 30 AND 500),
     height REAL NOT NULL CHECK(height BETWEEN 40 AND 240),
     xp_stagionali REAL NOT NULL DEFAULT 0.0,
-    livello_stagionale INT DEFAULT 3,
+    livello_stagionale INTEGER DEFAULT 3,
     xp_globali REAL NOT NULL DEFAULT 0.0,
-    livello_globale REAL NOT NULL DEFAULT 0.0,
+    livello_globale INTEGER NOT NULL DEFAULT 0.0,
     numero_followers INTEGER NOT NULL DEFAULT 0,
     numero_followed INTEGER NOT NULL DEFAULT 0,
     numero_sessioni INTEGER NOT NULL DEFAULT 0,
@@ -135,6 +135,7 @@ CREATE TABLE IF NOT EXISTS Sessioni (
     data_svolgimento INTEGER NOT NULL,
     xp INTEGER NOT NULL,
     pubblica BOOLEAN DEFAULT 1 NOT NULL,
+    stagione_valida BOOLEAN DEFAULT 1 NOT NULL,
     FOREIGN KEY(id_creatore) REFERENCES Atleti(id) ON DELETE CASCADE
 );
 

@@ -5,7 +5,6 @@ import { input } from '@angular/core';
 import { addIcons } from 'ionicons';
 import { calendarOutline, flashOutline, lockClosedOutline, shareSocialOutline } from 'ionicons/icons';
 import { DatefyPipe } from "../../../../shared/pipes/datefy-pipe";
-import { DecimalPipe } from '@angular/common';
 import { ToIntPipe } from "../../../../shared/pipes/to-int-pipe";
 
 @Component({

@@ -2,8 +2,12 @@ const dbutils = require('../db/database.utils');
 const bcrypt = require('bcrypt');
 const global = require('../config/global');
 const config = require('../config/env');
+const updateUserRank = require('../utils/updateUserRank.util');
 const fs = require('fs').promises;
 const path = require('path');
+
+// presa da https://github.com/angular/angular/blob/main/packages/forms/src/validators.ts
+const emailRegex = /^(?=.{1,254}$)(?=.{1,64}@)[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
 
 async function update(req, res) {
     const user = req.body.user ? JSON.parse(req.body.user) : null;
@@ -15,6 +19,48 @@ async function update(req, res) {
         return res.status(400).json({
             success: false,
             message: "Data unavailable"
+        });
+    }
+
+    if (
+        !user.username ||
+        !user.email ||
+        !user.weight ||
+        !user.height ||
+        user.username.trim() === '' ||
+        user.email.trim() === ''
+    ) {
+        return res.status(400).json({
+            success: false,
+            message: "Input not valid"
+        });
+    }
+
+    if (user.username.length < global.min_username_length || user.username.length > global.max_username_length) {
+        return res.status(400).json({
+            success: false,
+            message: `Username should be ${global.min_username_length}-${global.max_username_length} characters long`
+        });
+    }
+
+    if (!user.email.match(emailRegex)) {
+        return res.status(400).json({
+            success: false,
+            message: "Email format is not valid, please insert a correct one"
+        });
+    }
+
+    if (user.weight < global.min_weight_value || user.weight > global.max_weight_value) {
+        return res.status(400).json({
+            success: false,
+            message: `Weight should be in ${global.min_weight_value}-${global.max_weight_value} range`
+        });
+    }
+    
+    if (user.height < global.min_height_value || user.height > global.max_height_value) {
+        return res.status(400).json({
+            success: false,
+            message: `Height should be in ${global.min_height_value}-${global.max_heigth_value} range`
         });
     }
 
@@ -232,6 +278,13 @@ async function changePassword(req, res) {
             });
         }
 
+        if (await bcrypt.compareSync(newPass, dbPass.password)) {
+            return res.status(400).json({
+                success: false,
+                message: "New password must be different from old one"
+            });
+        }
+
         const pHash = await bcrypt.hash(newPass, global.rounds);
 
         await dbutils.run(
@@ -273,54 +326,6 @@ async function follows(req, res) {
     }
 }
 
-async function updateUserRank(userId, deltaXp) {
-    try {
-        await dbutils.run(`
-            UPDATE Atleti
-            SET xp_stagionali = xp_stagionali + ?,
-                xp_globali = xp_globali + ?
-            WHERE id = ?`,
-            [deltaXp, deltaXp, userId]
-        );
-
-        const xp = await dbutils.get(`
-            SELECT xp_stagionali
-            FROM Atleti WHERE id = ?`,
-            [userId]
-        );
-        const xp_stagionali = xp.xp_stagionali < 0 ? 0 : (xp.xp_stagionali ?? 0);
-        
-        // Global Level
-        await dbutils.run(`
-            UPDATE Atleti
-            SET livello_globale = max(floor(xp_globali / ?), 0)
-            WHERE id = ?`,
-            [global.global_level_step, userId]
-        );
-        
-        // Seasonal Rank
-        const seasonInfoRow = await dbutils.get(
-            `SELECT id
-            FROM SeasonalRankInfo
-            WHERE (? BETWEEN start AND end) OR (? >= start AND end IS NULL)`,
-            [xp_stagionali, xp_stagionali]
-        );
-        
-        if (!seasonInfoRow)
-            throw new Error('Error during profile update');
-
-        const id = seasonInfoRow.id;
-
-        await dbutils.run(
-            "UPDATE Atleti SET livello_stagionale = ? WHERE id = ?",
-            [id, userId]
-        );
-
-    } catch(err) {
-        throw err;
-    }
-}
-
 async function saveSession(req, res) {
     let active_transaction = false;
     try {
@@ -344,7 +349,7 @@ async function saveSession(req, res) {
             );
         }
 
-        await updateUserRank(profileId, xp);
+        await updateUserRank(profileId, xp, true);
 
         await dbutils.run('COMMIT');
         active_transaction = false;
@@ -371,7 +376,7 @@ async function removeSession(req, res) {
     try {
 
         const xpsRow = await dbutils.get(
-            "SELECT xp, pubblica FROM Sessioni WHERE id = ? AND id_creatore = ?",
+            "SELECT xp, pubblica, stagione_valida FROM Sessioni WHERE id = ? AND id_creatore = ?",
             [id, userId]
         );
 
@@ -382,6 +387,7 @@ async function removeSession(req, res) {
             });
         }
 
+        const seasonal_valid = (xpsRow.stagione_valida === 1) ? true : false;
         const public = xpsRow.pubblica;
         const xps = (public) ? xpsRow.xp : 0;
 
@@ -394,7 +400,7 @@ async function removeSession(req, res) {
         );
 
         if (xps != 0)
-            await updateUserRank(userId, -xps);
+            await updateUserRank(userId, -xps, seasonal_valid);
 
         await dbutils.run("COMMIT");
         active_transaction = false;
@@ -422,12 +428,13 @@ async function updateSessionVisibility(req, res) {
         active_transaction = true;
 
         const sessionXpRow = await dbutils.get(
-            "UPDATE Sessioni SET pubblica = ? WHERE id = ? AND id_creatore = ? RETURNING xp",
+            "UPDATE Sessioni SET pubblica = ? WHERE id = ? AND id_creatore = ? RETURNING xp, stagione_valida",
             [visibility ? 1 : 0, sessionId, userId]
         );
+        const seasonal_valid = (sessionXpRow.stagione_valida === 1) ? true : false;
         const sessionXps = sessionXpRow.xp;
 
-        await updateUserRank(userId, (visibility) ? sessionXps : -sessionXps);
+        await updateUserRank(userId, (visibility) ? sessionXps : -sessionXps, seasonal_valid);
 
         await dbutils.run("COMMIT");
         active_transaction = false;
