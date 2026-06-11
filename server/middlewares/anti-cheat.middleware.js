@@ -31,7 +31,7 @@ const antiCheat = async (req, res, next) => {
                 // console.log("Peso serie: " + serie.weight);
                 // console.log("Peso avg: " + avgMap[serie.exerciseId]);
                 const diff = serie.weight - avgMap[serie.exerciseId];
-                if (diff > 0 && diff > 0.5 * avgMap[serie.exerciseId]) {
+                if (diff > 0 && diff > (0.8 * avgMap[serie.exerciseId]) + avgMap[serie.exerciseId]) {
                     // console.log(serie + " is not valid anymore");
                     serie.valid = false;
                 }
@@ -67,8 +67,7 @@ const antiCheat = async (req, res, next) => {
 
                 if (avgRow.media) {
                     // console.log("AVG ROW: " + avgRow);
-                    const offset = 50;
-                    const limit = avgRow.media + offset;
+                    const limit = (avgRow.media * 0.8) + avgRow.media;
     
                     if (serie.weight > limit)
                         serie.valid = false;
