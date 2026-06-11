@@ -10,7 +10,7 @@ const OFFSET = Number(config.seasonalMonthOffset);
 function init() {
     console.log("Season Chrono Checker init...");
     // Ogni giorno a mezzanotte
-    chrono.schedule("0 17 13 * * *", async () => {
+    chrono.schedule("0 0 0 * * *", async () => {
         const filepath = path.resolve(config.seasonalDir, FILENAME);
 
         if (!fs.existsSync(filepath))
@@ -23,7 +23,7 @@ function init() {
 
         let active_transaction = false;
 
-        if (true) {
+        if (now >= next) {
             try {
                 await dbutils.run("BEGIN TRANSACTION");
                 active_transaction = true;
