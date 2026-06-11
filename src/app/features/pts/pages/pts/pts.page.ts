@@ -7,11 +7,12 @@ import { navigateOutline } from 'ionicons/icons';
 import { PtCardComponent } from "../../components/pt-card/pt-card.component";
 import { PersonalTrainerCard } from 'src/app/models/pt-card.model';
 import { Geolocation, PositionOptions } from '@capacitor/geolocation';
-import { HttpClient, provideHttpClient } from '@angular/common/http';
 import { CityMinimal } from 'src/app/models/city.model';
 import { CityService } from 'src/app/shared/services/city-service';
 import { PtsService } from 'src/app/shared/services/pts-service';
 import { GeoLocalizationService } from 'src/app/shared/services/geo-localization-service';
+import { LoadingController } from '@ionic/angular';
+
 @Component({
   selector: 'app-pts',
   templateUrl: './pts.page.html',
@@ -42,6 +43,8 @@ export class PtsPage implements OnInit {
   });
 
   @ViewChild('cityModal') cityModal!: IonModal;
+
+  private loadingController = inject(LoadingController);
 
   constructor() {
     addIcons({ navigateOutline });
@@ -93,17 +96,24 @@ export class PtsPage implements OnInit {
         timeout: 10000,
         maximumAge: 0
       };
+      const loading = await this.loadingController.create({
+        message: "Fetching infos..."
+      });
+      await loading.present();
+      
       const posizione = await Geolocation.getCurrentPosition(opzioni);
       const lat = posizione.coords.latitude;
       const lng = posizione.coords.longitude;
 
       this.geoService.getCityAndNation(lat, lng).subscribe({
         next: (data) => {
+          loading.dismiss();
           const city: string = data.cityName;
           this.selectedCity.set(city);
           this.filterPts(this.selectedCity());
         },
         error: (err) => {
+          loading.dismiss();
           console.error('Errore durante il recupero della città:', err);
           this.selectedCity.set("");
         }
