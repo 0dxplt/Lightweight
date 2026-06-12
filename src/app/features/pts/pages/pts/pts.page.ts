@@ -11,7 +11,7 @@ import { CityMinimal } from 'src/app/models/city.model';
 import { CityService } from 'src/app/shared/services/city-service';
 import { PtsService } from 'src/app/shared/services/pts-service';
 import { GeoLocalizationService } from 'src/app/shared/services/geo-localization-service';
-import { LoadingController } from '@ionic/angular';
+import { LoadingController, ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-pts',
@@ -45,9 +45,19 @@ export class PtsPage implements OnInit {
   @ViewChild('cityModal') cityModal!: IonModal;
 
   private loadingController = inject(LoadingController);
+  private toastController = inject(ToastController);
 
   constructor() {
     addIcons({ navigateOutline });
+  }
+
+  private async _showToast(message: string, color: string, duration: number) {
+    const toast = await this.toastController.create({
+      message: message,
+      color: color,
+      duration: duration
+    });
+    await toast.present();
   }
 
   ngOnInit() {
@@ -55,8 +65,8 @@ export class PtsPage implements OnInit {
       next: (data) => {
         this.cities.set(data);
       },
-      error: (err) => {
-        console.log("Errore nel caricare le città");
+      error: (_) => {
+        this._showToast("Errore nel caricare le città", 'danger', 2000);
       }
     })
   }
@@ -78,7 +88,8 @@ export class PtsPage implements OnInit {
         this.personal_trainers.set(data);
       },
       error: (err) => {
-        console.log(err);
+        this._showToast("Error: " + (err.error?.message ?? 'Unknown'), 'danger', 2000);
+        console.error(err);
       }
     });
   }
@@ -90,17 +101,17 @@ export class PtsPage implements OnInit {
   }
 
   async getCity() {
+    const loading = await this.loadingController.create({
+      message: "Fetching infos..."
+    });
+    await loading.present();
+
     try {
       const opzioni: PositionOptions = {
         enableHighAccuracy: true,
         timeout: 10000,
         maximumAge: 0
       };
-      const loading = await this.loadingController.create({
-        message: "Fetching infos..."
-      });
-      await loading.present();
-      
       const posizione = await Geolocation.getCurrentPosition(opzioni);
       const lat = posizione.coords.latitude;
       const lng = posizione.coords.longitude;
@@ -114,11 +125,14 @@ export class PtsPage implements OnInit {
         },
         error: (err) => {
           loading.dismiss();
+          this._showToast("Error: " + (err.error?.message ?? 'Unknown'), 'danger', 2000);
           console.error('Errore durante il recupero della città:', err);
           this.selectedCity.set("");
         }
       });
     } catch (error) {
+      loading.dismiss();
+      this._showToast("Impossibile ottenere la posizione", 'danger', 2000);
       console.error('Impossibile ottenere la posizione:', error);
     }
   }
